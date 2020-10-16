@@ -150,6 +150,112 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://yuhaojiang.gitee.io/2020/03/21/esp8266%E8%BF%9E%E6%8E%A5%E6%98%BE%E7%A4%BA%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
+      <meta itemprop="name" content="kawhi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kawhi的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/03/21/esp8266%E8%BF%9E%E6%8E%A5%E6%98%BE%E7%A4%BA%E5%99%A8/" class="post-title-link" itemprop="url">esp8266连接显示器</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-21 00:00:00" itemprop="dateCreated datePublished" datetime="2020-03-21T00:00:00+08:00">2020-03-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-16 12:01:00" itemprop="dateModified" datetime="2020-10-16T12:01:00+08:00">2020-10-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%A1%AC%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">硬件</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h5 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h5><p>**简介:**本篇文章展示用OLED显示屏与ESP8266连接。OLED淘宝上一般有两种，4引脚(IIC)和7引脚(SPI)，7引脚的屏幕就稍微大点。这里我用的是4引脚。接线如下所示。基本就3.3接vcc，gnd地线接地线没有问题，引用角D1(GPIO5)，D2(GPIO4)接SLC和SDA。</p>
+<p><strong>价格：</strong>一个esp8266和oled显示器加起来也就20块左右。</p>
+<img src="http://img.kawhi.xyz/image-20200321115923891.png" alt="image-20200321115923891" style="high:40%;width:40%;" />
+
+<h5 id="基本显示"><a href="#基本显示" class="headerlink" title="基本显示"></a><strong>基本显示</strong></h5><p><strong>输出hello world！</strong></p>
+<p>首先要装一个U8g2的库，然后只需要短短10多行代码即可显示。</p>
+<img src="http://img.kawhi.xyz/image-20200321104619926.png" alt="image-20200321104619926" style="high:80%;width:80%;" />
+
+<p><strong>输出动画</strong></p>
+<p>项目代码：<a style="text-decoration:none;" class="foo" href="https://github.com/icomgx/esp8266_codePlayer" target="_blank">传送门</a></p>
+<p>这个项目是用python特殊处理了你的视频，原理大概是把视频切成很多帧图片，然后因为oled无法显示彩色视频，所以需要把图片灰度化，然后再进行转码，这样视频就可以在显示器上逐帧播放你的视频了。</p>
+<video width="320" height="200" controls="controls">
+  <source src="http://img.kawhi.xyz/QQ%E8%A7%86%E9%A2%9120200321123849.mp4" type="video/mp4" />
+</video>
+
+
+<h5 id="显示电脑情况"><a href="#显示电脑情况" class="headerlink" title="显示电脑情况"></a><strong>显示电脑情况</strong></h5><img src="http://img.kawhi.xyz/image-20200320212053043.png" alt="image-20200320212053043" style="high:80%;width:80%;" />
+
+<p>项目代码：<a style="text-decoration:none;" class="foo" href="https://github.com/flyAkari/AIDA64Reader" target="_blank">传送门</a></p>
+<p>所需工具：AIDA64，Arduino的u8g2库。</p>
+<p>在AIDA64把下图都勾选上，再把代码上传到esp8266板子上即可。</p>
+<img src="http://img.kawhi.xyz/image-20200320212408242.png" alt="image-20200320212408242" style="high:80%;width:80%;" />
+
+
+<h5 id="显示北京时间"><a href="#显示北京时间" class="headerlink" title="显示北京时间"></a><strong>显示北京时间</strong></h5><img src="http://img.kawhi.xyz/image-20200321102945702.png" alt="image-20200321102945702" style="high:80%;width:80%;" />
+
+<p>项目代码：<a style="text-decoration:none;" class="foo" href="https://github.com/flyAkari/ESP8266_Network_Clock" target="_blank">传送门</a></p>
+<p>这个项目是使用的烧录工具直接上传的，免去了搭建环境的麻烦。</p>
+<h5 id="显示实时肺炎疫情"><a href="#显示实时肺炎疫情" class="headerlink" title="显示实时肺炎疫情"></a><strong>显示实时肺炎疫情</strong></h5><img src="http://img.kawhi.xyz/image-20200321113448668.png" alt="image-20200321113448668" style="high:80%;width:80%;" />
+
+<p>项目代码：<a style="text-decoration:none;" class="foo" href="https://gitee.com/ikcty/pneumonia" target="_blank">传送门</a></p>
+<p>这里需要装一个Arduinojson库，同时需要运行代码里面的python服务端。代码里面具体怎么实现我就没有去研究了。</p>
+<p>可以显示累计治愈数，现有确诊，现有疑似，累计死亡数。每一分钟更新一次数据。每个数据显示15秒。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://yuhaojiang.gitee.io/2020/03/15/DVWA%E7%BB%83%E4%B9%A0%E2%85%A1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -370,7 +476,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-16 12:26:12" itemprop="dateModified" datetime="2020-10-16T12:26:12+08:00">2020-10-16</time>
+                <time title="修改时间：2020-10-16 12:29:02" itemprop="dateModified" datetime="2020-10-16T12:29:02+08:00">2020-10-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -407,10 +513,7 @@
 <p>而且存在sql注入漏洞，也可以输入admin’#即可成功登录</p>
 <img src="http://img.kawhi.xyz/image-20200314110629085.png" alt="image-20200314110629085" style="high:80%;width:80%;" />
 
-<ul>
-<li><h6 id="Medium等级"><a href="#Medium等级" class="headerlink" title="Medium等级"></a>Medium等级</h6></li>
-</ul>
-<p>先查看一下源码</p>
+<h6 id="Medium等级"><a href="#Medium等级" class="headerlink" title="Medium等级"></a>Medium等级</h6><p>先查看一下源码</p>
 <img src="http://img.kawhi.xyz/image-20200314110942887.png" alt="image-20200314110942887" style="high:80%;width:80%;" />
 
 <blockquote>
@@ -419,58 +522,40 @@
 <p>mysql_real_escape_string() 函数转义 SQL 语句中使用的字符串中的特殊字符</p>
 <p>但是依然没有加入有效的防爆破，爆破方式和low等级一样</p>
 </blockquote>
-<ul>
-<li><h6 id="High等级"><a href="#High等级" class="headerlink" title="High等级"></a>High等级</h6></li>
-</ul>
-<p>通过抓包可以发现登录的时候提交了四个参数</p>
+<h6 id="High等级"><a href="#High等级" class="headerlink" title="High等级"></a>High等级</h6><p>通过抓包可以发现登录的时候提交了四个参数</p>
 <img src="http://img.kawhi.xyz/image-20200314111842212.png" alt="image-20200314111842212" style="high:80%;width:80%;" />
 
 <blockquote>
 <p>这样就要求我们发送的每个请求包中包含随机生成的token值。我们无法简单的使用Burpsuite完成</p>
 <p>看网上说可以用python脚本抓取每次返回的user_token，这里我没去试了，实力劝退</p>
 </blockquote>
-<ul>
-<li><h6 id="Impossible等级"><a href="#Impossible等级" class="headerlink" title="Impossible等级"></a>Impossible等级</h6></li>
-</ul>
-<p>先查看一下源码</p>
+<h6 id="Impossible等级"><a href="#Impossible等级" class="headerlink" title="Impossible等级"></a>Impossible等级</h6><p>先查看一下源码</p>
 <img src="http://img.kawhi.xyz/image-20200314112505889.png" alt="image-20200314112505889" style="high:80%;width:80%;" />
 
 <blockquote>
 <p>可以看到Impossible级别的代码加入了可靠的防爆破机制</p>
 <p>一旦错误次数达到3次，就会锁定用户15秒</p>
 </blockquote>
-<h5 id="命令注入"><a href="#命令注入" class="headerlink" title="命令注入"></a><strong>命令注入</strong></h5><ul>
-<li><h6 id="low等级-1"><a href="#low等级-1" class="headerlink" title="low等级"></a>low等级</h6></li>
-</ul>
-<img src="http://img.kawhi.xyz/image-20200314112821092.png" alt="image-20200314112821092" style="high:80%;width:80%;" />
+<h5 id="命令注入"><a href="#命令注入" class="headerlink" title="命令注入"></a><strong>命令注入</strong></h5><h6 id="low等级-1"><a href="#low等级-1" class="headerlink" title="low等级"></a>low等级</h6><img src="http://img.kawhi.xyz/image-20200314112821092.png" alt="image-20200314112821092" style="high:80%;width:80%;" />
 
 <p>这里我们随便输入一下127.0.0.1&amp;&amp;ipconfig</p>
 <img src="http://img.kawhi.xyz/image-20200314114952634.png" alt="image-20200314114952634" style="high:80%;width:80%;" />
 
 <p>可以发现low等级对ip的参数没有做任何的过滤</p>
-<ul>
-<li><h6 id="Medium等级-1"><a href="#Medium等级-1" class="headerlink" title="Medium等级"></a>Medium等级</h6></li>
-</ul>
-<p>先查看一下源码</p>
+<h6 id="Medium等级-1"><a href="#Medium等级-1" class="headerlink" title="Medium等级"></a>Medium等级</h6><p>先查看一下源码</p>
 <img src="http://img.kawhi.xyz/image-20200314115219862.png" alt="image-20200314115219862" style="high:80%;width:80%;" />
 
 <blockquote>
 <p>发现相比于Low等级的代码，服务器端对ip参数做了一定过滤，把”&amp;&amp;” 、”；”替换为空；本质上是添加了黑名单机制，依旧存在安全问题。</p>
 <p>这里可以使用&amp;或者|，或者用绕过的方式如&amp;;&amp;</p>
 </blockquote>
-<ul>
-<li><h6 id="High等级-1"><a href="#High等级-1" class="headerlink" title="High等级"></a>High等级</h6></li>
-</ul>
-<p>查看一下源代码</p>
+<h6 id="High等级-1"><a href="#High等级-1" class="headerlink" title="High等级"></a>High等级</h6><p>查看一下源代码</p>
 <img src="http://img.kawhi.xyz/image-20200314120028803.png" alt="image-20200314120028803" style="high:80%;width:80%;" />
 
 <blockquote>
 <p>发现过滤了如上的字符，但是箭头所示的地方是将“| ”替换为空，并不是“|”，所以这里可以直接输入127.0.0.1|ipconfig即可</p>
 </blockquote>
-<ul>
-<li><h6 id="Impossible等级-1"><a href="#Impossible等级-1" class="headerlink" title="Impossible等级"></a>Impossible等级</h6></li>
-</ul>
-<img src="http://img.kawhi.xyz/image-20200314120450931.png" alt="image-20200314120450931" style="high:80%;width:80%;" />
+<h6 id="Impossible等级-1"><a href="#Impossible等级-1" class="headerlink" title="Impossible等级"></a>Impossible等级</h6><img src="http://img.kawhi.xyz/image-20200314120450931.png" alt="image-20200314120450931" style="high:80%;width:80%;" />
 
 <blockquote>
 <p>可以看到这里不仅加入了token,而且同时对参数ip进行了限制，只有数字才可执行，彻底杜绝了命令注入漏洞。</p>
@@ -480,10 +565,7 @@
 <p>基本的流程如下：</p>
 <p>①用户首先登录服务器<br>②服务器返回cookie<br>③然后攻击者将修改用户密码的URL发给用户<br>④用户如果点击了该URL，则密码就会被更改<br>⑤最后，攻击者使用用户的用户名和密码尝试进行登录服务器。如果成功，则证明用户点过url，如果没有登录成功，则用户没有点击url。</p>
 </blockquote>
-<ul>
-<li><h6 id="low等级-2"><a href="#low等级-2" class="headerlink" title="low等级"></a>low等级</h6></li>
-</ul>
-<p>查看他的源码</p>
+<h6 id="low等级-2"><a href="#low等级-2" class="headerlink" title="low等级"></a>low等级</h6><p>查看他的源码</p>
 <img src="http://img.kawhi.xyz/image-20200314122002750.png" alt="image-20200314122002750" style="high:80%;width:80%;" />
 
 <blockquote>
@@ -511,10 +593,7 @@
 <p>因为是存储型xss，所以写入之后每次访问xss都会直接重定向1.html页面</p>
 <p>结果也发现密码成功修改</p>
 </blockquote>
-<ul>
-<li><h6 id="Medium等级-2"><a href="#Medium等级-2" class="headerlink" title="Medium等级"></a>Medium等级</h6></li>
-</ul>
-<p>查看一下源码</p>
+<h6 id="Medium等级-2"><a href="#Medium等级-2" class="headerlink" title="Medium等级"></a>Medium等级</h6><p>查看一下源码</p>
 <img src="http://img.kawhi.xyz/image-20200314141947325.png" alt="image-20200314141947325" style="high:80%;width:80%;" />
 
 <blockquote>
@@ -523,19 +602,13 @@
 <p>如果使用上面的方式二或者三就会失效，这里可以把1.html再放进包含本地ip地址的文件夹中即可</p>
 <img src="http://img.kawhi.xyz/image-20200314143922825.png" alt="image-20200314143922825" style="high:80%;width:80%;" />
 
-<ul>
-<li><h6 id="High等级-2"><a href="#High等级-2" class="headerlink" title="High等级"></a>High等级</h6></li>
-</ul>
-<p>查看一下源码</p>
+<h6 id="High等级-2"><a href="#High等级-2" class="headerlink" title="High等级"></a>High等级</h6><p>查看一下源码</p>
 <img src="http://img.kawhi.xyz/image-20200314164900286.png" alt="image-20200314164900286" style="high:80%;width:80%;" />
 
 <blockquote>
 <p>发现加入了Anti-CSRF token机制。这里实力劝退</p>
 </blockquote>
-<ul>
-<li><h6 id="Impossible等级-2"><a href="#Impossible等级-2" class="headerlink" title="Impossible等级"></a>Impossible等级</h6></li>
-</ul>
-<img src="http://img.kawhi.xyz/image-20200314165136975.png" alt="image-20200314165136975" style="high:80%;width:80%;" />
+<h6 id="Impossible等级-2"><a href="#Impossible等级-2" class="headerlink" title="Impossible等级"></a>Impossible等级</h6><img src="http://img.kawhi.xyz/image-20200314165136975.png" alt="image-20200314165136975" style="high:80%;width:80%;" />
 
 <blockquote>
 <p>这里要求输入原始的密码，有效的防止了CSRF</p>
@@ -569,10 +642,7 @@
 <p>？file=</p>
 <p>？home=</p>
 </blockquote>
-<ul>
-<li><h6 id="low等级-3"><a href="#low等级-3" class="headerlink" title="low等级"></a>low等级</h6></li>
-</ul>
-<p><strong>本地文件包含</strong></p>
+<h6 id="low等级-3"><a href="#low等级-3" class="headerlink" title="low等级"></a>low等级</h6><p><strong>本地文件包含</strong></p>
 <p>查看源代码</p>
 <img src="http://img.kawhi.xyz/image-20200314171409981.png" alt="image-20200314171409981" style="high:80%;width:80%;" />
 
@@ -590,27 +660,18 @@
 </blockquote>
 <img src="http://img.kawhi.xyz/image-20200314172507620.png" alt="image-20200314172507620" style="high:80%;width:80%;" />
 
-<ul>
-<li><h6 id="Medium等级-3"><a href="#Medium等级-3" class="headerlink" title="Medium等级"></a>Medium等级</h6></li>
-</ul>
-<p>查看一下源码</p>
+<h6 id="Medium等级-3"><a href="#Medium等级-3" class="headerlink" title="Medium等级"></a>Medium等级</h6><p>查看一下源码</p>
 <img src="http://img.kawhi.xyz/image-20200314172841792.png" alt="image-20200314172841792" style="high:80%;width:80%;" />
 
 <blockquote>
 <p>看源码可知：Medium级别使用了str_replace函数将“http://”，“https://”，“../”，“..\”替换为空</p>
 <p>可以使用“httphttp://://”, “…/./”,”file:///”方式绕过</p>
 </blockquote>
-<ul>
-<li><h6 id="High等级-3"><a href="#High等级-3" class="headerlink" title="High等级"></a>High等级</h6></li>
-</ul>
-<blockquote>
+<h6 id="High等级-3"><a href="#High等级-3" class="headerlink" title="High等级"></a>High等级</h6><blockquote>
 <p>查看源码之后发现page参数必须以file开头</p>
 <p>直接使用file:///方式绕过即可</p>
 </blockquote>
-<ul>
-<li><h6 id="Impossible等级-3"><a href="#Impossible等级-3" class="headerlink" title="Impossible等级"></a>Impossible等级</h6></li>
-</ul>
-<blockquote>
+<h6 id="Impossible等级-3"><a href="#Impossible等级-3" class="headerlink" title="Impossible等级"></a>Impossible等级</h6><blockquote>
 <p>查看源代码可知</p>
 <p>Impossible级别中，page参数只能是如上四种，include.php,file1.php,file2.php,file3.php；杜绝了文件包含漏洞</p>
 </blockquote>
@@ -813,7 +874,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-count">24</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
