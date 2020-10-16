@@ -17,14 +17,14 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"yuhaojiang.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"www.getflag.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="前言这次复现的题目是师兄本周开会讲的题目，我都复现了一下，又学到了新的东西。题目具体详情可以参考师兄的文章：传送门 虎符easy_login首先打开题目源码发现static&#x2F;js&#x2F;app.js，进去后发现koa 利用 koa-static 错误配置的源码泄露获得源码，进行审计。直接读取app.js koa是基于Node.js的web框架。然后再进去controller.js 再进入controll">
 <meta property="og:type" content="article">
 <meta property="og:title" content="虎符&amp;MRCTF">
-<meta property="og:url" content="https://yuhaojiang.gitee.io/2020/04/24/%E8%99%8E%E7%AC%A6&MRCTF/index.html">
-<meta property="og:site_name" content="kawhi的博客">
+<meta property="og:url" content="https://www.getflag.cn/2020/04/24/%E8%99%8E%E7%AC%A6&MRCTF/index.html">
+<meta property="og:site_name" content="kawhi">
 <meta property="og:description" content="前言这次复现的题目是师兄本周开会讲的题目，我都复现了一下，又学到了新的东西。题目具体详情可以参考师兄的文章：传送门 虎符easy_login首先打开题目源码发现static&#x2F;js&#x2F;app.js，进去后发现koa 利用 koa-static 错误配置的源码泄露获得源码，进行审计。直接读取app.js koa是基于Node.js的web框架。然后再进去controller.js 再进入controll">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://img.kawhi.xyz/image-20200423184848460.png">
@@ -48,7 +48,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://img.kawhi.xyz/image-20200423184848460.png">
 
-<link rel="canonical" href="https://yuhaojiang.gitee.io/2020/04/24/%E8%99%8E%E7%AC%A6&MRCTF/">
+<link rel="canonical" href="https://www.getflag.cn/2020/04/24/%E8%99%8E%E7%AC%A6&MRCTF/">
 
 
 <script id="page-configurations">
@@ -61,7 +61,7 @@
   };
 </script>
 
-  <title>虎符&MRCTF | kawhi的博客</title>
+  <title>虎符&MRCTF | kawhi</title>
   
 
 
@@ -112,9 +112,10 @@
 
     <a href="/" class="brand" rel="start">
       <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">kawhi的博客</h1>
+      <h1 class="site-title">kawhi</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
+      <p class="site-subtitle" itemprop="description">1</p>
   </div>
 
   <div class="site-nav-right">
@@ -176,16 +177,16 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://yuhaojiang.gitee.io/2020/04/24/%E8%99%8E%E7%AC%A6&MRCTF/">
+    <link itemprop="mainEntityOfPage" href="https://www.getflag.cn/2020/04/24/%E8%99%8E%E7%AC%A6&MRCTF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
       <meta itemprop="name" content="kawhi">
-      <meta itemprop="description" content="">
+      <meta itemprop="description" content="2">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="kawhi的博客">
+      <meta itemprop="name" content="kawhi">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
@@ -559,7 +560,7 @@
     <img class="site-author-image" itemprop="image" alt="kawhi"
       src="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
   <p class="site-author-name" itemprop="name">kawhi</p>
-  <div class="site-description" itemprop="description"></div>
+  <div class="site-description" itemprop="description">2</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
