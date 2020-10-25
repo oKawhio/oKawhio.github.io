@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.getflag.cn/2020/07/18/无字符构造webshell/</loc>
+    
+    <lastmod>2020-10-25</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.getflag.cn/links/index.html</loc>
     
     <lastmod>2020-10-25</lastmod>
@@ -129,13 +136,6 @@
   
   <url>
     <loc>https://www.getflag.cn/2020/03/26/BugkuCTF-WEB/</loc>
-    
-    <lastmod>2020-10-25</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/07/18/无字符构造webshell/</loc>
     
     <lastmod>2020-10-25</lastmod>
     
