@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>2020年「羊城杯」网络安全大赛</title>
+    <title>羊城杯 2020</title>
     <url>/2020/09/11/2020%E5%B9%B4%E3%80%8C%E7%BE%8A%E5%9F%8E%E6%9D%AF%E3%80%8D%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B/</url>
     <content><![CDATA[<h1 id="easycon"><a href="#easycon" class="headerlink" title="easycon"></a>easycon</h1><p>连接上蚁剑后，发现<code>bbbbbbbbb.txt</code>文件，base64解码保存为图片即可看到flag。<a id="more"></a></p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line">f = open(<span class="string">r&#x27;bbbbbbbbb.txt&#x27;</span>,<span class="string">&#x27;r&#x27;</span>)</span><br><span class="line">s = f.read()</span><br><span class="line">f2 = open(<span class="string">r&#x27;1.txt&#x27;</span>,<span class="string">&#x27;wb+&#x27;</span>)</span><br><span class="line">flag = (base64.b64decode(s))</span><br><span class="line">f2.write(flag)</span><br><span class="line">f2.close()</span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure>
@@ -285,7 +285,7 @@
       </categories>
   </entry>
   <entry>
-    <title>2020腾讯犀牛鸟网络安全T-Star高校挑战赛</title>
+    <title>腾讯T-Star高校挑战赛 2020</title>
     <url>/2020/07/02/2020%E8%85%BE%E8%AE%AF%E7%8A%80%E7%89%9B%E9%B8%9F%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8T-Star%E9%AB%98%E6%A0%A1%E6%8C%91%E6%88%98%E8%B5%9B/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Gq和hhhm师傅tql<a id="more"></a></p>
 <h2 id="签到"><a href="#签到" class="headerlink" title="签到"></a>签到</h2><p>考点：前端js验证图片后缀</p>
@@ -674,7 +674,7 @@
       </categories>
   </entry>
   <entry>
-    <title>DelCTF2020</title>
+    <title>DelCTF 2020</title>
     <url>/2020/05/08/DelCTF2020/</url>
     <content><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h4><p>题目对我来说太难，只复现了两道题目。<a id="more"></a></p>
 <h4 id="Check-In"><a href="#Check-In" class="headerlink" title="Check In"></a><strong>Check In</strong></h4><p>一道上传漏洞题，会检查<code>Content-Type</code>和文件后缀黑名单，这个问题不大。</p>
@@ -755,7 +755,7 @@
       </categories>
   </entry>
   <entry>
-    <title>DozerCTF</title>
+    <title>DozerCTF 2020</title>
     <url>/2020/06/17/DozerCTF/</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>干啥啥不行，赛后read writeup第一名。<a id="more"></a></p>
 <h1 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h1><h2 id="sqli-labs"><a href="#sqli-labs" class="headerlink" title="sqli-labs"></a>sqli-labs</h2><p>这道题是原题</p>
@@ -906,7 +906,7 @@
       </categories>
   </entry>
   <entry>
-    <title>GKCTF2020</title>
+    <title>GKCTF 2020</title>
     <url>/2020/06/01/GKCTF%202020/</url>
     <content><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h4><p>抽空复现一下<a id="more"></a></p>
 <h4 id="老八小超市"><a href="#老八小超市" class="headerlink" title="老八小超市"></a><strong>老八小超市</strong></h4><p>打开之后是个shopxo的商城，用默认后台账号密码登录，成功进入后台。</p>
@@ -1542,7 +1542,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
       </categories>
   </entry>
   <entry>
-    <title>WMCTF2020</title>
+    <title>WMCTF 2020</title>
     <url>/2020/08/06/WMCTF2020/</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>不会做，好多知识盲点🙃<a id="more"></a></p>
 <h1 id="web"><a href="#web" class="headerlink" title="web"></a><strong>web</strong></h1><h2 id="web-checkin"><a href="#web-checkin" class="headerlink" title="web_checkin"></a><strong>web_checkin</strong></h2><p>源码为</p>
@@ -1615,7 +1615,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
       </categories>
   </entry>
   <entry>
-    <title>ciscn初赛</title>
+    <title>ciscn初赛 2020</title>
     <url>/2020/08/22/ciscn%E5%88%9D%E8%B5%9B/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><p>一次躺赢的比赛<a id="more"></a></p>
 <p>一队wp:<a style="text-decoration:none;" class="foo" href="https://www.redmango.top/article/44" target="_blank">传送门</a></p>
@@ -2000,7 +2000,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
       </categories>
   </entry>
   <entry>
-    <title>安恒七月赛</title>
+    <title>安恒七月赛 2020</title>
     <url>/2020/07/26/%E5%AE%89%E6%81%92%E4%B8%83%E6%9C%88%E8%B5%9B/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h3><p>就几道题，水一下<a id="more"></a></p>
 <h3 id="ezfileinclude"><a href="#ezfileinclude" class="headerlink" title="ezfileinclude"></a><strong>ezfileinclude</strong></h3><p>打开题目链接后显示出来的是一张图片，查看网页源代码会在img标签种发现一个/image.php?t=xxxxx&amp;f=base64(xxxx)</p>
@@ -3262,7 +3262,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
       </categories>
   </entry>
   <entry>
-    <title>虎符&amp;MRCTF</title>
+    <title>虎符&amp;MRCTF 2020</title>
     <url>/2020/04/24/%E8%99%8E%E7%AC%A6%E5%92%8CMRCTF/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><p>这次复现的题目是师兄本周开会讲的题目，我都复现了一下，又学到了新的东西。题目具体详情可以参考师兄的文章：<a class="foo" target="_blank" href="https://www.plasf.cn/2020/04/20/HFCTF_WP/">传送门</a><a id="more"></a></p>
 <h2 id="虎符"><a href="#虎符" class="headerlink" title="虎符"></a><strong>虎符</strong></h2><h3 id="easy-login"><a href="#easy-login" class="headerlink" title="easy_login"></a><strong>easy_login</strong></h3><p>首先打开题目源码发现static/js/app.js，进去后发现koa</p>
@@ -4060,7 +4060,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
       </categories>
   </entry>
   <entry>
-    <title>太湖杯</title>
+    <title>太湖杯 2020</title>
     <url>/2020/11/14/%E5%A4%AA%E6%B9%96%E6%9D%AF/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>复盘一下不久前的太湖杯的web&amp;misc<a id="more"></a></p>
 <h2 id="web"><a href="#web" class="headerlink" title="web"></a>web</h2><h3 id="checkInGame"><a href="#checkInGame" class="headerlink" title="checkInGame"></a>checkInGame</h3><p>进去之后是一个连连看的画面，倒计时40秒完成即可获得flag</p>
@@ -4336,7 +4336,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
       </categories>
   </entry>
   <entry>
-    <title>海啸杯writeup</title>
+    <title>第三届海啸杯</title>
     <url>/2020/11/19/%E6%B5%B7%E5%95%B8%E6%9D%AF/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>记一次校内的比赛<a id="more"></a></p>
 <h2 id="misc"><a href="#misc" class="headerlink" title="misc"></a>misc</h2><h3 id="表白"><a href="#表白" class="headerlink" title="表白"></a>表白</h3><p>PNG高度隐藏</p>
