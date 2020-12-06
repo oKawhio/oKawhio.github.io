@@ -27,25 +27,25 @@
 <meta property="og:site_name" content="kawhi&#39;s Blog">
 <meta property="og:description" content="前言抽空复现一下">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200526220703847.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200526220146582.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200526220613995.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200526225116128.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200526225159436.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200526225043564.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200526231215560.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200526231327900.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200527114207278.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200527114920600.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200601151723022.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200601172717498.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200601182225212.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200601185426514.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526220703847.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526220146582.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526220613995.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526225116128.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526225159436.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526225043564.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526231215560.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526231327900.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200527114207278.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200527114920600.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200601151723022.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200601172717498.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200601182225212.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200601185426514.png">
 <meta property="article:published_time" content="2020-05-31T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-11-20T14:20:30.575Z">
+<meta property="article:modified_time" content="2020-12-06T08:21:38.783Z">
 <meta property="article:author" content="kawhi">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://img.kawhi.xyz/image-20200526220703847.png">
+<meta name="twitter:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526220703847.png">
 
 <link rel="canonical" href="https://www.getflag.cn/2020/06/01/GKCTF%202020/">
 
@@ -239,7 +239,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-20 22:20:30" itemprop="dateModified" datetime="2020-11-20T22:20:30+08:00">2020-11-20</time>
+                <time title="修改时间：2020-12-06 16:21:38" itemprop="dateModified" datetime="2020-12-06T16:21:38+08:00">2020-12-06</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -283,13 +283,13 @@
 <p>参考：<a class="foo" href="http://www.nctry.com/1660.html" target="_blank">传送门</a></p>
 <p>然后在假flag告知下得知真flag在/root目录下，但是因为当前是www-data用户是没有权限访问/root目录的。</p>
 <p>然后在根目录下发现auto.sh</p>
-<img src="http://img.kawhi.xyz/image-20200526220703847.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526220703847.png" style="high:80%;width:80%;" />
 
-<img src="http://img.kawhi.xyz/image-20200526220146582.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526220146582.png" style="high:80%;width:80%;" />
 
 <p>输入ps -ef发现auto.sh是root权限执行的。</p>
 <p>然后在/var/mail/makeflaghint.py修改一下代码，加入两行内容读取/root/flag到/flag.hint</p>
-<img src="http://img.kawhi.xyz/image-20200526220613995.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526220613995.png" style="high:80%;width:80%;" />
 
 <p>然后在flag.hint里面成功读取flag。</p>
 <h4 id="CheckIN"><a href="#CheckIN" class="headerlink" title="CheckIN"></a><strong>CheckIN</strong></h4><p>源码</p>
@@ -302,24 +302,24 @@
 <p>base64加密得ZXZhbCgkX1BPU1RbY21kXSk7</p>
 <p>在根目录看到一个flag，但是没有权限查看，还有一个readflag文件。</p>
 <p>但是发现蚁剑终端并不能用，回到phpinfo()发现很多方法被禁用。</p>
-<img src="http://img.kawhi.xyz/image-20200526225116128.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526225116128.png" style="high:80%;width:80%;" />
 
 <p>过滤了很多function，想到绕过disable_functions，上传一个文件使其执行任意命令，exp地址：<a class="foo" href="https://github.com/mm0r1/exploits/blob/master/php7-gc-bypass/exploit.php" target="_blank">传送门</a></p>
 <p>在这里稍微改一下。</p>
-<img src="http://img.kawhi.xyz/image-20200526225159436.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526225159436.png" style="high:80%;width:80%;" />
 
 <p>然后在页面就可以得到flag。</p>
-<img src="http://img.kawhi.xyz/image-20200526225043564.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526225043564.png" style="high:80%;width:80%;" />
 
 <h4 id="cve版签到"><a href="#cve版签到" class="headerlink" title="cve版签到"></a><strong>cve版签到</strong></h4><p>通过%00截断可以让<code>get_headers()</code>请求到错误的主机，于是请求到本地。</p>
-<img src="http://img.kawhi.xyz/image-20200526231215560.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526231215560.png" style="high:80%;width:80%;" />
 
 <p>再根据提示把后缀改为123</p>
-<img src="http://img.kawhi.xyz/image-20200526231327900.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526231327900.png" style="high:80%;width:80%;" />
 
 <p>即可得到flag。</p>
 <h4 id="EZ三剑客-EzWeb"><a href="#EZ三剑客-EzWeb" class="headerlink" title="EZ三剑客-EzWeb"></a><strong>EZ三剑客-EzWeb</strong></h4><p>访问?secret得到本机ip</p>
-<img src="http://img.kawhi.xyz/image-20200527114207278.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200527114207278.png" style="high:80%;width:80%;" />
 
 <p>写个脚本探测内网</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">ip = <span class="string">&#x27;173.17.51.&#123;&#125;&#x27;</span></span><br><span class="line">url = <span class="string">&#x27;http://ac0d31a7-5126-4f26-a7ec-b38aceea896a.node3.buuoj.cn&#x27;</span></span><br><span class="line">temp = <span class="string">&quot;&#123;0&#125;/index.php?url=&#123;1&#125;&amp;&amp;submit=提交&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">255</span>):</span><br><span class="line">    u = temp.format(url, ip.format(i))</span><br><span class="line">    resp = requests.get(u)</span><br><span class="line">    <span class="keyword">if</span> len(resp.text) != <span class="number">421</span>:</span><br><span class="line">    	print(i)</span><br></pre></td></tr></table></figure>
@@ -327,7 +327,7 @@
 <p>跑出结果4 5 6 7 10 11</p>
 <p>一个一个试，11的时候给出了提示。</p>
 <p>然后用burp爆破端口</p>
-<img src="http://img.kawhi.xyz/image-20200527114920600.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200527114920600.png" style="high:80%;width:80%;" />
 
 <p>payloads选numbers爆破1到65535端口，线程选1。</p>
 <p>爆破出结果6374。</p>
@@ -356,19 +356,19 @@
 <p>payload(post提交)</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">e=setInterval.constructor(<span class="string">&#x27;return process&#x27;</span>)().mainModule.require(<span class="string">&#x27;child_process&#x27;</span>).execSync(<span class="string">&#x27;cat /flag&#x27;</span>).toString();</span><br></pre></td></tr></table></figure>
 
-<img src="http://img.kawhi.xyz/image-20200601151723022.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200601151723022.png" style="high:80%;width:80%;" />
 
 <h4 id="Pokémon"><a href="#Pokémon" class="headerlink" title="Pokémon"></a><strong>Pokémon</strong></h4><p>下载得到一个gba文件，用<code>VisualBoyAdvance</code>打开，玩游戏即可得到flag。</p>
 <h4 id="code-obfuscation"><a href="#code-obfuscation" class="headerlink" title="code obfuscation"></a><strong>code obfuscation</strong></h4><p>得到一张残缺的二维码图片</p>
 <p>然后在这个网站上面修补：<a class="foo" href="https://merricx.github.io/qrazybox/" target="_blank">传送门</a></p>
 <p>或者使用ps修复也行</p>
-<img src="http://img.kawhi.xyz/image-20200601172717498.png" style="high:50%;width:50%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200601172717498.png" style="high:50%;width:50%;" />
 
 <p>扫二维码得gkctf，再base58解密得到压缩包密码CfjxaPF。</p>
 <h4 id="Harley-Quinn"><a href="#Harley-Quinn" class="headerlink" title="Harley Quinn"></a><strong>Harley Quinn</strong></h4><p>得到一段音频，最后面有拨号音，剪切之后丢到dtmf里面。</p>
 <p>解得#222833344477773338866# 根据hint九键输出ctfisfun。</p>
 <p>下载hint所说的软件, FreeFileCamouflage。</p>
-<img src="http://img.kawhi.xyz/image-20200601182225212.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200601182225212.png" style="high:80%;width:80%;" />
 
 <p>输入密钥和图片地址得到flag。</p>
 <h4 id="Sail-a-boat-down-the-river"><a href="#Sail-a-boat-down-the-river" class="headerlink" title="Sail a boat down the river"></a><strong>Sail a boat down the river</strong></h4><p>下载得一个flag.mp4有一帧是二维码，然后扫描得到一个网盘链接，但是没有提取码，根据视频里的摄像头闪光长短转换成<code>摩斯密码</code>。解码得<code>yw8g</code>。</p>
@@ -377,7 +377,7 @@
 
 <p>在这个网站可以自动求解数独：<a class="foo" href="http://www.llang.net/sudoku/calsudoku.html" target="_blank">传送门</a></p>
 <p>得到密钥<code>52693795149137</code>。</p>
-<img src="http://img.kawhi.xyz/image-20200601185426514.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200601185426514.png" style="high:80%;width:80%;" />
 
 <p>然后求得压缩包密码<code>GG0kc.tf</code>，解压得到<code>逆光 vocal.ovex</code>文件。使用<code>Overture 5</code>打谱软件打开，在歌词里看到flag。</p>
 

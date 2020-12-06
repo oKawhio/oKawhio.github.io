@@ -27,13 +27,13 @@
 <meta property="og:site_name" content="kawhi&#39;s Blog">
 <meta property="og:description" content="前言总结的不是很全，以后慢慢更。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200527114207278.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200527114920600.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200527114207278.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200527114920600.png">
 <meta property="article:published_time" content="2020-07-13T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-10-25T02:30:48.768Z">
+<meta property="article:modified_time" content="2020-12-06T08:22:25.228Z">
 <meta property="article:author" content="kawhi">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://img.kawhi.xyz/image-20200527114207278.png">
+<meta name="twitter:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200527114207278.png">
 
 <link rel="canonical" href="https://www.getflag.cn/2020/07/14/SSRF%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0/">
 
@@ -227,7 +227,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-25 10:30:48" itemprop="dateModified" datetime="2020-10-25T10:30:48+08:00">2020-10-25</time>
+                <time title="修改时间：2020-12-06 16:22:25" itemprop="dateModified" datetime="2020-12-06T16:22:25+08:00">2020-12-06</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -387,14 +387,14 @@
 <p>可以看到经过了一个正则的匹配才可以<code>curl($url);</code>。</p>
 <p>从正则可以看出过滤了<code>file://</code>，<code>dict</code>，<code>127.0.0.1</code>，<code>localhost</code>，<code>../</code>但是没有过滤http协议和gopher协议。看到如果get传值secret会执行ifconfig。</p>
 <p>按F12在有个注释也可以发现?secret，访问?secret得到本机ip</p>
-<img src="http://img.kawhi.xyz/image-20200527114207278.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200527114207278.png" style="high:80%;width:80%;" />
 
 <p>写个脚本探测内网</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">ip = <span class="string">&#x27;173.17.51.&#123;&#125;&#x27;</span></span><br><span class="line">url = <span class="string">&#x27;http://ac0d31a7-5126-4f26-a7ec-b38aceea896a.node3.buuoj.cn&#x27;</span></span><br><span class="line">temp = <span class="string">&quot;&#123;0&#125;/index.php?url=&#123;1&#125;&amp;&amp;submit=提交&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">255</span>):</span><br><span class="line">    u = temp.format(url, ip.format(i))</span><br><span class="line">    resp = requests.get(u)</span><br><span class="line">    <span class="keyword">if</span> len(resp.text) != <span class="number">421</span>:</span><br><span class="line">    	print(i)</span><br></pre></td></tr></table></figure>
 
 <p>跑出结果4 5 6 7 10 11，一个一个试，11的时候给出了提示，当然这里不用写脚本，用burp去爆破也是可以的。</p>
 <p>获取到地址之后，然后用burp爆破端口。</p>
-<img src="http://img.kawhi.xyz/image-20200527114920600.png" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200527114920600.png" style="high:80%;width:80%;" />
 
 <p>payloads选numbers爆破1到65535端口，线程选1。一般来说猜测是6379端口（redis）或3306端口（mysql），当然爆破出结果是6374。</p>
 <p>因为输入url这里只限制了<code>file://</code>，没有ban掉<code>gopher://</code>，很容易想到是Redis SSRF getshell。</p>

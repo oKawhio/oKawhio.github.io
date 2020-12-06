@@ -27,14 +27,14 @@
 <meta property="og:site_name" content="kawhi&#39;s Blog">
 <meta property="og:description" content="前言干啥啥不行，赛后read writeup第一名。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200616230446072.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200616091015847.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200616104946314.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200616230446072.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200616091015847.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200616104946314.png">
 <meta property="article:published_time" content="2020-06-16T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-11-20T14:20:39.017Z">
+<meta property="article:modified_time" content="2020-12-06T08:24:45.153Z">
 <meta property="article:author" content="kawhi">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://img.kawhi.xyz/image-20200616230446072.png">
+<meta name="twitter:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200616230446072.png">
 
 <link rel="canonical" href="https://www.getflag.cn/2020/06/17/DozerCTF/">
 
@@ -228,7 +228,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-20 22:20:39" itemprop="dateModified" datetime="2020-11-20T22:20:39+08:00">2020-11-20</time>
+                <time title="修改时间：2020-12-06 16:24:45" itemprop="dateModified" datetime="2020-12-06T16:24:45+08:00">2020-12-06</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -368,7 +368,7 @@
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">        function js_unescape($str) &#123;</span><br><span class="line">                $ret = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">                $len = strlen($str);</span><br><span class="line">                <span class="keyword">for</span> ($i = <span class="number">0</span>;$i &lt; $len;$i++) &#123;</span><br><span class="line">                        <span class="keyword">if</span> ($str[$i] == <span class="string">&#x27;%&#x27;</span> &amp;&amp; $str[$i + <span class="number">1</span>] == <span class="string">&#x27;u&#x27;</span>) &#123;</span><br><span class="line">                                $val = hexdec(substr($str, $i + <span class="number">2</span>, <span class="number">4</span>));</span><br><span class="line">                                <span class="keyword">if</span> ($val &lt; <span class="number">0x7f</span>) $ret.= chr($val);</span><br><span class="line">                                <span class="keyword">else</span> <span class="keyword">if</span> ($val &lt; <span class="number">0x800</span>) $ret.= chr(<span class="number">0xc0</span> | ($val &gt;&gt; <span class="number">6</span>)) . chr(<span class="number">0x80</span> | ($val &amp; <span class="number">0x3f</span>));</span><br><span class="line">                                <span class="keyword">else</span> $ret.= chr(<span class="number">0xe0</span> | ($val &gt;&gt; <span class="number">12</span>)) . chr(<span class="number">0x80</span> | (($val &gt;&gt; <span class="number">6</span>) &amp; <span class="number">0x3f</span>)) . chr(<span class="number">0x80</span> | ($val &amp; <span class="number">0x3f</span>));</span><br><span class="line">                                $i+= <span class="number">5</span>;</span><br><span class="line">                        &#125; <span class="keyword">else</span> <span class="keyword">if</span> ($str[$i] == <span class="string">&#x27;%&#x27;</span>) &#123;</span><br><span class="line">                                $ret.= urldecode(substr($str, $i, <span class="number">3</span>));</span><br><span class="line">                                $i+= <span class="number">2</span>;</span><br><span class="line">                        &#125; <span class="keyword">else</span> $ret.= $str[$i];</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> $ret;</span><br><span class="line">        &#125;</span><br><span class="line">        $data = js_unescape($_POST[<span class="string">&#x27;htmlcode&#x27;</span>]);  //对获得源码js_unescape解码。</span><br><span class="line">        $filename = $_POST[<span class="string">&#x27;filename&#x27;</span>] . date(<span class="string">&quot;y-m-d-h-i-s&quot;</span>) . <span class="string">&quot;.html&quot;</span>;</span><br><span class="line">        $myfile = fopen($filename, <span class="string">&quot;w&quot;</span>);</span><br><span class="line">        fwrite($myfile, $data);</span><br><span class="line">        fclose($myfile);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
 
 <p>然后在content处访问CSRF表单即可</p>
-<img src="http://img.kawhi.xyz/image-20200616230446072.png" alt="image-20200616230446072" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200616230446072.png" alt="image-20200616230446072" style="high:80%;width:80%;" />
 
 <h1 id="Misc"><a href="#Misc" class="headerlink" title="Misc"></a>Misc</h1><h2 id="py吗？"><a href="#py吗？" class="headerlink" title="py吗？"></a><strong>py吗？</strong></h2><p>题目是一张老外穿着python文化衫的图片。</p>
 <p>修改正常高度恢复正常的crc32校验。</p>
@@ -378,7 +378,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">secret<span class="number">-1</span></span><br><span class="line">secret<span class="number">-2</span></span><br><span class="line">secret<span class="number">-3</span></span><br><span class="line">secret<span class="number">-4</span></span><br></pre></td></tr></table></figure>
 
 <p>这里看官方wp是伪加密修改这里。</p>
-<img src="http://img.kawhi.xyz/image-20200616091015847.png" alt="image-20200616091015847" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200616091015847.png" alt="image-20200616091015847" style="high:80%;width:80%;" />
 
 <p>然后文件4合1</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">copy /b <span class="number">1</span>+<span class="number">2</span>+<span class="number">3</span>+<span class="number">4</span> new.txt</span><br></pre></td></tr></table></figure>
@@ -388,7 +388,7 @@
 
 <p>得到汉信码扫码可得flag。</p>
 <h2 id="upload"><a href="#upload" class="headerlink" title="upload"></a>upload</h2><p>在wireshark里面导出Http对象列表，发现flag.jpg，改zip后缀</p>
-<img src="http://img.kawhi.xyz/image-20200616104946314.png" alt="image-20200616104946314" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200616104946314.png" alt="image-20200616104946314" style="high:80%;width:80%;" />
 
 <p>然后crc32解密</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python crc32.py reverse <span class="number">0xC</span>RC32</span><br></pre></td></tr></table></figure>

