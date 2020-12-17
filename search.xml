@@ -4618,7 +4618,7 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
   </entry>
   <entry>
     <title>xmctf</title>
-    <url>/2020/12/17/%E6%98%9F%E7%9B%9F%E8%80%83%E6%A0%B8writeup/</url>
+    <url>/2020/12/17/xmctf/</url>
     <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>一共做了8道题，记录一下解题过程</p>
 <p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20201217195705321.png" alt="image-20201216234950487"><a id="more"></a></p>
 <h3 id="web3-考核"><a href="#web3-考核" class="headerlink" title="web3-考核"></a>web3-考核</h3><p>题目源码为</p>
