@@ -4511,9 +4511,7 @@
   <entry>
     <title>【转载】php伪协议在CTF中的应用小结</title>
     <url>/2020/12/22/php%E4%BC%AA%E5%8D%8F%E8%AE%AE%E5%9C%A8CTF%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8%E5%B0%8F%E7%BB%93/</url>
-    <content><![CDATA[<a id="more"></a>
-
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文章首发i春秋：<a href="https://bbs.ichunqiu.com/thread-59593-1-1.html">传送门</a></p>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><a id="more"></a>前言</h2><p>文章首发i春秋：<a href="https://bbs.ichunqiu.com/thread-59593-1-1.html">传送门</a></p>
 <p>php的伪协议在CTF中算是一个比较老的知识点，也有一些新的利用点，在最近的CTF比赛中比如极客大挑战2020，WMCTF2020中的题目也还会出现，于是本篇文章就把CTF中涉及到这个知识点的地方从浅到深做一个复习和总结</p>
 <blockquote>
 <p>关于php中的伪协议可以参考官方文档：<a href="https://www.php.net/manual/zh/wrappers.php">https://www.php.net/manual/zh/wrappers.php</a></p>
