@@ -547,7 +547,7 @@
 </blockquote>
 ]]></content>
       <categories>
-        <category>web安全</category>
+        <category>刷题</category>
       </categories>
   </entry>
   <entry>
@@ -672,7 +672,7 @@
 <h2 id="Impossible等级-3"><a href="#Impossible等级-3" class="headerlink" title="Impossible等级"></a><strong>Impossible等级</strong></h2><p>使用htmlspecialchars函数把预定义的字符&amp;、”、 ’、&lt;、&gt;转换为 HTML 实体，防止浏览器将其作为HTML元素（特殊意义），有效防止了反射型XSS攻击</p>
 ]]></content>
       <categories>
-        <category>web安全</category>
+        <category>刷题</category>
       </categories>
   </entry>
   <entry>
