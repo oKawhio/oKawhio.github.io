@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"www.getflag.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="前言最近在buu刷题，遇到到了一些关于反序列化的题目，这里做一个总结。">
+  <meta name="description" content="前言最近在buu刷题，遇到到了一些关于反序列化的题目，这里做一个总结。 PHP反序列化漏洞序列化和反序列化是什么？ 所有php里面的值都可以使用函数serialize()来返回一个包含字节流的字符串来表示。unserialize()函数能够重新把字符串变回php原来的值。 序列化一个对象将会保存对象的所有变量，但是不会保存对象的方法，只会保存类的名字。 ——php官方文档  序列化和反序列化本">
 <meta property="og:type" content="article">
 <meta property="og:title" content="反序列化漏洞总结">
 <meta property="og:url" content="https://www.getflag.cn/2020/05/12/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/index.html">
 <meta property="og:site_name" content="kawhi&#39;s Blog">
-<meta property="og:description" content="前言最近在buu刷题，遇到到了一些关于反序列化的题目，这里做一个总结。">
+<meta property="og:description" content="前言最近在buu刷题，遇到到了一些关于反序列化的题目，这里做一个总结。 PHP反序列化漏洞序列化和反序列化是什么？ 所有php里面的值都可以使用函数serialize()来返回一个包含字节流的字符串来表示。unserialize()函数能够重新把字符串变回php原来的值。 序列化一个对象将会保存对象的所有变量，但是不会保存对象的方法，只会保存类的名字。 ——php官方文档  序列化和反序列化本">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711120132680.png">
 <meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711121735182.png">
@@ -43,7 +43,7 @@
 <meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711143646347.png">
 <meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711143829700.png">
 <meta property="article:published_time" content="2020-05-11T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-12-22T15:47:58.080Z">
+<meta property="article:modified_time" content="2021-02-05T13:20:46.978Z">
 <meta property="article:author" content="kawhi">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711120132680.png">
@@ -240,7 +240,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-12-22 23:47:58" itemprop="dateModified" datetime="2020-12-22T23:47:58+08:00">2020-12-22</time>
+                <time title="修改时间：2021-02-05 21:20:46" itemprop="dateModified" datetime="2021-02-05T21:20:46+08:00">2021-02-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -277,7 +277,9 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>最近在buu刷题，遇到到了一些关于反序列化的题目，这里做一个总结。<a id="more"></a></p>
+        <a id="more"></a>
+
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>最近在buu刷题，遇到到了一些关于反序列化的题目，这里做一个总结。</p>
 <h1 id="PHP反序列化漏洞"><a href="#PHP反序列化漏洞" class="headerlink" title="PHP反序列化漏洞"></a><strong>PHP反序列化漏洞</strong></h1><h2 id="序列化和反序列化是什么？"><a href="#序列化和反序列化是什么？" class="headerlink" title="序列化和反序列化是什么？"></a><strong>序列化和反序列化是什么？</strong></h2><blockquote>
 <p>所有php里面的值都可以使用函数serialize()来返回一个包含字节流的字符串来表示。unserialize()函数能够重新把字符串变回php原来的值。 序列化一个对象将会保存对象的所有变量，但是不会保存对象的方法，只会保存类的名字。 ——php官方文档</p>
 </blockquote>
@@ -719,7 +721,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-count">33</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -766,7 +768,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -775,12 +777,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">324k</span>
+    <span title="站点总字数">315k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:54</span>
+    <span title="站点阅读时长">4:46</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

