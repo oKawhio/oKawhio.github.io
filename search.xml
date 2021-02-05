@@ -5218,7 +5218,7 @@
   <entry>
     <title>bypass open_basedir and disable_function</title>
     <url>/2021/02/05/bypass%20disable_function/</url>
-    <content><![CDATA[<p>把hhhm师傅的这篇文章过了一遍，这里做下学习的记录，张总的原文地址：<a href="https://www.redmango.top/article/56#_8">bypass disable function学习</a><a id="more"></a></p>
+    <content><![CDATA[<p>把hhhm师傅的这篇文章过了一遍，这里做下学习的记录，张总的原文地址：<a href="https://www.redmango.top/article/56">bypass disable function学习</a><a id="more"></a></p>
 <h2 id="phpinfo中获取有用的信息"><a href="#phpinfo中获取有用的信息" class="headerlink" title="phpinfo中获取有用的信息"></a>phpinfo中获取有用的信息</h2><h3 id="网站当前路径"><a href="#网站当前路径" class="headerlink" title="网站当前路径"></a>网站当前路径</h3><p>一般可以从<code>DOCUMENT_ROOT</code>或者<code>SCRIPT_FILENAME</code> 中获取</p>
 <p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20210205232613397.png" alt="image-20210205232613397"></p>
 <h3 id="opcache"><a href="#opcache" class="headerlink" title="opcache"></a>opcache</h3><p>如果使用了opcache，那么可能达成getshell，但需要存在文件上传的点</p>
