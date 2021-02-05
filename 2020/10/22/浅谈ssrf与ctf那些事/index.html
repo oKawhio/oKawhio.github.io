@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"www.getflag.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="前言文章首发合天：传送门">
+  <meta name="description" content="有关SSRF(Server-Side Request Forgery:服务器端请求伪造)介绍的文章很多了，这里主要是把自己学习和打ctf中遇到的一些trick和用法整理和记录一下。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【转载】浅谈ssrf与ctf那些事">
+<meta property="og:title" content="浅谈ssrf与ctf那些事">
 <meta property="og:url" content="https://www.getflag.cn/2020/10/22/%E6%B5%85%E8%B0%88ssrf%E4%B8%8Ectf%E9%82%A3%E4%BA%9B%E4%BA%8B/index.html">
 <meta property="og:site_name" content="kawhi&#39;s Blog">
-<meta property="og:description" content="前言文章首发合天：传送门">
+<meta property="og:description" content="有关SSRF(Server-Side Request Forgery:服务器端请求伪造)介绍的文章很多了，这里主要是把自己学习和打ctf中遇到的一些trick和用法整理和记录一下。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://yuhaojiang.gitee.io/picture/%E6%B5%85%E8%B0%88ssrf%E4%B8%8Ectf%E9%82%A3%E4%BA%9B%E4%BA%8B/image-20201015092531597.png">
 <meta property="og:image" content="http://yuhaojiang.gitee.io/picture/%E6%B5%85%E8%B0%88ssrf%E4%B8%8Ectf%E9%82%A3%E4%BA%9B%E4%BA%8B/image-20201014114625737.png">
@@ -54,7 +54,7 @@
 <meta property="og:image" content="http://yuhaojiang.gitee.io/picture/%E6%B5%85%E8%B0%88ssrf%E4%B8%8Ectf%E9%82%A3%E4%BA%9B%E4%BA%8B/image-20201018220444647.png">
 <meta property="og:image" content="http://yuhaojiang.gitee.io/picture/%E6%B5%85%E8%B0%88ssrf%E4%B8%8Ectf%E9%82%A3%E4%BA%9B%E4%BA%8B/image-20201018220722711.png">
 <meta property="article:published_time" content="2020-10-21T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-10-25T03:18:29.585Z">
+<meta property="article:modified_time" content="2021-02-05T13:55:38.674Z">
 <meta property="article:author" content="kawhi">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://yuhaojiang.gitee.io/picture/%E6%B5%85%E8%B0%88ssrf%E4%B8%8Ectf%E9%82%A3%E4%BA%9B%E4%BA%8B/image-20201015092531597.png">
@@ -72,7 +72,7 @@
   };
 </script>
 
-  <title>【转载】浅谈ssrf与ctf那些事 | kawhi's Blog</title>
+  <title>浅谈ssrf与ctf那些事 | kawhi's Blog</title>
   
 
 
@@ -126,7 +126,7 @@
       <h1 class="site-title">kawhi's Blog</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
-      <p class="site-subtitle" itemprop="description">年轻人不讲武德</p>
+      <p class="site-subtitle" itemprop="description">今天也没什么干劲</p>
   </div>
 
   <div class="site-nav-right">
@@ -226,7 +226,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
       <meta itemprop="name" content="kawhi">
-      <meta itemprop="description" content="PHP是世界上最好的语言">
+      <meta itemprop="description" content="随笔、分享、记录生活">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -234,7 +234,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          【转载】浅谈ssrf与ctf那些事
+          浅谈ssrf与ctf那些事
         </h1>
 
         <div class="post-meta">
@@ -251,7 +251,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-10-25 11:18:29" itemprop="dateModified" datetime="2020-10-25T11:18:29+08:00">2020-10-25</time>
+                <time title="修改时间：2021-02-05 21:55:38" itemprop="dateModified" datetime="2021-02-05T21:55:38+08:00">2021-02-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -288,8 +288,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>文章首发合天：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/qfYqkBH11YZxiCJXYIwd7Q">传送门</a><a id="more"></a></p>
-<p>有关SSRF(Server-Side Request Forgery:服务器端请求伪造)介绍的文章很多了，这里主要是把自己学习和打ctf中遇到的一些trick和用法整理和记录一下。</p>
+        <p>有关SSRF(Server-Side Request Forgery:服务器端请求伪造)介绍的文章很多了，这里主要是把自己学习和打ctf中遇到的一些trick和用法整理和记录一下。<a id="more"></a></p>
 <p>有个最基本的问题就是，如何判断ctf题目是考察SSRF或者说存在SSRF的点呢，首先要知道出现ssrf的函数基本就这几个<code>file_get_contents()</code>、<code>curl()</code>、<code>fsocksopen()</code>、<code>fopen()</code>，如果获取到题目源码了，源码中存在这些个函数就大致可以判断是否有ssrf，如果没有题目的源码，ssrf的入口一般是出现在调用外部资源的地方，比如url有个参数让你传或者是在html中的输入框，然后就用<code>http://</code>，<code>file://</code>，<code>dict://</code>协议读取一下。</p>
 <p>举个例子，近日打的西湖论剑有一道题为flagshop中用ssrf读文件</p>
 <p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%85%E8%B0%88ssrf%E4%B8%8Ectf%E9%82%A3%E4%BA%9B%E4%BA%8B/image-20201015092531597.png" alt="image-20201015092531597"></p>
@@ -518,6 +517,7 @@
 <p><img src="http://yuhaojiang.gitee.io/picture/%E6%B5%85%E8%B0%88ssrf%E4%B8%8Ectf%E9%82%A3%E4%BA%9B%E4%BA%8B/image-20201018220722711.png" alt="image-20201018220722711"></p>
 <p>关于更多的DNS-rebinding攻击利用方法见参考链接</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在ctf中ssrf一般不会单独出题，大多数情况下是作为其中一个利用点，知识点看起来就那几个，总结起来还挺多的，由于水平有限，本篇可能还有一些点没有提到，比如赵总最近写了一个ssrf新的利用方法：<a target="_blank" rel="noopener" href="https://www.zhaoj.in/read-6681.html%EF%BC%8C%E6%9C%89%E5%85%B4%E8%B6%A3%E5%8F%AF%E4%BB%A5%E7%9C%8B%E7%9C%8B%E3%80%82">https://www.zhaoj.in/read-6681.html，有兴趣可以看看。</a></p>
+<p>文章首发合天：<a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/qfYqkBH11YZxiCJXYIwd7Q">传送门</a></p>
 <h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a target="_blank" rel="noopener" href="https://www.blackhat.com/docs/us-17/thursday/us-17-Tsai-A-New-Era-Of-SSRF-Exploiting-URL-Parser-In-Trending-Programming-Languages.pdf">https://www.blackhat.com/docs/us-17/thursday/us-17-Tsai-A-New-Era-Of-SSRF-Exploiting-URL-Parser-In-Trending-Programming-Languages.pdf</a></p>
 <p><a target="_blank" rel="noopener" href="http://www.bendawang.site/2017/05/31/%E5%85%B3%E4%BA%8EDNS-rebinding%E7%9A%84%E6%80%BB%E7%BB%93/">http://www.bendawang.site/2017/05/31/%E5%85%B3%E4%BA%8EDNS-rebinding%E7%9A%84%E6%80%BB%E7%BB%93/</a></p>
 
@@ -535,12 +535,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/10/10/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/" rel="prev" title="【转载】CTF中.htaccess文件的利用">
-      <i class="fa fa-chevron-left"></i> 【转载】CTF中.htaccess文件的利用
+    <a href="/2020/10/10/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/" rel="prev" title="CTF中.htaccess文件的利用">
+      <i class="fa fa-chevron-left"></i> CTF中.htaccess文件的利用
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/11/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%9F%90%E4%BC%97%E6%B5%8B%E7%9A%84%E8%80%83%E6%A0%B8/" rel="next" title="【转载】记一次某众测的考核">
-      【转载】记一次某众测的考核 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/11/03/%E8%AE%B0%E4%B8%80%E6%AC%A1%E6%9F%90%E4%BC%97%E6%B5%8B%E7%9A%84%E8%80%83%E6%A0%B8/" rel="next" title="记一次某众测的考核">
+      记一次某众测的考核 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -600,7 +600,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">SSRF常见用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A2%E6%B5%8B%E5%86%85%E7%BD%91"><span class="nav-number">2.1.</span> <span class="nav-text">探测内网</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSRF%E4%B8%AD%E7%9A%84bypass"><span class="nav-number">2.2.</span> <span class="nav-text">SSRF中的bypass</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%AD%98%E5%9C%A8%E5%8D%8F%E8%AE%AE%E5%A4%B4%E7%BB%95%E8%BF%87"><span class="nav-number">2.3.</span> <span class="nav-text">不存在协议头绕过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#URL%E7%9A%84%E8%A7%A3%E6%9E%90%E9%97%AE%E9%A2%98"><span class="nav-number">2.4.</span> <span class="nav-text">URL的解析问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF%E8%BF%9B%E9%98%B6%E7%94%A8%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">SSRF进阶用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%BB%E5%87%BBRedis%E6%9C%8D%E5%8A%A1"><span class="nav-number">3.1.</span> <span class="nav-text">攻击Redis服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%BB%E5%87%BBMysql%E6%9C%8D%E5%8A%A1"><span class="nav-number">3.2.</span> <span class="nav-text">攻击Mysql服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Gopher%E5%8F%91%E9%80%81%E8%AF%B7%E6%B1%82"><span class="nav-number">3.3.</span> <span class="nav-text">Gopher发送请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP-FPM%E6%94%BB%E5%87%BB"><span class="nav-number">3.4.</span> <span class="nav-text">PHP-FPM攻击</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DNS-rebinding"><span class="nav-number">3.5.</span> <span class="nav-text">DNS-rebinding</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">5.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF%E5%B8%B8%E8%A7%81%E7%94%A8%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">SSRF常见用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A2%E6%B5%8B%E5%86%85%E7%BD%91"><span class="nav-number">1.1.</span> <span class="nav-text">探测内网</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSRF%E4%B8%AD%E7%9A%84bypass"><span class="nav-number">1.2.</span> <span class="nav-text">SSRF中的bypass</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E5%AD%98%E5%9C%A8%E5%8D%8F%E8%AE%AE%E5%A4%B4%E7%BB%95%E8%BF%87"><span class="nav-number">1.3.</span> <span class="nav-text">不存在协议头绕过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#URL%E7%9A%84%E8%A7%A3%E6%9E%90%E9%97%AE%E9%A2%98"><span class="nav-number">1.4.</span> <span class="nav-text">URL的解析问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSRF%E8%BF%9B%E9%98%B6%E7%94%A8%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">SSRF进阶用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%BB%E5%87%BBRedis%E6%9C%8D%E5%8A%A1"><span class="nav-number">2.1.</span> <span class="nav-text">攻击Redis服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%94%BB%E5%87%BBMysql%E6%9C%8D%E5%8A%A1"><span class="nav-number">2.2.</span> <span class="nav-text">攻击Mysql服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Gopher%E5%8F%91%E9%80%81%E8%AF%B7%E6%B1%82"><span class="nav-number">2.3.</span> <span class="nav-text">Gopher发送请求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP-FPM%E6%94%BB%E5%87%BB"><span class="nav-number">2.4.</span> <span class="nav-text">PHP-FPM攻击</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DNS-rebinding"><span class="nav-number">2.5.</span> <span class="nav-text">DNS-rebinding</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">4.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -609,14 +609,14 @@
     <img class="site-author-image" itemprop="image" alt="kawhi"
       src="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
   <p class="site-author-name" itemprop="name">kawhi</p>
-  <div class="site-description" itemprop="description">PHP是世界上最好的语言</div>
+  <div class="site-description" itemprop="description">随笔、分享、记录生活</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -672,12 +672,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">315k</span>
+    <span title="站点总字数">307k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:46</span>
+    <span title="站点阅读时长">4:39</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

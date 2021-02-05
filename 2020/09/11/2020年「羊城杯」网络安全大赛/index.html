@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"www.getflag.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="easycon连接上蚁剑后，发现bbbbbbbbb.txt文件，base64解码保存为图片即可看到flag。">
+  <meta name="description" content="记录一下wp">
 <meta property="og:type" content="article">
 <meta property="og:title" content="羊城杯 2020">
 <meta property="og:url" content="https://www.getflag.cn/2020/09/11/2020%E5%B9%B4%E3%80%8C%E7%BE%8A%E5%9F%8E%E6%9D%AF%E3%80%8D%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%A4%A7%E8%B5%9B/index.html">
 <meta property="og:site_name" content="kawhi&#39;s Blog">
-<meta property="og:description" content="easycon连接上蚁剑后，发现bbbbbbbbb.txt文件，base64解码保存为图片即可看到flag。">
+<meta property="og:description" content="记录一下wp">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-09-10T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-11-20T14:20:08.000Z">
+<meta property="article:modified_time" content="2021-02-05T13:59:54.307Z">
 <meta property="article:author" content="kawhi">
 <meta name="twitter:card" content="summary">
 
@@ -99,7 +99,7 @@
       <h1 class="site-title">kawhi's Blog</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
-      <p class="site-subtitle" itemprop="description">年轻人不讲武德</p>
+      <p class="site-subtitle" itemprop="description">今天也没什么干劲</p>
   </div>
 
   <div class="site-nav-right">
@@ -199,7 +199,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
       <meta itemprop="name" content="kawhi">
-      <meta itemprop="description" content="PHP是世界上最好的语言">
+      <meta itemprop="description" content="随笔、分享、记录生活">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -224,7 +224,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-20 22:20:08" itemprop="dateModified" datetime="2020-11-20T22:20:08+08:00">2020-11-20</time>
+                <time title="修改时间：2021-02-05 21:59:54" itemprop="dateModified" datetime="2021-02-05T21:59:54+08:00">2021-02-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -261,7 +261,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="easycon"><a href="#easycon" class="headerlink" title="easycon"></a>easycon</h1><p>连接上蚁剑后，发现<code>bbbbbbbbb.txt</code>文件，base64解码保存为图片即可看到flag。<a id="more"></a></p>
+        <p>记录一下wp<a id="more"></a></p>
+<h1 id="easycon"><a href="#easycon" class="headerlink" title="easycon"></a>easycon</h1><p>连接上蚁剑后，发现<code>bbbbbbbbb.txt</code>文件，base64解码保存为图片即可看到flag。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> base64</span><br><span class="line">f = open(<span class="string">r&#x27;bbbbbbbbb.txt&#x27;</span>,<span class="string">&#x27;r&#x27;</span>)</span><br><span class="line">s = f.read()</span><br><span class="line">f2 = open(<span class="string">r&#x27;1.txt&#x27;</span>,<span class="string">&#x27;wb+&#x27;</span>)</span><br><span class="line">flag = (base64.b64decode(s))</span><br><span class="line">f2.write(flag)</span><br><span class="line">f2.close()</span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure>
 
 <h1 id="BlackCat"><a href="#BlackCat" class="headerlink" title="BlackCat"></a>BlackCat</h1><p>源码在</p>
@@ -361,8 +362,8 @@
       <i class="fa fa-chevron-left"></i> ciscn初赛 2020
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/10/10/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/" rel="next" title="【转载】CTF中.htaccess文件的利用">
-      【转载】CTF中.htaccess文件的利用 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/10/10/CTF%E4%B8%AD.htaccess%E6%96%87%E4%BB%B6%E7%9A%84%E5%88%A9%E7%94%A8/" rel="next" title="CTF中.htaccess文件的利用">
+      CTF中.htaccess文件的利用 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -431,14 +432,14 @@
     <img class="site-author-image" itemprop="image" alt="kawhi"
       src="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
   <p class="site-author-name" itemprop="name">kawhi</p>
-  <div class="site-description" itemprop="description">PHP是世界上最好的语言</div>
+  <div class="site-description" itemprop="description">随笔、分享、记录生活</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -494,12 +495,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">315k</span>
+    <span title="站点总字数">307k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:46</span>
+    <span title="站点阅读时长">4:39</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

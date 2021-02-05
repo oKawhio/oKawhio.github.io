@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"www.getflag.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="前言这次复现的题目是师兄本周开会讲的题目，我都复现了一下，又学到了新的东西。题目具体详情可以参考师兄的文章：传送门">
+  <meta name="description" content="这次复现的题目是师兄本周开会讲的题目，我都复现了一下，又学到了新的东西。题目具体详情可以参考师兄的文章：传送门">
 <meta property="og:type" content="article">
 <meta property="og:title" content="虎符&amp;MRCTF 2020">
 <meta property="og:url" content="https://www.getflag.cn/2020/04/24/%E8%99%8E%E7%AC%A6%E5%92%8CMRCTF/index.html">
 <meta property="og:site_name" content="kawhi&#39;s Blog">
-<meta property="og:description" content="前言这次复现的题目是师兄本周开会讲的题目，我都复现了一下，又学到了新的东西。题目具体详情可以参考师兄的文章：传送门">
+<meta property="og:description" content="这次复现的题目是师兄本周开会讲的题目，我都复现了一下，又学到了新的东西。题目具体详情可以参考师兄的文章：传送门">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200423184848460.png">
 <meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200423211337775.png">
@@ -43,7 +43,7 @@
 <meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200424212849538.png">
 <meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200424212915052.png">
 <meta property="article:published_time" content="2020-04-23T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-12-06T08:26:49.494Z">
+<meta property="article:modified_time" content="2021-02-05T13:44:41.896Z">
 <meta property="article:author" content="kawhi">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200423184848460.png">
@@ -115,7 +115,7 @@
       <h1 class="site-title">kawhi's Blog</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
-      <p class="site-subtitle" itemprop="description">年轻人不讲武德</p>
+      <p class="site-subtitle" itemprop="description">今天也没什么干劲</p>
   </div>
 
   <div class="site-nav-right">
@@ -215,7 +215,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
       <meta itemprop="name" content="kawhi">
-      <meta itemprop="description" content="PHP是世界上最好的语言">
+      <meta itemprop="description" content="随笔、分享、记录生活">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -240,7 +240,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-12-06 16:26:49" itemprop="dateModified" datetime="2020-12-06T16:26:49+08:00">2020-12-06</time>
+                <time title="修改时间：2021-02-05 21:44:41" itemprop="dateModified" datetime="2021-02-05T21:44:41+08:00">2021-02-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -277,7 +277,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h2><p>这次复现的题目是师兄本周开会讲的题目，我都复现了一下，又学到了新的东西。题目具体详情可以参考师兄的文章：<a class="foo" target="_blank" href="https://www.plasf.cn/2020/04/20/HFCTF_WP/">传送门</a><a id="more"></a></p>
+        <p>这次复现的题目是师兄本周开会讲的题目，我都复现了一下，又学到了新的东西。题目具体详情可以参考师兄的文章：<a class="foo" target="_blank" href="https://www.plasf.cn/2020/04/20/HFCTF_WP/">传送门</a><a id="more"></a></p>
 <h2 id="虎符"><a href="#虎符" class="headerlink" title="虎符"></a><strong>虎符</strong></h2><h3 id="easy-login"><a href="#easy-login" class="headerlink" title="easy_login"></a><strong>easy_login</strong></h3><p>首先打开题目源码发现static/js/app.js，进去后发现koa</p>
 <p>利用 koa-static 错误配置的源码泄露获得源码，进行审计。直接读取app.js</p>
 <p>koa是基于Node.js的web框架。然后再进去controller.js</p>
@@ -598,7 +598,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%8E%E7%AC%A6"><span class="nav-number">2.</span> <span class="nav-text">虎符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#easy-login"><span class="nav-number">2.1.</span> <span class="nav-text">easy_login</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#just-escape"><span class="nav-number">2.2.</span> <span class="nav-text">just_escape</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BabyUpload"><span class="nav-number">2.3.</span> <span class="nav-text">BabyUpload</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MRCTF"><span class="nav-number">3.</span> <span class="nav-text">MRCTF</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%A0%E8%83%BD%E7%9C%8B%E6%87%82%E9%9F%B3%E7%AC%A6%E5%90%97"><span class="nav-number">3.1.</span> <span class="nav-text">你能看懂音符吗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E7%9C%A0%E4%B9%8B%E5%A4%9C"><span class="nav-number">3.2.</span> <span class="nav-text">不眠之夜</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BB%E6%89%BExxx"><span class="nav-number">3.3.</span> <span class="nav-text">寻找xxx</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hello-misc"><span class="nav-number">3.4.</span> <span class="nav-text">Hello_ misc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ezpop"><span class="nav-number">3.5.</span> <span class="nav-text">ezpop</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%BA%90%E7%A0%81"><span class="nav-number">3.5.1.</span> <span class="nav-text">题目源码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Modifier%E7%B1%BB"><span class="nav-number">3.5.2.</span> <span class="nav-text">Modifier类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Show%E7%B1%BB"><span class="nav-number">3.5.3.</span> <span class="nav-text">Show类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Test%E7%B1%BB"><span class="nav-number">3.5.4.</span> <span class="nav-text">Test类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A5%97%E5%A8%83"><span class="nav-number">3.6.</span> <span class="nav-text">套娃</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PYwebsite"><span class="nav-number">3.7.</span> <span class="nav-text">PYwebsite</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ez-bypass"><span class="nav-number">3.8.</span> <span class="nav-text">ez_bypass</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%A0%E4%BC%A0%E4%BD%A0%F0%9F%90%8E%E5%91%A2"><span class="nav-number">3.9.</span> <span class="nav-text">你传你🐎呢</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ezaudit"><span class="nav-number">3.10.</span> <span class="nav-text">Ezaudit</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%99%8E%E7%AC%A6"><span class="nav-number">1.</span> <span class="nav-text">虎符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#easy-login"><span class="nav-number">1.1.</span> <span class="nav-text">easy_login</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#just-escape"><span class="nav-number">1.2.</span> <span class="nav-text">just_escape</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BabyUpload"><span class="nav-number">1.3.</span> <span class="nav-text">BabyUpload</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MRCTF"><span class="nav-number">2.</span> <span class="nav-text">MRCTF</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%A0%E8%83%BD%E7%9C%8B%E6%87%82%E9%9F%B3%E7%AC%A6%E5%90%97"><span class="nav-number">2.1.</span> <span class="nav-text">你能看懂音符吗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E7%9C%A0%E4%B9%8B%E5%A4%9C"><span class="nav-number">2.2.</span> <span class="nav-text">不眠之夜</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BB%E6%89%BExxx"><span class="nav-number">2.3.</span> <span class="nav-text">寻找xxx</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hello-misc"><span class="nav-number">2.4.</span> <span class="nav-text">Hello_ misc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ezpop"><span class="nav-number">2.5.</span> <span class="nav-text">ezpop</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A2%98%E7%9B%AE%E6%BA%90%E7%A0%81"><span class="nav-number">2.5.1.</span> <span class="nav-text">题目源码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Modifier%E7%B1%BB"><span class="nav-number">2.5.2.</span> <span class="nav-text">Modifier类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Show%E7%B1%BB"><span class="nav-number">2.5.3.</span> <span class="nav-text">Show类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Test%E7%B1%BB"><span class="nav-number">2.5.4.</span> <span class="nav-text">Test类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A5%97%E5%A8%83"><span class="nav-number">2.6.</span> <span class="nav-text">套娃</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PYwebsite"><span class="nav-number">2.7.</span> <span class="nav-text">PYwebsite</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ez-bypass"><span class="nav-number">2.8.</span> <span class="nav-text">ez_bypass</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%A0%E4%BC%A0%E4%BD%A0%F0%9F%90%8E%E5%91%A2"><span class="nav-number">2.9.</span> <span class="nav-text">你传你🐎呢</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ezaudit"><span class="nav-number">2.10.</span> <span class="nav-text">Ezaudit</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -607,14 +607,14 @@
     <img class="site-author-image" itemprop="image" alt="kawhi"
       src="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
   <p class="site-author-name" itemprop="name">kawhi</p>
-  <div class="site-description" itemprop="description">PHP是世界上最好的语言</div>
+  <div class="site-description" itemprop="description">随笔、分享、记录生活</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -670,12 +670,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">315k</span>
+    <span title="站点总字数">307k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:46</span>
+    <span title="站点阅读时长">4:39</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

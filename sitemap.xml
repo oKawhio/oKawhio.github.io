@@ -2,14 +2,35 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://www.getflag.cn/2020/12/22/php伪协议在CTF中的应用小结/</loc>
+    <loc>https://www.getflag.cn/about/index.html</loc>
     
     <lastmod>2021-02-05</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.getflag.cn/2020/05/12/反序列化漏洞总结/</loc>
+    <loc>https://www.getflag.cn/links/index.html</loc>
+    
+    <lastmod>2021-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.getflag.cn/2020/10/10/CTF中.htaccess文件的利用/</loc>
+    
+    <lastmod>2021-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.getflag.cn/2020/11/19/海啸杯/</loc>
+    
+    <lastmod>2021-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.getflag.cn/2020/12/17/xmctf/</loc>
     
     <lastmod>2021-02-05</lastmod>
     
@@ -23,226 +44,198 @@
   </url>
   
   <url>
-    <loc>https://www.getflag.cn/2020/07/27/搭建动态CTFd/</loc>
+    <loc>https://www.getflag.cn/2020/12/22/php伪协议在CTF中的应用小结/</loc>
     
     <lastmod>2021-02-05</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.getflag.cn/2020/12/17/xmctf/</loc>
-    
-    <lastmod>2020-12-17</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://www.getflag.cn/2020/11/03/记一次某众测的考核/</loc>
     
-    <lastmod>2020-12-17</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/04/24/虎符和MRCTF/</loc>
-    
-    <lastmod>2020-12-06</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/04/19/如何用PIL库处理图片/</loc>
-    
-    <lastmod>2020-12-06</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/07/18/无字符构造webshell/</loc>
-    
-    <lastmod>2020-12-06</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/03/26/BugkuCTF-WEB/</loc>
-    
-    <lastmod>2020-12-06</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/08/22/ciscn初赛/</loc>
-    
-    <lastmod>2020-12-06</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/05/08/DelCTF2020/</loc>
-    
-    <lastmod>2020-12-06</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/06/17/DozerCTF/</loc>
-    
-    <lastmod>2020-12-06</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/03/14/DVWA练习Ⅰ/</loc>
-    
-    <lastmod>2020-12-06</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/03/15/DVWA练习Ⅱ/</loc>
-    
-    <lastmod>2020-12-06</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/03/21/esp8266连接显示器/</loc>
-    
-    <lastmod>2020-12-06</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/04/29/xss闯关小游戏/</loc>
-    
-    <lastmod>2020-12-06</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/05/04/upload-labs/</loc>
-    
-    <lastmod>2020-12-06</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/07/14/SSRF漏洞学习/</loc>
-    
-    <lastmod>2020-12-06</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/07/20/NodeJs学习/</loc>
-    
-    <lastmod>2020-12-06</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/06/01/GKCTF 2020/</loc>
-    
-    <lastmod>2020-12-06</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/03/04/esp8266制作wifi杀手及wifi钓鱼/</loc>
-    
-    <lastmod>2020-12-06</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/11/06/浅谈SVG的两个黑魔法/</loc>
-    
-    <lastmod>2020-11-25</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/07/26/安恒七月赛/</loc>
-    
-    <lastmod>2020-11-20</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/07/02/2020腾讯犀牛鸟网络安全T-Star高校挑战赛/</loc>
-    
-    <lastmod>2020-11-20</lastmod>
+    <lastmod>2021-02-05</lastmod>
     
   </url>
   
   <url>
     <loc>https://www.getflag.cn/2020/09/11/2020年「羊城杯」网络安全大赛/</loc>
     
-    <lastmod>2020-11-20</lastmod>
+    <lastmod>2021-02-05</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.getflag.cn/2020/08/06/WMCTF2020/</loc>
+    <loc>https://www.getflag.cn/2020/03/15/DVWA练习Ⅱ/</loc>
     
-    <lastmod>2020-11-20</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/11/14/太湖杯/</loc>
-    
-    <lastmod>2020-11-20</lastmod>
+    <lastmod>2021-02-05</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.getflag.cn/2020/11/19/海啸杯/</loc>
+    <loc>https://www.getflag.cn/2020/11/06/浅谈SVG的两个黑魔法/</loc>
     
-    <lastmod>2020-11-20</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/11/10/浅谈ctf中无回显/</loc>
-    
-    <lastmod>2020-11-14</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/about/index.html</loc>
-    
-    <lastmod>2020-11-14</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/links/index.html</loc>
-    
-    <lastmod>2020-10-25</lastmod>
+    <lastmod>2021-02-05</lastmod>
     
   </url>
   
   <url>
     <loc>https://www.getflag.cn/2020/10/22/浅谈ssrf与ctf那些事/</loc>
     
-    <lastmod>2020-10-25</lastmod>
+    <lastmod>2021-02-05</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.getflag.cn/2020/10/10/CTF中.htaccess文件的利用/</loc>
+    <loc>https://www.getflag.cn/2020/11/10/浅谈ctf中无回显/</loc>
     
-    <lastmod>2020-10-25</lastmod>
+    <lastmod>2021-02-05</lastmod>
     
   </url>
   
   <url>
     <loc>https://www.getflag.cn/2020/07/18/无参数RCE/</loc>
     
-    <lastmod>2020-10-25</lastmod>
+    <lastmod>2021-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.getflag.cn/2020/11/14/太湖杯/</loc>
+    
+    <lastmod>2021-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.getflag.cn/2020/08/06/WMCTF2020/</loc>
+    
+    <lastmod>2021-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.getflag.cn/2020/07/02/2020腾讯犀牛鸟网络安全T-Star高校挑战赛/</loc>
+    
+    <lastmod>2021-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.getflag.cn/2020/07/26/安恒七月赛/</loc>
+    
+    <lastmod>2021-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.getflag.cn/2020/03/04/esp8266制作wifi杀手及wifi钓鱼/</loc>
+    
+    <lastmod>2021-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.getflag.cn/2020/06/01/GKCTF 2020/</loc>
+    
+    <lastmod>2021-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.getflag.cn/2020/07/20/NodeJs学习/</loc>
+    
+    <lastmod>2021-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.getflag.cn/2020/05/04/upload-labs/</loc>
+    
+    <lastmod>2021-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.getflag.cn/2020/04/29/xss闯关小游戏/</loc>
+    
+    <lastmod>2021-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.getflag.cn/2020/03/21/esp8266连接显示器/</loc>
+    
+    <lastmod>2021-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.getflag.cn/2020/03/14/DVWA练习Ⅰ/</loc>
+    
+    <lastmod>2021-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.getflag.cn/2020/06/17/DozerCTF/</loc>
+    
+    <lastmod>2021-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.getflag.cn/2020/08/22/ciscn初赛/</loc>
+    
+    <lastmod>2021-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.getflag.cn/2020/05/08/DelCTF2020/</loc>
+    
+    <lastmod>2021-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.getflag.cn/2020/03/26/BugkuCTF-WEB/</loc>
+    
+    <lastmod>2021-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.getflag.cn/2020/07/18/无字符构造webshell/</loc>
+    
+    <lastmod>2021-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.getflag.cn/2020/04/19/如何用PIL库处理图片/</loc>
+    
+    <lastmod>2021-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.getflag.cn/2020/04/24/虎符和MRCTF/</loc>
+    
+    <lastmod>2021-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.getflag.cn/2020/05/12/反序列化漏洞总结/</loc>
+    
+    <lastmod>2021-02-05</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://www.getflag.cn/2020/07/27/搭建动态CTFd/</loc>
+    
+    <lastmod>2021-02-05</lastmod>
     
   </url>
   

@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"www.getflag.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="前言网上的搭建教程有很多了，但是有几个比较坑的地方的资料比较零散，这里记录一下从零开始搭建的过程，虽然因为各种原因最后还是学贤大佬帮我搭好了🙃，这个动态靶机是真的方便。 前置工作本篇搭建环境为centos7.6 学贤大佬用的是ubuntu18也搭成功了，但是相对来说还是centos比较方便。 更新yum源1yum update  1yum install -y git nginx maria">
+  <meta name="description" content="记录一次从零开始搭建CTF动态靶场的过程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="搭建动态CTFd">
 <meta property="og:url" content="https://www.getflag.cn/2020/07/27/%E6%90%AD%E5%BB%BA%E5%8A%A8%E6%80%81CTFd/index.html">
 <meta property="og:site_name" content="kawhi&#39;s Blog">
-<meta property="og:description" content="前言网上的搭建教程有很多了，但是有几个比较坑的地方的资料比较零散，这里记录一下从零开始搭建的过程，虽然因为各种原因最后还是学贤大佬帮我搭好了🙃，这个动态靶机是真的方便。 前置工作本篇搭建环境为centos7.6 学贤大佬用的是ubuntu18也搭成功了，但是相对来说还是centos比较方便。 更新yum源1yum update  1yum install -y git nginx maria">
+<meta property="og:description" content="记录一次从零开始搭建CTF动态靶场的过程">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-07-26T16:00:00.000Z">
-<meta property="article:modified_time" content="2021-02-05T13:19:30.321Z">
+<meta property="article:modified_time" content="2021-02-05T13:42:55.720Z">
 <meta property="article:author" content="kawhi">
 <meta name="twitter:card" content="summary">
 
@@ -99,7 +99,7 @@
       <h1 class="site-title">kawhi's Blog</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
-      <p class="site-subtitle" itemprop="description">年轻人不讲武德</p>
+      <p class="site-subtitle" itemprop="description">今天也没什么干劲</p>
   </div>
 
   <div class="site-nav-right">
@@ -199,7 +199,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
       <meta itemprop="name" content="kawhi">
-      <meta itemprop="description" content="PHP是世界上最好的语言">
+      <meta itemprop="description" content="随笔、分享、记录生活">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -224,7 +224,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-02-05 21:19:30" itemprop="dateModified" datetime="2021-02-05T21:19:30+08:00">2021-02-05</time>
+                <time title="修改时间：2021-02-05 21:42:55" itemprop="dateModified" datetime="2021-02-05T21:42:55+08:00">2021-02-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -261,9 +261,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <a id="more"></a>
-
-<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h3><p>网上的搭建教程有很多了，但是有几个比较坑的地方的资料比较零散，这里记录一下从零开始搭建的过程，虽然因为各种原因最后还是学贤大佬帮我搭好了🙃，这个动态靶机是真的方便。</p>
+        <p>记录一次从零开始搭建CTF动态靶场的过程<a id="more"></a></p>
 <h3 id="前置工作"><a href="#前置工作" class="headerlink" title="前置工作"></a><strong>前置工作</strong></h3><p>本篇搭建环境为centos7.6</p>
 <p>学贤大佬用的是ubuntu18也搭成功了，但是相对来说还是centos比较方便。</p>
 <h4 id="更新yum源"><a href="#更新yum源" class="headerlink" title="更新yum源"></a><strong>更新yum源</strong></h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum update</span><br></pre></td></tr></table></figure>
@@ -414,7 +412,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E5%B7%A5%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">前置工作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0yum%E6%BA%90"><span class="nav-number">2.1.</span> <span class="nav-text">更新yum源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85docker"><span class="nav-number">2.2.</span> <span class="nav-text">安装docker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85docker-compose"><span class="nav-number">2.3.</span> <span class="nav-text">安装docker-compose</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F"><span class="nav-number">2.4.</span> <span class="nav-text">docker镜像加速</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85frp"><span class="nav-number">3.</span> <span class="nav-text">安装frp</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BDfrp"><span class="nav-number">3.1.</span> <span class="nav-text">下载frp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9frps-ini"><span class="nav-number">3.2.</span> <span class="nav-text">修改frps.ini</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9frpc-ini"><span class="nav-number">3.3.</span> <span class="nav-text">修改frpc.ini</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%BD%91%E7%BB%9Cfrpadmin"><span class="nav-number">3.4.</span> <span class="nav-text">创建网络frpadmin</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#token%E8%84%9A%E6%9C%AC"><span class="nav-number">3.5.</span> <span class="nav-text">token脚本</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85CTFd"><span class="nav-number">4.</span> <span class="nav-text">安装CTFd</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BDCTFd"><span class="nav-number">4.1.</span> <span class="nav-text">下载CTFd</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9Dockerfile"><span class="nav-number">4.2.</span> <span class="nav-text">修改Dockerfile</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9docker-compose-yml"><span class="nav-number">4.3.</span> <span class="nav-text">修改docker-compose.yml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9requirements-txt"><span class="nav-number">4.4.</span> <span class="nav-text">修改requirements.txt</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%92%E4%BB%B6%E4%BF%A1%E6%81%AF%E5%A1%AB%E5%86%99"><span class="nav-number">5.</span> <span class="nav-text">插件信息填写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-number">6.</span> <span class="nav-text">常见问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2web%E9%A2%98%E7%9B%AE"><span class="nav-number">7.</span> <span class="nav-text">部署web题目</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E5%B7%A5%E4%BD%9C"><span class="nav-number">1.</span> <span class="nav-text">前置工作</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9B%B4%E6%96%B0yum%E6%BA%90"><span class="nav-number">1.1.</span> <span class="nav-text">更新yum源</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85docker"><span class="nav-number">1.2.</span> <span class="nav-text">安装docker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%89%E8%A3%85docker-compose"><span class="nav-number">1.3.</span> <span class="nav-text">安装docker-compose</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#docker%E9%95%9C%E5%83%8F%E5%8A%A0%E9%80%9F"><span class="nav-number">1.4.</span> <span class="nav-text">docker镜像加速</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85frp"><span class="nav-number">2.</span> <span class="nav-text">安装frp</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BDfrp"><span class="nav-number">2.1.</span> <span class="nav-text">下载frp</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9frps-ini"><span class="nav-number">2.2.</span> <span class="nav-text">修改frps.ini</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9frpc-ini"><span class="nav-number">2.3.</span> <span class="nav-text">修改frpc.ini</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E7%BD%91%E7%BB%9Cfrpadmin"><span class="nav-number">2.4.</span> <span class="nav-text">创建网络frpadmin</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#token%E8%84%9A%E6%9C%AC"><span class="nav-number">2.5.</span> <span class="nav-text">token脚本</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85CTFd"><span class="nav-number">3.</span> <span class="nav-text">安装CTFd</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%8B%E8%BD%BDCTFd"><span class="nav-number">3.1.</span> <span class="nav-text">下载CTFd</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9Dockerfile"><span class="nav-number">3.2.</span> <span class="nav-text">修改Dockerfile</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9docker-compose-yml"><span class="nav-number">3.3.</span> <span class="nav-text">修改docker-compose.yml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9requirements-txt"><span class="nav-number">3.4.</span> <span class="nav-text">修改requirements.txt</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8F%92%E4%BB%B6%E4%BF%A1%E6%81%AF%E5%A1%AB%E5%86%99"><span class="nav-number">4.</span> <span class="nav-text">插件信息填写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-number">5.</span> <span class="nav-text">常见问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2web%E9%A2%98%E7%9B%AE"><span class="nav-number">6.</span> <span class="nav-text">部署web题目</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -423,14 +421,14 @@
     <img class="site-author-image" itemprop="image" alt="kawhi"
       src="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
   <p class="site-author-name" itemprop="name">kawhi</p>
-  <div class="site-description" itemprop="description">PHP是世界上最好的语言</div>
+  <div class="site-description" itemprop="description">随笔、分享、记录生活</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -486,12 +484,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">315k</span>
+    <span title="站点总字数">307k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:46</span>
+    <span title="站点阅读时长">4:39</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>

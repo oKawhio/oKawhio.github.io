@@ -20,16 +20,16 @@
     var CONFIG = {"hostname":"www.getflag.cn","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="前言学习一波NodeJs">
+  <meta name="description" content="学习一波NodeJs">
 <meta property="og:type" content="article">
 <meta property="og:title" content="NodeJs学习">
 <meta property="og:url" content="https://www.getflag.cn/2020/07/20/NodeJs%E5%AD%A6%E4%B9%A0/index.html">
 <meta property="og:site_name" content="kawhi&#39;s Blog">
-<meta property="og:description" content="前言学习一波NodeJs">
+<meta property="og:description" content="学习一波NodeJs">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200719212225968.png">
 <meta property="article:published_time" content="2020-07-19T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-12-06T08:21:58.279Z">
+<meta property="article:modified_time" content="2021-02-05T13:47:53.718Z">
 <meta property="article:author" content="kawhi">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://yuhaojiang.gitee.io/picture/typora-user-images/image-20200719212225968.png">
@@ -101,7 +101,7 @@
       <h1 class="site-title">kawhi's Blog</h1>
       <span class="logo-line-after"><i></i></span>
     </a>
-      <p class="site-subtitle" itemprop="description">年轻人不讲武德</p>
+      <p class="site-subtitle" itemprop="description">今天也没什么干劲</p>
   </div>
 
   <div class="site-nav-right">
@@ -201,7 +201,7 @@
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
       <meta itemprop="name" content="kawhi">
-      <meta itemprop="description" content="PHP是世界上最好的语言">
+      <meta itemprop="description" content="随笔、分享、记录生活">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -226,7 +226,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-12-06 16:21:58" itemprop="dateModified" datetime="2020-12-06T16:21:58+08:00">2020-12-06</time>
+                <time title="修改时间：2021-02-05 21:47:53" itemprop="dateModified" datetime="2021-02-05T21:47:53+08:00">2021-02-05</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -263,7 +263,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a><strong>前言</strong></h1><p>学习一波NodeJs<a id="more"></a></p>
+        <p>学习一波NodeJs<a id="more"></a></p>
 <h1 id="原型"><a href="#原型" class="headerlink" title="原型"></a><strong>原型</strong></h1><p>首先要搞清楚<code>prototype</code>，<code>__proto__</code>，<code>constructor</code>这三个东西。</p>
 <p>在JS中，声明一个函数Foo的同时，浏览器会在内存中创建一个对象，然后Foo函数默认有一个属性<code>prototype</code>指向了这个对象，这个对象就是函数Foo的<strong>原型对象</strong>，简称为函数的原型。这个对象默认会有个属性<code>constructor</code>指向了这个函数Foo。</p>
 <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Foo</span>(<span class="params"></span>)</span>&#123;&#125;;</span><br><span class="line"><span class="built_in">console</span>.log(Foo.prototype)<span class="comment">//Foo &#123;&#125;</span></span><br><span class="line"><span class="built_in">console</span>.log(Foo.prototype.constructor)<span class="comment">//[Function: Foo]</span></span><br></pre></td></tr></table></figure>
@@ -488,7 +488,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">原型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93"><span class="nav-number">3.</span> <span class="nav-text">原型链污染</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E6%89%8B%E6%AE%B5"><span class="nav-number">3.1.</span> <span class="nav-text">利用手段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hackit-2018"><span class="nav-number">3.2.</span> <span class="nav-text">hackit 2018</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JS%E4%B8%AD%E7%9A%84%E5%BC%B1%E7%B1%BB%E5%9E%8B"><span class="nav-number">4.</span> <span class="nav-text">JS中的弱类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E5%8A%A0%E8%BD%BD%E4%B8%8E%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C"><span class="nav-number">5.</span> <span class="nav-text">模块加载与命令执行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NPUCTF2020-%E9%AA%8C%E8%AF%81%F0%9F%90%8E"><span class="nav-number">6.</span> <span class="nav-text">[NPUCTF2020]验证🐎</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">7.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">原型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93"><span class="nav-number">2.</span> <span class="nav-text">原型链污染</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%A9%E7%94%A8%E6%89%8B%E6%AE%B5"><span class="nav-number">2.1.</span> <span class="nav-text">利用手段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hackit-2018"><span class="nav-number">2.2.</span> <span class="nav-text">hackit 2018</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#JS%E4%B8%AD%E7%9A%84%E5%BC%B1%E7%B1%BB%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">JS中的弱类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A8%A1%E5%9D%97%E5%8A%A0%E8%BD%BD%E4%B8%8E%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C"><span class="nav-number">4.</span> <span class="nav-text">模块加载与命令执行</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NPUCTF2020-%E9%AA%8C%E8%AF%81%F0%9F%90%8E"><span class="nav-number">5.</span> <span class="nav-text">[NPUCTF2020]验证🐎</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">6.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -497,14 +497,14 @@
     <img class="site-author-image" itemprop="image" alt="kawhi"
       src="http://yuhaojiang.gitee.io/picture/Blog头像.jpg">
   <p class="site-author-name" itemprop="name">kawhi</p>
-  <div class="site-description" itemprop="description">PHP是世界上最好的语言</div>
+  <div class="site-description" itemprop="description">随笔、分享、记录生活</div>
 </div>
 <div class="site-state-wrap motion-element">
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -560,12 +560,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">315k</span>
+    <span title="站点总字数">307k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4:46</span>
+    <span title="站点阅读时长">4:39</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
