@@ -5579,7 +5579,7 @@
     <title>redis安全学习</title>
     <url>/2021/02/21/redis%E5%AE%89%E5%85%A8%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[<p>学习一下 redis <a id="more"></a></p>
-<h2 id="redis基础"><a href="#redis基础" class="headerlink" title="redis基础"></a>redis基础</h2><h3 id="一些基础操作"><a href="#一些基础操作" class="headerlink" title="一些基础操作"></a>一些基础操作</h3><p>redis是一个<code>key-value</code>型数据库，详细基础知识可以参考：<a href="https://www.runoob.com/redis%EF%BC%8C%E8%BF%99%E9%87%8C%E6%8A%8A%E4%B8%80%E4%BA%9B%E8%A6%81%E7%82%B9%E7%BB%99%E7%BD%97%E5%88%97%E5%87%BA%E6%9D%A5">https://www.runoob.com/redis，这里把一些要点给罗列出来</a></p>
+<h2 id="redis基础"><a href="#redis基础" class="headerlink" title="redis基础"></a>redis基础</h2><h3 id="一些基础操作"><a href="#一些基础操作" class="headerlink" title="一些基础操作"></a>一些基础操作</h3><p>redis是一个<code>key-value</code>型数据库，详细基础知识可以参考：<a href="https://www.runoob.com/redis">https://www.runoob.com/redis</a> 这里把一些要点给罗列出来</p>
 <ul>
 <li>ubuntu 安装 redis</li>
 </ul>
@@ -5611,7 +5611,7 @@
 
 <h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><p>Redis支持五种数据类型：string（字符串），hash（哈希），list（列表），set（集合）及zset(sorted set：有序集合)</p>
 <h3 id="redis协议"><a href="#redis协议" class="headerlink" title="redis协议"></a>redis协议</h3><p> redis 使用的是 resp 协议，通过 wireshark 抓本地的包，然后设置连上 redis 再设置个键值对观察一下他的协议格式</p>
-<p><img src="F:/picture/redis安全学习/image-20210215110136093.png" alt="image-20210215110136093"></p>
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20210215110136093.png" alt="image-20210215110136093"></p>
 <ul>
 <li><code>*3</code>表示<code>set a 1</code>这样的以空格为分割的元组的属性个数</li>
 <li><code>$3</code>表示<code>set</code>的长度，同理往下的<code>$</code>都是表示长度</li>
