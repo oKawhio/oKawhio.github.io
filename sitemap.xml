@@ -9,30 +9,9 @@
   </url>
   
   <url>
-    <loc>https://www.getflag.cn/2021/02/21/redis安全学习/</loc>
-    
-    <lastmod>2021-02-22</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://www.getflag.cn/links/index.html</loc>
     
     <lastmod>2021-02-21</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2021/02/05/bypass disable_function/</loc>
-    
-    <lastmod>2021-02-21</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/10/10/CTF中.htaccess文件的利用/</loc>
-    
-    <lastmod>2021-02-05</lastmod>
     
   </url>
   
@@ -51,56 +30,7 @@
   </url>
   
   <url>
-    <loc>https://www.getflag.cn/2020/12/18/细说Jinja2之SSTI&bypass/</loc>
-    
-    <lastmod>2021-02-05</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/12/22/php伪协议在CTF中的应用小结/</loc>
-    
-    <lastmod>2021-02-05</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/11/03/记一次某众测的考核/</loc>
-    
-    <lastmod>2021-02-05</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://www.getflag.cn/2020/09/11/2020年「羊城杯」网络安全大赛/</loc>
-    
-    <lastmod>2021-02-05</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/11/06/浅谈SVG的两个黑魔法/</loc>
-    
-    <lastmod>2021-02-05</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/10/22/浅谈ssrf与ctf那些事/</loc>
-    
-    <lastmod>2021-02-05</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/11/10/浅谈ctf中无回显/</loc>
-    
-    <lastmod>2021-02-05</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/07/18/无参数RCE/</loc>
     
     <lastmod>2021-02-05</lastmod>
     
@@ -142,27 +72,6 @@
   </url>
   
   <url>
-    <loc>https://www.getflag.cn/2020/07/20/NodeJs学习/</loc>
-    
-    <lastmod>2021-02-05</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/05/04/upload-labs/</loc>
-    
-    <lastmod>2021-02-05</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/04/29/xss闯关小游戏/</loc>
-    
-    <lastmod>2021-02-05</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://www.getflag.cn/2020/06/17/DozerCTF/</loc>
     
     <lastmod>2021-02-05</lastmod>
@@ -184,35 +93,7 @@
   </url>
   
   <url>
-    <loc>https://www.getflag.cn/2020/07/18/无字符构造webshell/</loc>
-    
-    <lastmod>2021-02-05</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/04/19/如何用PIL库处理图片/</loc>
-    
-    <lastmod>2021-02-05</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://www.getflag.cn/2020/04/24/虎符和MRCTF/</loc>
-    
-    <lastmod>2021-02-05</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/05/12/反序列化漏洞总结/</loc>
-    
-    <lastmod>2021-02-05</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/2020/07/27/搭建动态CTFd/</loc>
     
     <lastmod>2021-02-05</lastmod>
     
@@ -228,7 +109,7 @@
 
   <url>
     <loc>https://www.getflag.cn/</loc>
-    <lastmod>2021-05-09</lastmod>
+    <lastmod>2021-06-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -238,42 +119,14 @@
   
   <url>
     <loc>https://www.getflag.cn/categories/CTF%E6%AF%94%E8%B5%9B/</loc>
-    <lastmod>2021-05-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/categories/%E5%88%B7%E9%A2%98/</loc>
-    <lastmod>2021-05-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/categories/web%E5%AE%89%E5%85%A8/</loc>
-    <lastmod>2021-05-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/categories/%E6%9D%82%E9%A1%B9/</loc>
-    <lastmod>2021-05-09</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.getflag.cn/categories/%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/</loc>
-    <lastmod>2021-05-09</lastmod>
+    <lastmod>2021-06-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://www.getflag.cn/categories/%E8%80%83%E6%A0%B8/</loc>
-    <lastmod>2021-05-09</lastmod>
+    <lastmod>2021-06-23</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.6</priority>
   </url>
