@@ -1443,7 +1443,8 @@
   <entry>
     <title>第五空间 2021</title>
     <url>/2021/09/17/2021%20%E7%AC%AC%E4%BA%94%E7%A9%BA%E9%97%B4/</url>
-    <content><![CDATA[<h2 id="WebFTP"><a href="#WebFTP" class="headerlink" title="WebFTP"></a>WebFTP</h2><p><code>/readme/mytz.php</code></p>
+    <content><![CDATA[<p>记录一下<a id="more"></a></p>
+<h2 id="WebFTP"><a href="#WebFTP" class="headerlink" title="WebFTP"></a>WebFTP</h2><p><code>/readme/mytz.php</code></p>
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">&#x27;act&#x27;</span>]) &amp;&amp; $_GET[<span class="string">&#x27;act&#x27;</span>] == <span class="string">&#x27;phpinfo&#x27;</span>)&#123;</span><br><span class="line">	phpinfo();</span><br><span class="line">	<span class="keyword">exit</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>有个探针页面，搜一下就有<code>flag</code></p>
